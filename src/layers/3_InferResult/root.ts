@@ -1,12 +1,13 @@
 import type { Schema } from '../../generator/generators/Schema.js'
+import type { Grafaid } from '../../lib/grafaid/__.js'
 import { type ExcludeNull } from '../../lib/prelude.js'
-import type { SchemaKit } from '../1_Schema/__.js'
+import type { SchemaKit } from '../../types/Schema/__.js'
 import type { Object } from './Object.js'
 
 export type RootViaObject<
   $SelectionSet,
   $Schema extends Schema,
-  $RootType extends SchemaKit.Output.RootType,
+  $RootType extends SchemaKit.RootType,
 > = Root<
   $SelectionSet,
   $Schema,
@@ -28,5 +29,5 @@ export type Subscription<$SelectionSet, $Schema extends Schema> =
 export type Root<
   $SelectionSet,
   $Schema extends Schema,
-  $RootTypeName extends SchemaKit.RootTypeName,
+  $RootTypeName extends Grafaid.Schema.RootTypeName,
 > = Object<$SelectionSet, $Schema, ExcludeNull<$Schema['Root'][$RootTypeName]>>

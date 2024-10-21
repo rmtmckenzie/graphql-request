@@ -34,7 +34,7 @@ export const toGraphQLDocument = (
 
 export interface Options {
   sddm?: SchemaDrivenDataMap | null
-  scalars?: SchemaKit.Hybrid.Scalar.ScalarMap
+  scalars?: SchemaKit.Scalar.ScalarMap
   operationVariables?: boolean
 }
 

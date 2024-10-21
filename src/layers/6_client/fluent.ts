@@ -1,6 +1,6 @@
 import type { Anyware } from '../../lib/anyware/__.js'
 import type { Fluent } from '../../lib/fluent/__.js'
-import type { SchemaKit } from '../1_Schema/__.js'
+import type { SchemaKit } from '../../types/Schema/__.js'
 import type { RequestCore } from '../5_request/__.js'
 import type { Extension } from './extension/extension.js'
 import type { Config } from './Settings/Config.js'
@@ -55,7 +55,7 @@ export interface ClientContext {
   scalars: RegisteredScalars
 }
 
-export type RegisteredScalars = Record<string, SchemaKit.Scalar.Scalar>
+export type RegisteredScalars = Record<string, SchemaKit.Scalar>
 
 export const createState = (stateWithoutConfig: StateWithoutConfig): ClientContext => {
   let config: Config | null

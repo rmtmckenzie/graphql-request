@@ -1,6 +1,5 @@
 import { Kind } from 'graphql'
 import { SchemaKit } from '../../entrypoints/schema.js'
-import { applyCodec } from '../../layers/1_Schema/Hybrid/types/Scalar/Scalar.js'
 import type { RegisteredScalars } from '../../layers/6_client/fluent.js'
 import type { Grafaid } from '../../lib/grafaid/__.js'
 import { SchemaDrivenDataMap } from '../../types/SchemaDrivenDataMap/__.js'
@@ -60,10 +59,10 @@ const decodeResultData_ = (input: {
     const sddmNode = sddmOutputField.nt
 
     if (SchemaDrivenDataMap.isScalar(sddmNode)) {
-      data[k] = applyCodec(sddmNode.codec.decode, v)
+      data[k] = SchemaKit.Scalar.applyCodec(sddmNode.codec.decode, v)
     } else if (SchemaDrivenDataMap.isCustomScalarName(sddmNode)) {
       const scalar = SchemaKit.Scalar.lookupCustomScalarOrFallbackToString(scalars, sddmNode)
-      data[k] = applyCodec(scalar.codec.decode, v)
+      data[k] = SchemaKit.Scalar.applyCodec(scalar.codec.decode, v)
     } else if (SchemaDrivenDataMap.isOutputObject(sddmNode)) {
       decodeResultData_({
         data: v,

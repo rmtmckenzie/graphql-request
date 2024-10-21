@@ -1,6 +1,8 @@
-import type * as $ from 'graffle/schema'
+import type { SchemaKit as $ } from 'graffle/utilities-for-generated'
+import type * as $$Utilities from 'graffle/utilities-for-generated'
+import type * as Data from './Data.js'
+import type * as MethodsRoot from './MethodsRoot.js'
 import type * as $Scalar from './Scalar.js'
-
 export namespace Schema {
   //
   //
@@ -18,47 +20,47 @@ export namespace Schema {
   //
   //
 
-  export type Query = $.Output.ObjectQuery<{
+  export type Query = $.ObjectQuery<{
     continent: $.Field<
       'continent',
-      $.Output.Nullable<Continent>,
+      $.Nullable<Continent>,
       $.Args<{
-        code: $.Input.Field<$Scalar.ID>
+        code: $.InputField<$Scalar.ID>
       }, false>
     >
     continents: $.Field<
       'continents',
-      $.Output.List<Continent>,
+      $.List<Continent>,
       $.Args<{
-        filter: $.Input.Field<$.Input.Nullable<ContinentFilterInput>>
+        filter: $.InputField<$.Nullable<ContinentFilterInput>>
       }, true>
     >
     countries: $.Field<
       'countries',
-      $.Output.List<Country>,
+      $.List<Country>,
       $.Args<{
-        filter: $.Input.Field<$.Input.Nullable<CountryFilterInput>>
+        filter: $.InputField<$.Nullable<CountryFilterInput>>
       }, true>
     >
     country: $.Field<
       'country',
-      $.Output.Nullable<Country>,
+      $.Nullable<Country>,
       $.Args<{
-        code: $.Input.Field<$Scalar.ID>
+        code: $.InputField<$Scalar.ID>
       }, false>
     >
     language: $.Field<
       'language',
-      $.Output.Nullable<Language>,
+      $.Nullable<Language>,
       $.Args<{
-        code: $.Input.Field<$Scalar.ID>
+        code: $.InputField<$Scalar.ID>
       }, false>
     >
     languages: $.Field<
       'languages',
-      $.Output.List<Language>,
+      $.List<Language>,
       $.Args<{
-        filter: $.Input.Field<$.Input.Nullable<LanguageFilterInput>>
+        filter: $.InputField<$.Nullable<LanguageFilterInput>>
       }, true>
     >
   }>
@@ -98,26 +100,26 @@ export namespace Schema {
   //
 
   export type ContinentFilterInput = $.InputObject<'ContinentFilterInput', {
-    code: $.Input.Field<$.Input.Nullable<StringQueryOperatorInput>>
+    code: $.InputField<$.Nullable<StringQueryOperatorInput>>
   }, true>
 
   export type CountryFilterInput = $.InputObject<'CountryFilterInput', {
-    code: $.Input.Field<$.Input.Nullable<StringQueryOperatorInput>>
-    continent: $.Input.Field<$.Input.Nullable<StringQueryOperatorInput>>
-    currency: $.Input.Field<$.Input.Nullable<StringQueryOperatorInput>>
-    name: $.Input.Field<$.Input.Nullable<StringQueryOperatorInput>>
+    code: $.InputField<$.Nullable<StringQueryOperatorInput>>
+    continent: $.InputField<$.Nullable<StringQueryOperatorInput>>
+    currency: $.InputField<$.Nullable<StringQueryOperatorInput>>
+    name: $.InputField<$.Nullable<StringQueryOperatorInput>>
   }, true>
 
   export type LanguageFilterInput = $.InputObject<'LanguageFilterInput', {
-    code: $.Input.Field<$.Input.Nullable<StringQueryOperatorInput>>
+    code: $.InputField<$.Nullable<StringQueryOperatorInput>>
   }, true>
 
   export type StringQueryOperatorInput = $.InputObject<'StringQueryOperatorInput', {
-    eq: $.Input.Field<$.Input.Nullable<$Scalar.String>>
-    in: $.Input.Field<$.Input.Nullable<$.Input.List<$Scalar.String>>>
-    ne: $.Input.Field<$.Input.Nullable<$Scalar.String>>
-    nin: $.Input.Field<$.Input.Nullable<$.Input.List<$Scalar.String>>>
-    regex: $.Input.Field<$.Input.Nullable<$Scalar.String>>
+    eq: $.InputField<$.Nullable<$Scalar.String>>
+    in: $.InputField<$.Nullable<$.List<$Scalar.String>>>
+    ne: $.InputField<$.Nullable<$Scalar.String>>
+    nin: $.InputField<$.Nullable<$.List<$Scalar.String>>>
+    regex: $.InputField<$.Nullable<$Scalar.String>>
   }, true>
 
   //
@@ -154,52 +156,52 @@ export namespace Schema {
   //
   //
 
-  export type Continent = $.Object$2<'Continent', {
+  export type Continent = $.OutputObject<'Continent', {
     code: $.Field<'code', $Scalar.ID, null>
-    countries: $.Field<'countries', $.Output.List<Country>, null>
+    countries: $.Field<'countries', $.List<Country>, null>
     name: $.Field<'name', $Scalar.String, null>
   }>
 
-  export type Country = $.Object$2<'Country', {
+  export type Country = $.OutputObject<'Country', {
     awsRegion: $.Field<'awsRegion', $Scalar.String, null>
-    capital: $.Field<'capital', $.Output.Nullable<$Scalar.String>, null>
+    capital: $.Field<'capital', $.Nullable<$Scalar.String>, null>
     code: $.Field<'code', $Scalar.ID, null>
     continent: $.Field<'continent', Continent, null>
-    currencies: $.Field<'currencies', $.Output.List<$Scalar.String>, null>
-    currency: $.Field<'currency', $.Output.Nullable<$Scalar.String>, null>
+    currencies: $.Field<'currencies', $.List<$Scalar.String>, null>
+    currency: $.Field<'currency', $.Nullable<$Scalar.String>, null>
     emoji: $.Field<'emoji', $Scalar.String, null>
     emojiU: $.Field<'emojiU', $Scalar.String, null>
-    languages: $.Field<'languages', $.Output.List<Language>, null>
+    languages: $.Field<'languages', $.List<Language>, null>
     name: $.Field<
       'name',
       $Scalar.String,
       $.Args<{
-        lang: $.Input.Field<$.Input.Nullable<$Scalar.String>>
+        lang: $.InputField<$.Nullable<$Scalar.String>>
       }, true>
     >
     native: $.Field<'native', $Scalar.String, null>
     phone: $.Field<'phone', $Scalar.String, null>
-    phones: $.Field<'phones', $.Output.List<$Scalar.String>, null>
-    states: $.Field<'states', $.Output.List<State>, null>
-    subdivisions: $.Field<'subdivisions', $.Output.List<Subdivision>, null>
+    phones: $.Field<'phones', $.List<$Scalar.String>, null>
+    states: $.Field<'states', $.List<State>, null>
+    subdivisions: $.Field<'subdivisions', $.List<Subdivision>, null>
   }>
 
-  export type Language = $.Object$2<'Language', {
+  export type Language = $.OutputObject<'Language', {
     code: $.Field<'code', $Scalar.ID, null>
     name: $.Field<'name', $Scalar.String, null>
     native: $.Field<'native', $Scalar.String, null>
     rtl: $.Field<'rtl', $Scalar.Boolean, null>
   }>
 
-  export type State = $.Object$2<'State', {
-    code: $.Field<'code', $.Output.Nullable<$Scalar.String>, null>
+  export type State = $.OutputObject<'State', {
+    code: $.Field<'code', $.Nullable<$Scalar.String>, null>
     country: $.Field<'country', Country, null>
     name: $.Field<'name', $Scalar.String, null>
   }>
 
-  export type Subdivision = $.Object$2<'Subdivision', {
+  export type Subdivision = $.OutputObject<'Subdivision', {
     code: $.Field<'code', $Scalar.ID, null>
-    emoji: $.Field<'emoji', $.Output.Nullable<$Scalar.String>, null>
+    emoji: $.Field<'emoji', $.Nullable<$Scalar.String>, null>
     name: $.Field<'name', $Scalar.String, null>
   }>
 
@@ -221,6 +223,7 @@ export namespace Schema {
 
   // -- no types --
 }
+
 //
 //
 //
@@ -236,11 +239,6 @@ export namespace Schema {
 //
 //
 //
-
-import type * as $$Utilities from 'graffle/utilities-for-generated'
-import type * as Data from './Data.js'
-import type * as MethodsRoot from './MethodsRoot.js'
-
 export interface Schema<$Scalars extends $$Utilities.SchemaKit.Scalar.ScalarMap = {}>
   extends $$Utilities.SchemaIndexBase
 {

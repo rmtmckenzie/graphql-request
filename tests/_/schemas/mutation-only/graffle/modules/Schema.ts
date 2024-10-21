@@ -1,6 +1,8 @@
-import type * as $ from '../../../../../../src/entrypoints/schema.js'
+import type { SchemaKit as $ } from '../../../../../../src/entrypoints/utilities-for-generated.js'
+import type * as $$Utilities from '../../../../../../src/entrypoints/utilities-for-generated.js'
+import type * as Data from './Data.js'
+import type * as MethodsRoot from './MethodsRoot.js'
 import type * as $Scalar from './Scalar.js'
-
 export namespace Schema {
   //
   //
@@ -18,8 +20,8 @@ export namespace Schema {
   //
   //
 
-  export type Mutation = $.Output.ObjectMutation<{
-    id: $.Field<'id', $.Output.Nullable<$Scalar.ID>, null>
+  export type Mutation = $.ObjectMutation<{
+    id: $.Field<'id', $.Nullable<$Scalar.ID>, null>
     idNonNull: $.Field<'idNonNull', $Scalar.ID, null>
   }>
 
@@ -113,6 +115,7 @@ export namespace Schema {
 
   // -- no types --
 }
+
 //
 //
 //
@@ -128,11 +131,6 @@ export namespace Schema {
 //
 //
 //
-
-import type * as $$Utilities from '../../../../../../src/entrypoints/utilities-for-generated.js'
-import type * as Data from './Data.js'
-import type * as MethodsRoot from './MethodsRoot.js'
-
 export interface Schema<$Scalars extends $$Utilities.SchemaKit.Scalar.ScalarMap = {}>
   extends $$Utilities.SchemaIndexBase
 {

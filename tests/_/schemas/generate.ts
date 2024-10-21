@@ -25,7 +25,7 @@ const generate = async (
     libraryPaths: {
       client: `../../../src/entrypoints/client.ts`,
       schema: `../../../src/entrypoints/schema.ts`,
-      scalars: `../../../src/layers/1_Schema/Hybrid/types/Scalar/Scalar.ts`,
+      scalars: `../../../src/types/Schema/types/Scalar/scalars.ts`,
       utilitiesForGenerated: `../../../src/entrypoints/utilities-for-generated.ts`,
     },
     ...input.input,

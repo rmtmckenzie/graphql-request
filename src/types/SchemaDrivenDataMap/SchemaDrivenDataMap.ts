@@ -1,6 +1,6 @@
-import { Scalar, type Scalar as SchemaScalar } from '../../layers/1_Schema/_.js'
 import type { Grafaid } from '../../lib/grafaid/__.js'
 import { isString } from '../../lib/prelude.js'
+import { SchemaKit } from '../Schema/__.js'
 
 declare global {
   namespace GraffleGlobal {
@@ -98,7 +98,7 @@ export type Enum = GraffleGlobal.SchemaDrivenDataMap.Enum
 
 export type ArgumentsOrInputObjectFields = GraffleGlobal.SchemaDrivenDataMap.ArgumentsOrInputObjectFields
 
-export type Scalar = SchemaScalar.Scalar
+export type Scalar = SchemaKit.Scalar
 
 export type CustomScalarName = string
 
@@ -136,9 +136,10 @@ export const isEnum = (
 
 export const isCustomScalarName = (value: unknown): value is CustomScalarName => isString(value)
 
-export const isScalar = Scalar.isScalar
+export const isScalar = SchemaKit.Scalar.isScalar
 
-export const isScalarLike = (value: unknown): value is ScalarLike => Scalar.isScalar(value) || isCustomScalarName(value)
+export const isScalarLike = (value: unknown): value is ScalarLike =>
+  SchemaKit.Scalar.isScalar(value) || isCustomScalarName(value)
 
 export const isOutputObject = (
   node?: Node,
@@ -169,9 +170,9 @@ export const isOutputField = (
 
 export type NamedLike = ScalarLike | OutputObject | Enum | InputObject
 
-export type OutputLike = SchemaScalar.Scalar | OutputObject | Enum | CustomScalarName
+export type OutputLike = Scalar | OutputObject | Enum | CustomScalarName
 
-export type ScalarLike = SchemaScalar.Scalar | CustomScalarName
+export type ScalarLike = Scalar | CustomScalarName
 
 export type InputLike = ScalarLike | InputObject | Enum
 

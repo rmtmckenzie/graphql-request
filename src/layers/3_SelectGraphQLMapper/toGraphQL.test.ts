@@ -4,7 +4,7 @@ import { db } from '../../../tests/_/schemas/db.js'
 import { schemaDrivenDataMap } from '../../../tests/_/schemas/kitchen-sink/graffle/modules/SchemaDrivenDataMap.js'
 import type * as SelectionSets from '../../../tests/_/schemas/kitchen-sink/graffle/modules/SelectionSets.js'
 import { Grafaid } from '../../lib/grafaid/__.js'
-import type { SchemaKit } from '../1_Schema/__.js'
+import type { SchemaKit } from '../../types/Schema/__.js'
 import { Select } from '../2_Select/__.js'
 import { toGraphQLDocument } from './nodes/1_Document.js'
 
@@ -22,7 +22,7 @@ type CasesDescriptiveQueryWithCustomScalars = [
 ]
 const testEachQueryWithDescriptionWithCustomScalars = test.for.bind(test)<CasesDescriptiveQueryWithCustomScalars>
 
-const tester = <$Scalars extends SchemaKit.Hybrid.Scalar.ScalarMap>(
+const tester = <$Scalars extends SchemaKit.Scalar.ScalarMap>(
   input: { variables: boolean; scalars: $Scalars },
 ) => {
   // dprint-ignore

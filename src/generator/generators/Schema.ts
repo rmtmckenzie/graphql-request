@@ -1,8 +1,8 @@
-import type { SchemaKit } from '../../layers/1_Schema/__.js'
 import { Code } from '../../lib/Code.js'
 import { Grafaid } from '../../lib/grafaid/__.js'
 import { entries, isObjectEmpty, values } from '../../lib/prelude.js'
 import type { GlobalRegistry } from '../../types/GlobalRegistry/GlobalRegistry.js'
+import type { SchemaKit } from '../../types/Schema/__.js'
 import type { Config } from '../config/config.js'
 import { identifiers } from '../helpers/identifiers.js'
 import { createModuleGenerator } from '../helpers/moduleGenerator.js'
@@ -22,24 +22,24 @@ export interface Schema<
 > {
   name: GlobalRegistry.ClientNames
   RootTypesPresent: ('Query' | 'Mutation' | 'Subscription')[]
-  RootUnion: SchemaKit.Output.RootType
+  RootUnion: SchemaKit.RootType
   Root: {
-    Query: null | SchemaKit.Output.ObjectQuery
-    Mutation: null | SchemaKit.Output.ObjectMutation
-    Subscription: null | SchemaKit.Output.ObjectSubscription
+    Query: null | SchemaKit.ObjectQuery
+    Mutation: null | SchemaKit.ObjectMutation
+    Subscription: null | SchemaKit.ObjectSubscription
   }
   allTypes: Record<
     string,
-    | SchemaKit.Hybrid.Enum
-    | SchemaKit.Output.ObjectQuery
-    | SchemaKit.Output.ObjectMutation
-    | SchemaKit.Output.Object$2
-    | SchemaKit.Output.Union
-    | SchemaKit.Output.Interface
+    | SchemaKit.Enum
+    | SchemaKit.ObjectQuery
+    | SchemaKit.ObjectMutation
+    | SchemaKit.OutputObject
+    | SchemaKit.Union
+    | SchemaKit.Interface
   >
-  objects: Record<string, SchemaKit.Output.Object$2>
-  unions: Record<string, SchemaKit.Output.Union>
-  interfaces: Record<string, SchemaKit.Output.Interface>
+  objects: Record<string, SchemaKit.OutputObject>
+  unions: Record<string, SchemaKit.Union>
+  interfaces: Record<string, SchemaKit.Interface>
   /**
    * A map of scalar definitions. Useful for custom scalars.
    */
@@ -50,9 +50,14 @@ export interface Schema<
 export const ModuleGeneratorSchema = createModuleGenerator(
   `Schema`,
   ({ config, code }) => {
-    code(`import type * as $ from '${config.paths.imports.grafflePackage.schema}'`)
-    code(`import type * as $Scalar from './${ModuleGeneratorScalar.name}.js'`)
-    code(`\n\n`)
+    // todo methods root is unused
+    code(`
+      import type * as Data from './${ModuleGeneratorData.name}.js'
+      import type * as ${identifiers.MethodsRoot} from './${ModuleGeneratorMethodsRoot.name}.js'
+      import type { SchemaKit as $ } from '${config.paths.imports.grafflePackage.utilitiesForGenerated}'
+      import type * as ${identifiers.$$Utilities} from '${config.paths.imports.grafflePackage.utilitiesForGenerated}'
+      import type * as $Scalar from './${ModuleGeneratorScalar.name}.js'
+    `)
 
     code(`export namespace ${identifiers.Schema} {`)
     for (const [name, types] of entries(config.schema.kindMap)) {
@@ -73,6 +78,7 @@ export const ModuleGeneratorSchema = createModuleGenerator(
       )
     }
     code(`}`)
+    code()
 
     code(SchemaGenerator({ config }))
   },
@@ -80,17 +86,7 @@ export const ModuleGeneratorSchema = createModuleGenerator(
 
 export const SchemaGenerator = createCodeGenerator(
   ({ config, code }) => {
-    code()
     code(title1(`Schema`))
-    code()
-
-    // todo methods root is unused
-    code(`
-      import type * as Data from './${ModuleGeneratorData.name}.js'
-      import type * as ${identifiers.MethodsRoot} from './${ModuleGeneratorMethodsRoot.name}.js'
-      import type * as ${identifiers.$$Utilities} from '${config.paths.imports.grafflePackage.utilitiesForGenerated}'
-    `)
-    code()
 
     const rootTypesPresence = {
       Query: Grafaid.Schema.KindMap.hasQuery(config.schema.kindMap),
@@ -281,8 +277,8 @@ const concreteRenderers = defineConcreteRenderers({
   GraphQLObjectType: (config, node) => {
     const maybeRootTypeName = (Grafaid.Schema.RootTypeName as Record<string, Grafaid.Schema.RootTypeName>)[node.name]
     const type = maybeRootTypeName
-      ? `$.Output.Object${maybeRootTypeName}<${renderOutputFields(config, node)}>`
-      : `$.Object$2<${Code.string(node.name)}, ${renderOutputFields(config, node)}>`
+      ? `$.Object${maybeRootTypeName}<${renderOutputFields(config, node)}>`
+      : `$.OutputObject<${Code.string(node.name)}, ${renderOutputFields(config, node)}>`
     const doc = getDocumentation(config, node)
     const source = Code.export$(Code.type(node.name, type))
     return Code.TSDocWithBlock(doc, source)
@@ -331,7 +327,7 @@ const renderInputFields = (config: Config, node: AnyGraphQLFieldsType): string =
 }
 
 const renderOutputField = (config: Config, field: Grafaid.Schema.InputOrOutputField): string => {
-  const type = buildType(`output`, config, field.type)
+  const type = buildType(config, field.type)
 
   const args = Grafaid.Schema.isGraphQLOutputField(field) && field.args.length > 0
     ? renderArgs(config, field.args)
@@ -341,11 +337,11 @@ const renderOutputField = (config: Config, field: Grafaid.Schema.InputOrOutputFi
 }
 
 const renderInputField = (config: Config, field: Grafaid.Schema.InputOrOutputField): string => {
-  return `$.Input.Field<${buildType(`input`, config, field.type)}>`
+  return `$.InputField<${buildType(config, field.type)}>`
 }
 
-const buildType = (direction: 'input' | 'output', config: Config, node: Grafaid.Schema.Types) => {
-  const ns = direction === `input` ? `Input` : `Output`
+const buildType = (config: Config, node: Grafaid.Schema.Types) => {
+  // const ns = direction === `input` ? `Input` : `Output`
   const nullable = Grafaid.Schema.isNullableType(node)
   const nodeInner = Grafaid.Schema.getNullableType(node)
 
@@ -354,14 +350,14 @@ const buildType = (direction: 'input' | 'output', config: Config, node: Grafaid.
     // const namedTypeCode = `_.Named<${namedTypeReference}>`
     const namedTypeCode = namedTypeReference
     return nullable
-      ? `$.${ns}.Nullable<${namedTypeCode}>`
+      ? `$.Nullable<${namedTypeCode}>`
       : namedTypeCode
   }
 
   if (Grafaid.Schema.isListType(nodeInner)) {
-    const fieldType = `$.${ns}.List<${buildType(direction, config, nodeInner.ofType)}>` as any as string
+    const fieldType = `$.List<${buildType(config, nodeInner.ofType)}>` as any as string
     return nullable
-      ? `$.${ns}.Nullable<${fieldType}>`
+      ? `$.Nullable<${fieldType}>`
       : fieldType
   }
 
@@ -382,6 +378,6 @@ const renderArgs = (config: Config, args: readonly Grafaid.Schema.Argument[]) =>
 const renderArg = (config: Config, arg: Grafaid.Schema.Argument) => {
   // const { nullable } = unwrapToNonNull(arg.type)
   // hasRequiredArgs = hasRequiredArgs || !nullable
-  const type = buildType(`input`, config, arg.type)
-  return Code.field(arg.name, `$.Input.Field<${type}>`)
+  const type = buildType(config, arg.type)
+  return Code.field(arg.name, `$.InputField<${type}>`)
 }

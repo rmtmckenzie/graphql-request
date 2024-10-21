@@ -1,4 +1,4 @@
-import type { SchemaKit } from '../../1_Schema/__.js'
+import type { SchemaKit } from '../../../types/Schema/__.js'
 import type { Include, Skip } from './_.js'
 
 export interface Definition {

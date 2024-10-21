@@ -33,11 +33,6 @@
         "default": "./build/entrypoints/schema.js"
       }
     },
-    "./schema/scalars": {
-      "import": {
-        "default": "./build/entrypoints/scalars.js"
-      }
-    },
     "./utilities-for-generated": {
       "import": {
         "default": "./build/entrypoints/utilities-for-generated.js"

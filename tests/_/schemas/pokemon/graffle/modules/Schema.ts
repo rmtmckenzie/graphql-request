@@ -1,6 +1,8 @@
-import type * as $ from '../../../../../../src/entrypoints/schema.js'
+import type { SchemaKit as $ } from '../../../../../../src/entrypoints/utilities-for-generated.js'
+import type * as $$Utilities from '../../../../../../src/entrypoints/utilities-for-generated.js'
+import type * as Data from './Data.js'
+import type * as MethodsRoot from './MethodsRoot.js'
 import type * as $Scalar from './Scalar.js'
-
 export namespace Schema {
   //
   //
@@ -18,46 +20,46 @@ export namespace Schema {
   //
   //
 
-  export type Mutation = $.Output.ObjectMutation<{
+  export type Mutation = $.ObjectMutation<{
     addPokemon: $.Field<
       'addPokemon',
-      $.Output.Nullable<Pokemon>,
+      $.Nullable<Pokemon>,
       $.Args<{
-        attack: $.Input.Field<$.Input.Nullable<$Scalar.Int>>
-        defense: $.Input.Field<$.Input.Nullable<$Scalar.Int>>
-        hp: $.Input.Field<$.Input.Nullable<$Scalar.Int>>
-        name: $.Input.Field<$Scalar.String>
-        type: $.Input.Field<PokemonType>
+        attack: $.InputField<$.Nullable<$Scalar.Int>>
+        defense: $.InputField<$.Nullable<$Scalar.Int>>
+        hp: $.InputField<$.Nullable<$Scalar.Int>>
+        name: $.InputField<$Scalar.String>
+        type: $.InputField<PokemonType>
       }, false>
     >
   }>
 
-  export type Query = $.Output.ObjectQuery<{
-    battles: $.Field<'battles', $.Output.List<Battle>, null>
-    beings: $.Field<'beings', $.Output.List<Being>, null>
-    pokemon: $.Field<'pokemon', $.Output.Nullable<$.Output.List<Pokemon>>, null>
+  export type Query = $.ObjectQuery<{
+    battles: $.Field<'battles', $.List<Battle>, null>
+    beings: $.Field<'beings', $.List<Being>, null>
+    pokemon: $.Field<'pokemon', $.Nullable<$.List<Pokemon>>, null>
     pokemonByName: $.Field<
       'pokemonByName',
-      $.Output.Nullable<$.Output.List<Pokemon>>,
+      $.Nullable<$.List<Pokemon>>,
       $.Args<{
-        name: $.Input.Field<$Scalar.String>
+        name: $.InputField<$Scalar.String>
       }, false>
     >
     pokemons: $.Field<
       'pokemons',
-      $.Output.Nullable<$.Output.List<Pokemon>>,
+      $.Nullable<$.List<Pokemon>>,
       $.Args<{
-        filter: $.Input.Field<$.Input.Nullable<PokemonFilter>>
+        filter: $.InputField<$.Nullable<PokemonFilter>>
       }, true>
     >
     trainerByName: $.Field<
       'trainerByName',
-      $.Output.Nullable<Trainer>,
+      $.Nullable<Trainer>,
       $.Args<{
-        name: $.Input.Field<$Scalar.String>
+        name: $.InputField<$Scalar.String>
       }, false>
     >
-    trainers: $.Field<'trainers', $.Output.Nullable<$.Output.List<Trainer>>, null>
+    trainers: $.Field<'trainers', $.Nullable<$.List<Trainer>>, null>
   }>
 
   //
@@ -116,18 +118,18 @@ export namespace Schema {
   //
 
   export type DateFilter = $.InputObject<'DateFilter', {
-    gte: $.Input.Field<$.Input.Nullable<$Scalar.Float>>
-    lte: $.Input.Field<$.Input.Nullable<$Scalar.Float>>
+    gte: $.InputField<$.Nullable<$Scalar.Float>>
+    lte: $.InputField<$.Nullable<$Scalar.Float>>
   }, true>
 
   export type PokemonFilter = $.InputObject<'PokemonFilter', {
-    birthday: $.Input.Field<$.Input.Nullable<DateFilter>>
-    name: $.Input.Field<$.Input.Nullable<StringFilter>>
+    birthday: $.InputField<$.Nullable<DateFilter>>
+    name: $.InputField<$.Nullable<StringFilter>>
   }, true>
 
   export type StringFilter = $.InputObject<'StringFilter', {
-    contains: $.Input.Field<$.Input.Nullable<$Scalar.String>>
-    in: $.Input.Field<$.Input.Nullable<$.Input.List<$Scalar.String>>>
+    contains: $.InputField<$.Nullable<$Scalar.String>>
+    in: $.InputField<$.Nullable<$.List<$Scalar.String>>>
   }, true>
 
   //
@@ -147,8 +149,8 @@ export namespace Schema {
   //
 
   export type Being = $.Interface<'Being', {
-    id: $.Field<'id', $.Output.Nullable<$Scalar.ID>, null>
-    name: $.Field<'name', $.Output.Nullable<$Scalar.String>, null>
+    id: $.Field<'id', $.Nullable<$Scalar.ID>, null>
+    name: $.Field<'name', $.Nullable<$Scalar.String>, null>
   }, [Patron, Pokemon, Trainer]>
 
   //
@@ -167,63 +169,63 @@ export namespace Schema {
   //
   //
 
-  export type BattleRoyale = $.Object$2<'BattleRoyale', {
-    combatants: $.Field<'combatants', $.Output.Nullable<$.Output.List<CombatantMultiPokemon>>, null>
-    date: $.Field<'date', $.Output.Nullable<$Scalar.Float>, null>
-    id: $.Field<'id', $.Output.Nullable<$Scalar.ID>, null>
-    winner: $.Field<'winner', $.Output.Nullable<Trainer>, null>
+  export type BattleRoyale = $.OutputObject<'BattleRoyale', {
+    combatants: $.Field<'combatants', $.Nullable<$.List<CombatantMultiPokemon>>, null>
+    date: $.Field<'date', $.Nullable<$Scalar.Float>, null>
+    id: $.Field<'id', $.Nullable<$Scalar.ID>, null>
+    winner: $.Field<'winner', $.Nullable<Trainer>, null>
   }>
 
-  export type BattleTrainer = $.Object$2<'BattleTrainer', {
-    combatant1: $.Field<'combatant1', $.Output.Nullable<CombatantSinglePokemon>, null>
-    combatant2: $.Field<'combatant2', $.Output.Nullable<CombatantSinglePokemon>, null>
-    date: $.Field<'date', $.Output.Nullable<$Scalar.Float>, null>
-    id: $.Field<'id', $.Output.Nullable<$Scalar.ID>, null>
-    winner: $.Field<'winner', $.Output.Nullable<Trainer>, null>
+  export type BattleTrainer = $.OutputObject<'BattleTrainer', {
+    combatant1: $.Field<'combatant1', $.Nullable<CombatantSinglePokemon>, null>
+    combatant2: $.Field<'combatant2', $.Nullable<CombatantSinglePokemon>, null>
+    date: $.Field<'date', $.Nullable<$Scalar.Float>, null>
+    id: $.Field<'id', $.Nullable<$Scalar.ID>, null>
+    winner: $.Field<'winner', $.Nullable<Trainer>, null>
   }>
 
-  export type BattleWild = $.Object$2<'BattleWild', {
-    date: $.Field<'date', $.Output.Nullable<$Scalar.Float>, null>
-    id: $.Field<'id', $.Output.Nullable<$Scalar.ID>, null>
-    pokemon: $.Field<'pokemon', $.Output.Nullable<Pokemon>, null>
-    result: $.Field<'result', $.Output.Nullable<BattleWildResult>, null>
-    trainer: $.Field<'trainer', $.Output.Nullable<Trainer>, null>
-    wildPokemons: $.Field<'wildPokemons', $.Output.Nullable<$.Output.List<Pokemon>>, null>
+  export type BattleWild = $.OutputObject<'BattleWild', {
+    date: $.Field<'date', $.Nullable<$Scalar.Float>, null>
+    id: $.Field<'id', $.Nullable<$Scalar.ID>, null>
+    pokemon: $.Field<'pokemon', $.Nullable<Pokemon>, null>
+    result: $.Field<'result', $.Nullable<BattleWildResult>, null>
+    trainer: $.Field<'trainer', $.Nullable<Trainer>, null>
+    wildPokemons: $.Field<'wildPokemons', $.Nullable<$.List<Pokemon>>, null>
   }>
 
-  export type CombatantMultiPokemon = $.Object$2<'CombatantMultiPokemon', {
-    pokemons: $.Field<'pokemons', $.Output.Nullable<$.Output.List<Pokemon>>, null>
-    trainer: $.Field<'trainer', $.Output.Nullable<Trainer>, null>
+  export type CombatantMultiPokemon = $.OutputObject<'CombatantMultiPokemon', {
+    pokemons: $.Field<'pokemons', $.Nullable<$.List<Pokemon>>, null>
+    trainer: $.Field<'trainer', $.Nullable<Trainer>, null>
   }>
 
-  export type CombatantSinglePokemon = $.Object$2<'CombatantSinglePokemon', {
-    pokemon: $.Field<'pokemon', $.Output.Nullable<Pokemon>, null>
-    trainer: $.Field<'trainer', $.Output.Nullable<Trainer>, null>
+  export type CombatantSinglePokemon = $.OutputObject<'CombatantSinglePokemon', {
+    pokemon: $.Field<'pokemon', $.Nullable<Pokemon>, null>
+    trainer: $.Field<'trainer', $.Nullable<Trainer>, null>
   }>
 
-  export type Patron = $.Object$2<'Patron', {
-    id: $.Field<'id', $.Output.Nullable<$Scalar.ID>, null>
-    money: $.Field<'money', $.Output.Nullable<$Scalar.Int>, null>
-    name: $.Field<'name', $.Output.Nullable<$Scalar.String>, null>
+  export type Patron = $.OutputObject<'Patron', {
+    id: $.Field<'id', $.Nullable<$Scalar.ID>, null>
+    money: $.Field<'money', $.Nullable<$Scalar.Int>, null>
+    name: $.Field<'name', $.Nullable<$Scalar.String>, null>
   }>
 
-  export type Pokemon = $.Object$2<'Pokemon', {
-    attack: $.Field<'attack', $.Output.Nullable<$Scalar.Int>, null>
-    birthday: $.Field<'birthday', $.Output.Nullable<$Scalar.Int>, null>
-    defense: $.Field<'defense', $.Output.Nullable<$Scalar.Int>, null>
-    hp: $.Field<'hp', $.Output.Nullable<$Scalar.Int>, null>
-    id: $.Field<'id', $.Output.Nullable<$Scalar.ID>, null>
-    name: $.Field<'name', $.Output.Nullable<$Scalar.String>, null>
-    trainer: $.Field<'trainer', $.Output.Nullable<Trainer>, null>
-    type: $.Field<'type', $.Output.Nullable<PokemonType>, null>
+  export type Pokemon = $.OutputObject<'Pokemon', {
+    attack: $.Field<'attack', $.Nullable<$Scalar.Int>, null>
+    birthday: $.Field<'birthday', $.Nullable<$Scalar.Int>, null>
+    defense: $.Field<'defense', $.Nullable<$Scalar.Int>, null>
+    hp: $.Field<'hp', $.Nullable<$Scalar.Int>, null>
+    id: $.Field<'id', $.Nullable<$Scalar.ID>, null>
+    name: $.Field<'name', $.Nullable<$Scalar.String>, null>
+    trainer: $.Field<'trainer', $.Nullable<Trainer>, null>
+    type: $.Field<'type', $.Nullable<PokemonType>, null>
   }>
 
-  export type Trainer = $.Object$2<'Trainer', {
-    class: $.Field<'class', $.Output.Nullable<TrainerClass>, null>
-    fans: $.Field<'fans', $.Output.Nullable<$.Output.List<Patron>>, null>
-    id: $.Field<'id', $.Output.Nullable<$Scalar.ID>, null>
-    name: $.Field<'name', $.Output.Nullable<$Scalar.String>, null>
-    pokemon: $.Field<'pokemon', $.Output.Nullable<$.Output.List<Pokemon>>, null>
+  export type Trainer = $.OutputObject<'Trainer', {
+    class: $.Field<'class', $.Nullable<TrainerClass>, null>
+    fans: $.Field<'fans', $.Nullable<$.List<Patron>>, null>
+    id: $.Field<'id', $.Nullable<$Scalar.ID>, null>
+    name: $.Field<'name', $.Nullable<$Scalar.String>, null>
+    pokemon: $.Field<'pokemon', $.Nullable<$.List<Pokemon>>, null>
   }>
 
   //
@@ -244,6 +246,7 @@ export namespace Schema {
 
   export type Battle = $.Union<'Battle', [BattleRoyale, BattleTrainer, BattleWild]>
 }
+
 //
 //
 //
@@ -259,11 +262,6 @@ export namespace Schema {
 //
 //
 //
-
-import type * as $$Utilities from '../../../../../../src/entrypoints/utilities-for-generated.js'
-import type * as Data from './Data.js'
-import type * as MethodsRoot from './MethodsRoot.js'
-
 export interface Schema<$Scalars extends $$Utilities.SchemaKit.Scalar.ScalarMap = {}>
   extends $$Utilities.SchemaIndexBase
 {

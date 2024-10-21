@@ -1,7 +1,7 @@
 import type { Simplify } from 'type-fest'
 import type { Schema } from '../../generator/generators/Schema.js'
 import type { TSErrorDescriptive } from '../../lib/ts-error.js'
-import type { SchemaKit } from '../1_Schema/__.js'
+import type { SchemaKit } from '../../types/Schema/__.js'
 import type { Select } from '../2_Select/__.js'
 import type { Interface } from './Interface.js'
 import type { Object } from './Object.js'
@@ -22,19 +22,19 @@ export type Field<$SelectionSet, $Field extends SchemaKit.SomeField, $Schema ext
 // dprint-ignore
 type FieldType<
   $SelectionSet,
-  $Type extends SchemaKit.Output.Any,
+  $Type extends SchemaKit.OutputTypes,
   $Schema extends Schema
 > = 
-  $Type extends SchemaKit.__typename<infer $Value>             ? $Value :
-  $Type extends SchemaKit.Output.Nullable<infer $InnerType>    ? null | FieldType<$SelectionSet, $InnerType, $Schema> :
-  $Type extends SchemaKit.Output.List<infer $InnerType>        ? Array<FieldType<$SelectionSet, $InnerType, $Schema>> :
-  $Type extends SchemaKit.Enum<infer _, infer $Members>        ? $Members[number] :
-  $Type extends SchemaKit.Scalar.Scalar                        ? ReturnType<$Type['codec']['decode']> :
-  $Type extends SchemaKit.Scalar.ScalarCodecless               ? ReturnType<GetCodecForCodecless<$Type, $Schema>['codec']['decode']> :
-  $Type extends SchemaKit.Object$2                             ? Object<$SelectionSet, $Schema, $Type> :
-  $Type extends SchemaKit.Interface                            ? Interface<$SelectionSet, $Schema, $Type> :
-  $Type extends SchemaKit.Union                                ? Union<$SelectionSet, $Schema, $Type> :
-                                                                 TSErrorDescriptive<'FieldType', `Unknown type`, { $Type: $Type; $SelectionSet: $SelectionSet; $Schema:$Schema }>
+  $Type extends SchemaKit.__typename<infer $Value>                                      ? $Value :
+  $Type extends SchemaKit.Nullable<infer $InnerType extends SchemaKit.OutputTypes>      ? null | FieldType<$SelectionSet, $InnerType, $Schema> :
+  $Type extends SchemaKit.List<infer $InnerType extends SchemaKit.OutputTypes>          ? Array<FieldType<$SelectionSet, $InnerType, $Schema>> :
+  $Type extends SchemaKit.Enum<infer _, infer $Members>                                 ? $Members[number] :
+  $Type extends SchemaKit.Scalar                                                        ? ReturnType<$Type['codec']['decode']> :
+  $Type extends SchemaKit.Scalar.ScalarCodecless                                        ? ReturnType<GetCodecForCodecless<$Type, $Schema>['codec']['decode']> :
+  $Type extends SchemaKit.OutputObject                                                      ? Object<$SelectionSet, $Schema, $Type> :
+  $Type extends SchemaKit.Interface                                                     ? Interface<$SelectionSet, $Schema, $Type> :
+  $Type extends SchemaKit.Union                                                         ? Union<$SelectionSet, $Schema, $Type> :
+                                                                                          TSErrorDescriptive<'FieldType', `Unknown type`, { $Type: $Type; $SelectionSet: $SelectionSet; $Schema:$Schema }>
 
 // dprint-ignore
 type GetCodecForCodecless<

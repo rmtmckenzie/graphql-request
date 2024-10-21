@@ -12,7 +12,7 @@ export default Generator
     libraryPaths: {
       client: `../../../../entrypoints/client.ts`,
       schema: `../../../../entrypoints/schema.ts`,
-      scalars: `../../../../layers/1_Schema/Hybrid/types/Scalar/Scalar.ts`,
+      scalars: `../../../../types/Schema/types/Scalar/scalars.ts`,
       utilitiesForGenerated: `../../../../entrypoints/utilities-for-generated.ts`,
     },
   })
