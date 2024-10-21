@@ -42,7 +42,7 @@ const String = $Scalar.String
 //
 //
 
-const Date = $Scalar.Date
+const Date = 'Date'
 
 //
 //
@@ -194,6 +194,7 @@ const Foo: $Utilities.SchemaDrivenDataMap.OutputObject = {
 
 const Object1: $Utilities.SchemaDrivenDataMap.OutputObject = {
   f: {
+    ABCEnum: {},
     boolean: {},
     float: {},
     id: {},

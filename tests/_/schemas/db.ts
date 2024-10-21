@@ -21,12 +21,19 @@ const float = 123.456
 
 const boolean = true
 
+const ABCEnum = {
+  A: `A`,
+  B: `B`,
+  C: `C`,
+} as const
+
 const Object1 = {
   string,
   int,
   float,
   boolean,
   id,
+  ABCEnum: ABCEnum.A,
 }
 
 const Foo = {
@@ -41,7 +48,7 @@ export const db = {
     int,
   },
   Interface: { id },
-  ABCEnum: `A`,
+  ABCEnum: ABCEnum.A,
   ErrorOne: { message: `errorOne`, infoId: id },
   ErrorTwo: { message: `errorOne`, infoInt: int },
   ErrorOneError,
@@ -51,7 +58,9 @@ export const db = {
   id1: id,
   string,
   date0: new Date(0),
+  date0Encoded: new Date(0).toISOString(),
   date1: new Date(1),
+  date1Encoded: new Date(1).toISOString(),
   Foo,
   Bar: {
     int,
@@ -69,3 +78,7 @@ export const db = {
   },
   errorAggregate,
 } as const
+
+export namespace db {
+  export type ABCEnum = (typeof ABCEnum)[keyof typeof ABCEnum]
+}

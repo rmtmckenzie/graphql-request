@@ -62,7 +62,7 @@ export namespace GlobalRegistry {
     : keyof GraffleGlobal.Clients
 
   // dprint-ignore
-  export type HasDefaultUrlForSchema<$Schema extends ClientUnion> =
+  export type HasDefaultUrlForSchema<$Schema extends Client> =
     $Schema['defaultSchemaUrl'] extends null
       ? false
       : true
@@ -74,6 +74,26 @@ export namespace GlobalRegistry {
   // eslint-disable-next-line
   // @ts-ignore passes after generation
   export type SchemaDefault = GetSchema<DefaultClientName>
+
+  // dprint-ignore
+  export type Has<$Name extends string> =
+    $Name extends ClientNames
+      ? true
+      : false
+
+  export type Get<$Name extends string> = $Name extends ClientNames
+    // eslint-disable-next-line
+    // @ts-ignore passes after generation
+    ? GraffleGlobal.Clients[$Name]
+    : never
+
+  // dprint-ignore
+  export type GetOrGeneric<$Name extends string> =
+    IsEmpty extends true
+      ? Client
+      : $Name extends keyof Clients
+        ? Clients[$Name]
+        : Client
 
   // dprint-ignore
   export type GetOrDefault<$Name extends ClientNames | undefined> =

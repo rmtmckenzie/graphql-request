@@ -5,7 +5,7 @@ import { isSymbol } from '../../../lib/prelude.js'
 import { Select } from '../../2_Select/__.js'
 import { RequestCore } from '../../5_request/__.js'
 import type { GlobalRegistry } from '../../GlobalRegistry.js'
-import { type ClientContext, defineTerminus, type State } from '../fluent.js'
+import { type ClientContext, defineTerminus } from '../fluent.js'
 import { handleOutput } from '../handleOutput.js'
 import type { Config } from '../Settings/Config.js'
 
@@ -15,9 +15,13 @@ export interface FnRequestMethods extends Fluent.FnMerge {
 }
 
 // dprint-ignore
-export type BuilderRequestMethods<$Context extends ClientContext>=
+export type BuilderRequestMethods<$Context extends ClientContext> =
   & (
-    $Context['config']['schemaMap'] extends null
+    // todo
+    // GlobalRegistry.Has<$Context['name']> extends false
+    // eslint-disable-next-line
+    // @ts-ignore passes after generation
+    GlobalRegistry.Has<$Context['config']['name']> extends false
       ? {}
       :
         (
@@ -42,7 +46,7 @@ export const requestMethodsProperties = defineTerminus((state) => {
   }
 })
 
-export const createMethodDocument = (state: State) => (document: Select.Document.DocumentObject) => {
+export const createMethodDocument = (state: ClientContext) => (document: Select.Document.DocumentObject) => {
   const documentNormalized = Select.Document.normalizeOrThrow(document)
   return {
     run: async (maybeOperationName?: string) => {
@@ -51,7 +55,7 @@ export const createMethodDocument = (state: State) => (document: Select.Document
   }
 }
 
-const createMethodRootType = (state: State, rootTypeName: Grafaid.Schema.RootTypeName) => {
+const createMethodRootType = (state: ClientContext, rootTypeName: Grafaid.Schema.RootTypeName) => {
   return new Proxy({}, {
     get: (_, key) => {
       if (isSymbol(key)) throw new Error(`Symbols not supported.`)
@@ -69,7 +73,7 @@ const createMethodRootType = (state: State, rootTypeName: Grafaid.Schema.RootTyp
 }
 
 const executeRootField = async (
-  state: State,
+  state: ClientContext,
   rootTypeName: Grafaid.Schema.RootTypeName,
   rootFieldName: string,
   rootFieldSelectionSet?: Select.SelectionSet.AnySelectionSet,
@@ -87,7 +91,7 @@ const executeRootField = async (
 }
 
 const executeRootType = async (
-  state: State,
+  state: ClientContext,
   rootTypeName: Grafaid.Schema.RootTypeName,
   rootTypeSelectionSet: Select.SelectionSet.AnySelectionSet,
 ) => {
@@ -101,7 +105,7 @@ const executeRootType = async (
 }
 
 export const executeDocument = async (
-  state: State,
+  state: ClientContext,
   document: Select.Document.DocumentNormalized,
   operationName?: string,
   variables?: Grafaid.Variables,

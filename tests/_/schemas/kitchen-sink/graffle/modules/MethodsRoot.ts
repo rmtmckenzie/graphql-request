@@ -1,87 +1,91 @@
 import { type Simplify } from 'type-fest'
 import type { InferResult } from '../../../../../../src/entrypoints/schema.js'
-import type * as Utils from '../../../../../../src/entrypoints/utilities-for-generated.js'
+import type * as $$Utilities from '../../../../../../src/entrypoints/utilities-for-generated.js'
 import type { Schema } from './Schema.js'
 import type * as SelectionSet from './SelectionSets.js'
 
-export interface MutationMethods<$Config extends Utils.Config> {
-  // todo Use a static type here?
-  $batch: <$SelectionSet>(selectionSet: Utils.Exact<$SelectionSet, SelectionSet.Mutation>) => Promise<
+export interface MutationMethods<$Context extends $$Utilities.ClientContext> {
+  $batch: <$SelectionSet>(
+    selectionSet: $$Utilities.Exact<$SelectionSet, SelectionSet.Mutation<$Context['scalars']>>,
+  ) => Promise<
     Simplify<
-      Utils.HandleOutput<
-        $Config,
-        InferResult.Mutation<$SelectionSet, Schema>
+      $$Utilities.HandleOutput<
+        $Context,
+        InferResult.Mutation<$SelectionSet, Schema<$Context['scalars']>>
       >
     >
   >
-  // todo Use a static type here?
   __typename: () => Promise<
     Simplify<
-      Utils.HandleOutputGraffleRootField<
-        $Config,
+      $$Utilities.HandleOutputGraffleRootField<
+        $Context,
         { __typename: 'Mutation' },
         '__typename'
       >
     >
   >
-  id: <$SelectionSet>(selectionSet?: Utils.Exact<$SelectionSet, SelectionSet.Mutation.id>) => Promise<
+  id: <$SelectionSet>(
+    selectionSet?: $$Utilities.Exact<$SelectionSet, SelectionSet.Mutation.id<$Context['scalars']>>,
+  ) => Promise<
     Simplify<
-      Utils.HandleOutputGraffleRootField<
-        $Config,
-        InferResult.Mutation<{ id: $SelectionSet }, Schema>,
+      $$Utilities.HandleOutputGraffleRootField<
+        $Context,
+        InferResult.Mutation<{ id: $SelectionSet }, Schema<$Context['scalars']>>,
         'id'
       >
     >
   >
-  idNonNull: <$SelectionSet>(selectionSet?: Utils.Exact<$SelectionSet, SelectionSet.Mutation.idNonNull>) => Promise<
+  idNonNull: <$SelectionSet>(
+    selectionSet?: $$Utilities.Exact<$SelectionSet, SelectionSet.Mutation.idNonNull<$Context['scalars']>>,
+  ) => Promise<
     Simplify<
-      Utils.HandleOutputGraffleRootField<
-        $Config,
-        InferResult.Mutation<{ idNonNull: $SelectionSet }, Schema>,
+      $$Utilities.HandleOutputGraffleRootField<
+        $Context,
+        InferResult.Mutation<{ idNonNull: $SelectionSet }, Schema<$Context['scalars']>>,
         'idNonNull'
       >
     >
   >
 }
 
-export interface QueryMethods<$Config extends Utils.Config> {
-  // todo Use a static type here?
-  $batch: <$SelectionSet>(selectionSet: Utils.Exact<$SelectionSet, SelectionSet.Query>) => Promise<
+export interface QueryMethods<$Context extends $$Utilities.ClientContext> {
+  $batch: <$SelectionSet>(
+    selectionSet: $$Utilities.Exact<$SelectionSet, SelectionSet.Query<$Context['scalars']>>,
+  ) => Promise<
     Simplify<
-      Utils.HandleOutput<
-        $Config,
-        InferResult.Query<$SelectionSet, Schema>
+      $$Utilities.HandleOutput<
+        $Context,
+        InferResult.Query<$SelectionSet, Schema<$Context['scalars']>>
       >
     >
   >
-  // todo Use a static type here?
   __typename: () => Promise<
     Simplify<
-      Utils.HandleOutputGraffleRootField<
-        $Config,
+      $$Utilities.HandleOutputGraffleRootField<
+        $Context,
         { __typename: 'Query' },
         '__typename'
       >
     >
   >
   InputObjectNested: <$SelectionSet>(
-    selectionSet?: Utils.Exact<$SelectionSet, SelectionSet.Query.InputObjectNested>,
+    selectionSet?: $$Utilities.Exact<$SelectionSet, SelectionSet.Query.InputObjectNested<$Context['scalars']>>,
   ) => Promise<
     Simplify<
-      Utils.HandleOutputGraffleRootField<
-        $Config,
-        InferResult.Query<{ InputObjectNested: $SelectionSet }, Schema>,
+      $$Utilities.HandleOutputGraffleRootField<
+        $Context,
+        InferResult.Query<{ InputObjectNested: $SelectionSet }, Schema<$Context['scalars']>>,
         'InputObjectNested'
       >
     >
   >
   InputObjectNestedNonNull: <$SelectionSet>(
-    selectionSet: Utils.Exact<$SelectionSet, SelectionSet.Query.InputObjectNestedNonNull>,
+    selectionSet: $$Utilities.Exact<$SelectionSet, SelectionSet.Query.InputObjectNestedNonNull<$Context['scalars']>>,
   ) => Promise<
     Simplify<
-      Utils.HandleOutputGraffleRootField<
-        $Config,
-        InferResult.Query<{ InputObjectNestedNonNull: $SelectionSet }, Schema>,
+      $$Utilities.HandleOutputGraffleRootField<
+        $Context,
+        InferResult.Query<{ InputObjectNestedNonNull: $SelectionSet }, Schema<$Context['scalars']>>,
         'InputObjectNestedNonNull'
       >
     >
@@ -89,387 +93,434 @@ export interface QueryMethods<$Config extends Utils.Config> {
   /**
    * Query enum field documentation.
    */
-  abcEnum: <$SelectionSet>(selectionSet: Utils.Exact<$SelectionSet, SelectionSet.Query.abcEnum>) => Promise<
+  abcEnum: <$SelectionSet>(
+    selectionSet: $$Utilities.Exact<$SelectionSet, SelectionSet.Query.abcEnum<$Context['scalars']>>,
+  ) => Promise<
     Simplify<
-      Utils.HandleOutputGraffleRootField<
-        $Config,
-        InferResult.Query<{ abcEnum: $SelectionSet }, Schema>,
+      $$Utilities.HandleOutputGraffleRootField<
+        $Context,
+        InferResult.Query<{ abcEnum: $SelectionSet }, Schema<$Context['scalars']>>,
         'abcEnum'
       >
     >
   >
   argInputObjectCircular: <$SelectionSet>(
-    selectionSet?: Utils.Exact<$SelectionSet, SelectionSet.Query.argInputObjectCircular>,
+    selectionSet?: $$Utilities.Exact<$SelectionSet, SelectionSet.Query.argInputObjectCircular<$Context['scalars']>>,
   ) => Promise<
     Simplify<
-      Utils.HandleOutputGraffleRootField<
-        $Config,
-        InferResult.Query<{ argInputObjectCircular: $SelectionSet }, Schema>,
+      $$Utilities.HandleOutputGraffleRootField<
+        $Context,
+        InferResult.Query<{ argInputObjectCircular: $SelectionSet }, Schema<$Context['scalars']>>,
         'argInputObjectCircular'
       >
     >
   >
-  date: <$SelectionSet>(selectionSet?: Utils.Exact<$SelectionSet, SelectionSet.Query.date>) => Promise<
+  date: <$SelectionSet>(
+    selectionSet?: $$Utilities.Exact<$SelectionSet, SelectionSet.Query.date<$Context['scalars']>>,
+  ) => Promise<
     Simplify<
-      Utils.HandleOutputGraffleRootField<
-        $Config,
-        InferResult.Query<{ date: $SelectionSet }, Schema>,
+      $$Utilities.HandleOutputGraffleRootField<
+        $Context,
+        InferResult.Query<{ date: $SelectionSet }, Schema<$Context['scalars']>>,
         'date'
       >
     >
   >
-  dateArg: <$SelectionSet>(selectionSet?: Utils.Exact<$SelectionSet, SelectionSet.Query.dateArg>) => Promise<
+  dateArg: <$SelectionSet>(
+    selectionSet?: $$Utilities.Exact<$SelectionSet, SelectionSet.Query.dateArg<$Context['scalars']>>,
+  ) => Promise<
     Simplify<
-      Utils.HandleOutputGraffleRootField<
-        $Config,
-        InferResult.Query<{ dateArg: $SelectionSet }, Schema>,
+      $$Utilities.HandleOutputGraffleRootField<
+        $Context,
+        InferResult.Query<{ dateArg: $SelectionSet }, Schema<$Context['scalars']>>,
         'dateArg'
       >
     >
   >
   dateArgInputObject: <$SelectionSet>(
-    selectionSet?: Utils.Exact<$SelectionSet, SelectionSet.Query.dateArgInputObject>,
+    selectionSet?: $$Utilities.Exact<$SelectionSet, SelectionSet.Query.dateArgInputObject<$Context['scalars']>>,
   ) => Promise<
     Simplify<
-      Utils.HandleOutputGraffleRootField<
-        $Config,
-        InferResult.Query<{ dateArgInputObject: $SelectionSet }, Schema>,
+      $$Utilities.HandleOutputGraffleRootField<
+        $Context,
+        InferResult.Query<{ dateArgInputObject: $SelectionSet }, Schema<$Context['scalars']>>,
         'dateArgInputObject'
       >
     >
   >
-  dateArgList: <$SelectionSet>(selectionSet?: Utils.Exact<$SelectionSet, SelectionSet.Query.dateArgList>) => Promise<
+  dateArgList: <$SelectionSet>(
+    selectionSet?: $$Utilities.Exact<$SelectionSet, SelectionSet.Query.dateArgList<$Context['scalars']>>,
+  ) => Promise<
     Simplify<
-      Utils.HandleOutputGraffleRootField<
-        $Config,
-        InferResult.Query<{ dateArgList: $SelectionSet }, Schema>,
+      $$Utilities.HandleOutputGraffleRootField<
+        $Context,
+        InferResult.Query<{ dateArgList: $SelectionSet }, Schema<$Context['scalars']>>,
         'dateArgList'
       >
     >
   >
   dateArgNonNull: <$SelectionSet>(
-    selectionSet: Utils.Exact<$SelectionSet, SelectionSet.Query.dateArgNonNull>,
+    selectionSet: $$Utilities.Exact<$SelectionSet, SelectionSet.Query.dateArgNonNull<$Context['scalars']>>,
   ) => Promise<
     Simplify<
-      Utils.HandleOutputGraffleRootField<
-        $Config,
-        InferResult.Query<{ dateArgNonNull: $SelectionSet }, Schema>,
+      $$Utilities.HandleOutputGraffleRootField<
+        $Context,
+        InferResult.Query<{ dateArgNonNull: $SelectionSet }, Schema<$Context['scalars']>>,
         'dateArgNonNull'
       >
     >
   >
   dateArgNonNullList: <$SelectionSet>(
-    selectionSet: Utils.Exact<$SelectionSet, SelectionSet.Query.dateArgNonNullList>,
+    selectionSet: $$Utilities.Exact<$SelectionSet, SelectionSet.Query.dateArgNonNullList<$Context['scalars']>>,
   ) => Promise<
     Simplify<
-      Utils.HandleOutputGraffleRootField<
-        $Config,
-        InferResult.Query<{ dateArgNonNullList: $SelectionSet }, Schema>,
+      $$Utilities.HandleOutputGraffleRootField<
+        $Context,
+        InferResult.Query<{ dateArgNonNullList: $SelectionSet }, Schema<$Context['scalars']>>,
         'dateArgNonNullList'
       >
     >
   >
   dateArgNonNullListNonNull: <$SelectionSet>(
-    selectionSet: Utils.Exact<$SelectionSet, SelectionSet.Query.dateArgNonNullListNonNull>,
+    selectionSet: $$Utilities.Exact<$SelectionSet, SelectionSet.Query.dateArgNonNullListNonNull<$Context['scalars']>>,
   ) => Promise<
     Simplify<
-      Utils.HandleOutputGraffleRootField<
-        $Config,
-        InferResult.Query<{ dateArgNonNullListNonNull: $SelectionSet }, Schema>,
+      $$Utilities.HandleOutputGraffleRootField<
+        $Context,
+        InferResult.Query<{ dateArgNonNullListNonNull: $SelectionSet }, Schema<$Context['scalars']>>,
         'dateArgNonNullListNonNull'
       >
     >
   >
   dateInterface1: <$SelectionSet>(
-    selectionSet: Utils.Exact<$SelectionSet, SelectionSet.Query.dateInterface1>,
+    selectionSet: $$Utilities.Exact<$SelectionSet, SelectionSet.Query.dateInterface1<$Context['scalars']>>,
   ) => Promise<
     Simplify<
-      Utils.HandleOutputGraffleRootField<
-        $Config,
-        InferResult.Query<{ dateInterface1: $SelectionSet }, Schema>,
+      $$Utilities.HandleOutputGraffleRootField<
+        $Context,
+        InferResult.Query<{ dateInterface1: $SelectionSet }, Schema<$Context['scalars']>>,
         'dateInterface1'
       >
     >
   >
-  dateList: <$SelectionSet>(selectionSet?: Utils.Exact<$SelectionSet, SelectionSet.Query.dateList>) => Promise<
+  dateList: <$SelectionSet>(
+    selectionSet?: $$Utilities.Exact<$SelectionSet, SelectionSet.Query.dateList<$Context['scalars']>>,
+  ) => Promise<
     Simplify<
-      Utils.HandleOutputGraffleRootField<
-        $Config,
-        InferResult.Query<{ dateList: $SelectionSet }, Schema>,
+      $$Utilities.HandleOutputGraffleRootField<
+        $Context,
+        InferResult.Query<{ dateList: $SelectionSet }, Schema<$Context['scalars']>>,
         'dateList'
       >
     >
   >
-  dateListList: <$SelectionSet>(selectionSet?: Utils.Exact<$SelectionSet, SelectionSet.Query.dateListList>) => Promise<
+  dateListList: <$SelectionSet>(
+    selectionSet?: $$Utilities.Exact<$SelectionSet, SelectionSet.Query.dateListList<$Context['scalars']>>,
+  ) => Promise<
     Simplify<
-      Utils.HandleOutputGraffleRootField<
-        $Config,
-        InferResult.Query<{ dateListList: $SelectionSet }, Schema>,
+      $$Utilities.HandleOutputGraffleRootField<
+        $Context,
+        InferResult.Query<{ dateListList: $SelectionSet }, Schema<$Context['scalars']>>,
         'dateListList'
       >
     >
   >
   dateListNonNull: <$SelectionSet>(
-    selectionSet?: Utils.Exact<$SelectionSet, SelectionSet.Query.dateListNonNull>,
+    selectionSet?: $$Utilities.Exact<$SelectionSet, SelectionSet.Query.dateListNonNull<$Context['scalars']>>,
   ) => Promise<
     Simplify<
-      Utils.HandleOutputGraffleRootField<
-        $Config,
-        InferResult.Query<{ dateListNonNull: $SelectionSet }, Schema>,
+      $$Utilities.HandleOutputGraffleRootField<
+        $Context,
+        InferResult.Query<{ dateListNonNull: $SelectionSet }, Schema<$Context['scalars']>>,
         'dateListNonNull'
       >
     >
   >
-  dateNonNull: <$SelectionSet>(selectionSet?: Utils.Exact<$SelectionSet, SelectionSet.Query.dateNonNull>) => Promise<
+  dateNonNull: <$SelectionSet>(
+    selectionSet?: $$Utilities.Exact<$SelectionSet, SelectionSet.Query.dateNonNull<$Context['scalars']>>,
+  ) => Promise<
     Simplify<
-      Utils.HandleOutputGraffleRootField<
-        $Config,
-        InferResult.Query<{ dateNonNull: $SelectionSet }, Schema>,
+      $$Utilities.HandleOutputGraffleRootField<
+        $Context,
+        InferResult.Query<{ dateNonNull: $SelectionSet }, Schema<$Context['scalars']>>,
         'dateNonNull'
       >
     >
   >
-  dateObject1: <$SelectionSet>(selectionSet: Utils.Exact<$SelectionSet, SelectionSet.Query.dateObject1>) => Promise<
+  dateObject1: <$SelectionSet>(
+    selectionSet: $$Utilities.Exact<$SelectionSet, SelectionSet.Query.dateObject1<$Context['scalars']>>,
+  ) => Promise<
     Simplify<
-      Utils.HandleOutputGraffleRootField<
-        $Config,
-        InferResult.Query<{ dateObject1: $SelectionSet }, Schema>,
+      $$Utilities.HandleOutputGraffleRootField<
+        $Context,
+        InferResult.Query<{ dateObject1: $SelectionSet }, Schema<$Context['scalars']>>,
         'dateObject1'
       >
     >
   >
-  dateUnion: <$SelectionSet>(selectionSet: Utils.Exact<$SelectionSet, SelectionSet.Query.dateUnion>) => Promise<
+  dateUnion: <$SelectionSet>(
+    selectionSet: $$Utilities.Exact<$SelectionSet, SelectionSet.Query.dateUnion<$Context['scalars']>>,
+  ) => Promise<
     Simplify<
-      Utils.HandleOutputGraffleRootField<
-        $Config,
-        InferResult.Query<{ dateUnion: $SelectionSet }, Schema>,
+      $$Utilities.HandleOutputGraffleRootField<
+        $Context,
+        InferResult.Query<{ dateUnion: $SelectionSet }, Schema<$Context['scalars']>>,
         'dateUnion'
       >
     >
   >
-  error: <$SelectionSet>(selectionSet?: Utils.Exact<$SelectionSet, SelectionSet.Query.error>) => Promise<
+  error: <$SelectionSet>(
+    selectionSet?: $$Utilities.Exact<$SelectionSet, SelectionSet.Query.error<$Context['scalars']>>,
+  ) => Promise<
     Simplify<
-      Utils.HandleOutputGraffleRootField<
-        $Config,
-        InferResult.Query<{ error: $SelectionSet }, Schema>,
+      $$Utilities.HandleOutputGraffleRootField<
+        $Context,
+        InferResult.Query<{ error: $SelectionSet }, Schema<$Context['scalars']>>,
         'error'
       >
     >
   >
-  id: <$SelectionSet>(selectionSet?: Utils.Exact<$SelectionSet, SelectionSet.Query.id>) => Promise<
+  id: <$SelectionSet>(
+    selectionSet?: $$Utilities.Exact<$SelectionSet, SelectionSet.Query.id<$Context['scalars']>>,
+  ) => Promise<
     Simplify<
-      Utils.HandleOutputGraffleRootField<
-        $Config,
-        InferResult.Query<{ id: $SelectionSet }, Schema>,
+      $$Utilities.HandleOutputGraffleRootField<
+        $Context,
+        InferResult.Query<{ id: $SelectionSet }, Schema<$Context['scalars']>>,
         'id'
       >
     >
   >
-  idNonNull: <$SelectionSet>(selectionSet?: Utils.Exact<$SelectionSet, SelectionSet.Query.idNonNull>) => Promise<
+  idNonNull: <$SelectionSet>(
+    selectionSet?: $$Utilities.Exact<$SelectionSet, SelectionSet.Query.idNonNull<$Context['scalars']>>,
+  ) => Promise<
     Simplify<
-      Utils.HandleOutputGraffleRootField<
-        $Config,
-        InferResult.Query<{ idNonNull: $SelectionSet }, Schema>,
+      $$Utilities.HandleOutputGraffleRootField<
+        $Context,
+        InferResult.Query<{ idNonNull: $SelectionSet }, Schema<$Context['scalars']>>,
         'idNonNull'
       >
     >
   >
-  interface: <$SelectionSet>(selectionSet: Utils.Exact<$SelectionSet, SelectionSet.Query.$interface>) => Promise<
+  interface: <$SelectionSet>(
+    selectionSet: $$Utilities.Exact<$SelectionSet, SelectionSet.Query.$interface<$Context['scalars']>>,
+  ) => Promise<
     Simplify<
-      Utils.HandleOutputGraffleRootField<
-        $Config,
-        InferResult.Query<{ interface: $SelectionSet }, Schema>,
+      $$Utilities.HandleOutputGraffleRootField<
+        $Context,
+        InferResult.Query<{ interface: $SelectionSet }, Schema<$Context['scalars']>>,
         'interface'
       >
     >
   >
   interfaceNonNull: <$SelectionSet>(
-    selectionSet: Utils.Exact<$SelectionSet, SelectionSet.Query.interfaceNonNull>,
+    selectionSet: $$Utilities.Exact<$SelectionSet, SelectionSet.Query.interfaceNonNull<$Context['scalars']>>,
   ) => Promise<
     Simplify<
-      Utils.HandleOutputGraffleRootField<
-        $Config,
-        InferResult.Query<{ interfaceNonNull: $SelectionSet }, Schema>,
+      $$Utilities.HandleOutputGraffleRootField<
+        $Context,
+        InferResult.Query<{ interfaceNonNull: $SelectionSet }, Schema<$Context['scalars']>>,
         'interfaceNonNull'
       >
     >
   >
   interfaceWithArgs: <$SelectionSet>(
-    selectionSet: Utils.Exact<$SelectionSet, SelectionSet.Query.interfaceWithArgs>,
+    selectionSet: $$Utilities.Exact<$SelectionSet, SelectionSet.Query.interfaceWithArgs<$Context['scalars']>>,
   ) => Promise<
     Simplify<
-      Utils.HandleOutputGraffleRootField<
-        $Config,
-        InferResult.Query<{ interfaceWithArgs: $SelectionSet }, Schema>,
+      $$Utilities.HandleOutputGraffleRootField<
+        $Context,
+        InferResult.Query<{ interfaceWithArgs: $SelectionSet }, Schema<$Context['scalars']>>,
         'interfaceWithArgs'
       >
     >
   >
-  listInt: <$SelectionSet>(selectionSet?: Utils.Exact<$SelectionSet, SelectionSet.Query.listInt>) => Promise<
+  listInt: <$SelectionSet>(
+    selectionSet?: $$Utilities.Exact<$SelectionSet, SelectionSet.Query.listInt<$Context['scalars']>>,
+  ) => Promise<
     Simplify<
-      Utils.HandleOutputGraffleRootField<
-        $Config,
-        InferResult.Query<{ listInt: $SelectionSet }, Schema>,
+      $$Utilities.HandleOutputGraffleRootField<
+        $Context,
+        InferResult.Query<{ listInt: $SelectionSet }, Schema<$Context['scalars']>>,
         'listInt'
       >
     >
   >
   listIntNonNull: <$SelectionSet>(
-    selectionSet?: Utils.Exact<$SelectionSet, SelectionSet.Query.listIntNonNull>,
+    selectionSet?: $$Utilities.Exact<$SelectionSet, SelectionSet.Query.listIntNonNull<$Context['scalars']>>,
   ) => Promise<
     Simplify<
-      Utils.HandleOutputGraffleRootField<
-        $Config,
-        InferResult.Query<{ listIntNonNull: $SelectionSet }, Schema>,
+      $$Utilities.HandleOutputGraffleRootField<
+        $Context,
+        InferResult.Query<{ listIntNonNull: $SelectionSet }, Schema<$Context['scalars']>>,
         'listIntNonNull'
       >
     >
   >
-  listListInt: <$SelectionSet>(selectionSet?: Utils.Exact<$SelectionSet, SelectionSet.Query.listListInt>) => Promise<
+  listListInt: <$SelectionSet>(
+    selectionSet?: $$Utilities.Exact<$SelectionSet, SelectionSet.Query.listListInt<$Context['scalars']>>,
+  ) => Promise<
     Simplify<
-      Utils.HandleOutputGraffleRootField<
-        $Config,
-        InferResult.Query<{ listListInt: $SelectionSet }, Schema>,
+      $$Utilities.HandleOutputGraffleRootField<
+        $Context,
+        InferResult.Query<{ listListInt: $SelectionSet }, Schema<$Context['scalars']>>,
         'listListInt'
       >
     >
   >
   listListIntNonNull: <$SelectionSet>(
-    selectionSet?: Utils.Exact<$SelectionSet, SelectionSet.Query.listListIntNonNull>,
+    selectionSet?: $$Utilities.Exact<$SelectionSet, SelectionSet.Query.listListIntNonNull<$Context['scalars']>>,
   ) => Promise<
     Simplify<
-      Utils.HandleOutputGraffleRootField<
-        $Config,
-        InferResult.Query<{ listListIntNonNull: $SelectionSet }, Schema>,
+      $$Utilities.HandleOutputGraffleRootField<
+        $Context,
+        InferResult.Query<{ listListIntNonNull: $SelectionSet }, Schema<$Context['scalars']>>,
         'listListIntNonNull'
       >
     >
   >
   lowerCaseUnion: <$SelectionSet>(
-    selectionSet: Utils.Exact<$SelectionSet, SelectionSet.Query.lowerCaseUnion>,
+    selectionSet: $$Utilities.Exact<$SelectionSet, SelectionSet.Query.lowerCaseUnion<$Context['scalars']>>,
   ) => Promise<
     Simplify<
-      Utils.HandleOutputGraffleRootField<
-        $Config,
-        InferResult.Query<{ lowerCaseUnion: $SelectionSet }, Schema>,
+      $$Utilities.HandleOutputGraffleRootField<
+        $Context,
+        InferResult.Query<{ lowerCaseUnion: $SelectionSet }, Schema<$Context['scalars']>>,
         'lowerCaseUnion'
       >
     >
   >
-  object: <$SelectionSet>(selectionSet: Utils.Exact<$SelectionSet, SelectionSet.Query.$object>) => Promise<
+  object: <$SelectionSet>(
+    selectionSet: $$Utilities.Exact<$SelectionSet, SelectionSet.Query.$object<$Context['scalars']>>,
+  ) => Promise<
     Simplify<
-      Utils.HandleOutputGraffleRootField<
-        $Config,
-        InferResult.Query<{ object: $SelectionSet }, Schema>,
+      $$Utilities.HandleOutputGraffleRootField<
+        $Context,
+        InferResult.Query<{ object: $SelectionSet }, Schema<$Context['scalars']>>,
         'object'
       >
     >
   >
-  objectList: <$SelectionSet>(selectionSet: Utils.Exact<$SelectionSet, SelectionSet.Query.objectList>) => Promise<
+  objectList: <$SelectionSet>(
+    selectionSet: $$Utilities.Exact<$SelectionSet, SelectionSet.Query.objectList<$Context['scalars']>>,
+  ) => Promise<
     Simplify<
-      Utils.HandleOutputGraffleRootField<
-        $Config,
-        InferResult.Query<{ objectList: $SelectionSet }, Schema>,
+      $$Utilities.HandleOutputGraffleRootField<
+        $Context,
+        InferResult.Query<{ objectList: $SelectionSet }, Schema<$Context['scalars']>>,
         'objectList'
       >
     >
   >
   objectListNonNull: <$SelectionSet>(
-    selectionSet: Utils.Exact<$SelectionSet, SelectionSet.Query.objectListNonNull>,
+    selectionSet: $$Utilities.Exact<$SelectionSet, SelectionSet.Query.objectListNonNull<$Context['scalars']>>,
   ) => Promise<
     Simplify<
-      Utils.HandleOutputGraffleRootField<
-        $Config,
-        InferResult.Query<{ objectListNonNull: $SelectionSet }, Schema>,
+      $$Utilities.HandleOutputGraffleRootField<
+        $Context,
+        InferResult.Query<{ objectListNonNull: $SelectionSet }, Schema<$Context['scalars']>>,
         'objectListNonNull'
       >
     >
   >
-  objectNested: <$SelectionSet>(selectionSet: Utils.Exact<$SelectionSet, SelectionSet.Query.objectNested>) => Promise<
+  objectNested: <$SelectionSet>(
+    selectionSet: $$Utilities.Exact<$SelectionSet, SelectionSet.Query.objectNested<$Context['scalars']>>,
+  ) => Promise<
     Simplify<
-      Utils.HandleOutputGraffleRootField<
-        $Config,
-        InferResult.Query<{ objectNested: $SelectionSet }, Schema>,
+      $$Utilities.HandleOutputGraffleRootField<
+        $Context,
+        InferResult.Query<{ objectNested: $SelectionSet }, Schema<$Context['scalars']>>,
         'objectNested'
       >
     >
   >
-  objectNonNull: <$SelectionSet>(selectionSet: Utils.Exact<$SelectionSet, SelectionSet.Query.objectNonNull>) => Promise<
+  objectNonNull: <$SelectionSet>(
+    selectionSet: $$Utilities.Exact<$SelectionSet, SelectionSet.Query.objectNonNull<$Context['scalars']>>,
+  ) => Promise<
     Simplify<
-      Utils.HandleOutputGraffleRootField<
-        $Config,
-        InferResult.Query<{ objectNonNull: $SelectionSet }, Schema>,
+      $$Utilities.HandleOutputGraffleRootField<
+        $Context,
+        InferResult.Query<{ objectNonNull: $SelectionSet }, Schema<$Context['scalars']>>,
         'objectNonNull'
       >
     >
   >
   objectWithArgs: <$SelectionSet>(
-    selectionSet: Utils.Exact<$SelectionSet, SelectionSet.Query.objectWithArgs>,
+    selectionSet: $$Utilities.Exact<$SelectionSet, SelectionSet.Query.objectWithArgs<$Context['scalars']>>,
   ) => Promise<
     Simplify<
-      Utils.HandleOutputGraffleRootField<
-        $Config,
-        InferResult.Query<{ objectWithArgs: $SelectionSet }, Schema>,
+      $$Utilities.HandleOutputGraffleRootField<
+        $Context,
+        InferResult.Query<{ objectWithArgs: $SelectionSet }, Schema<$Context['scalars']>>,
         'objectWithArgs'
       >
     >
   >
-  result: <$SelectionSet>(selectionSet: Utils.Exact<$SelectionSet, SelectionSet.Query.result>) => Promise<
+  result: <$SelectionSet>(
+    selectionSet: $$Utilities.Exact<$SelectionSet, SelectionSet.Query.result<$Context['scalars']>>,
+  ) => Promise<
     Simplify<
-      Utils.HandleOutputGraffleRootField<
-        $Config,
-        InferResult.Query<{ result: $SelectionSet }, Schema>,
+      $$Utilities.HandleOutputGraffleRootField<
+        $Context,
+        InferResult.Query<{ result: $SelectionSet }, Schema<$Context['scalars']>>,
         'result'
       >
     >
   >
-  resultNonNull: <$SelectionSet>(selectionSet: Utils.Exact<$SelectionSet, SelectionSet.Query.resultNonNull>) => Promise<
+  resultNonNull: <$SelectionSet>(
+    selectionSet: $$Utilities.Exact<$SelectionSet, SelectionSet.Query.resultNonNull<$Context['scalars']>>,
+  ) => Promise<
     Simplify<
-      Utils.HandleOutputGraffleRootField<
-        $Config,
-        InferResult.Query<{ resultNonNull: $SelectionSet }, Schema>,
+      $$Utilities.HandleOutputGraffleRootField<
+        $Context,
+        InferResult.Query<{ resultNonNull: $SelectionSet }, Schema<$Context['scalars']>>,
         'resultNonNull'
       >
     >
   >
-  string: <$SelectionSet>(selectionSet?: Utils.Exact<$SelectionSet, SelectionSet.Query.$string>) => Promise<
+  string: <$SelectionSet>(
+    selectionSet?: $$Utilities.Exact<$SelectionSet, SelectionSet.Query.$string<$Context['scalars']>>,
+  ) => Promise<
     Simplify<
-      Utils.HandleOutputGraffleRootField<
-        $Config,
-        InferResult.Query<{ string: $SelectionSet }, Schema>,
+      $$Utilities.HandleOutputGraffleRootField<
+        $Context,
+        InferResult.Query<{ string: $SelectionSet }, Schema<$Context['scalars']>>,
         'string'
       >
     >
   >
   stringWithArgEnum: <$SelectionSet>(
-    selectionSet?: Utils.Exact<$SelectionSet, SelectionSet.Query.stringWithArgEnum>,
+    selectionSet?: $$Utilities.Exact<$SelectionSet, SelectionSet.Query.stringWithArgEnum<$Context['scalars']>>,
   ) => Promise<
     Simplify<
-      Utils.HandleOutputGraffleRootField<
-        $Config,
-        InferResult.Query<{ stringWithArgEnum: $SelectionSet }, Schema>,
+      $$Utilities.HandleOutputGraffleRootField<
+        $Context,
+        InferResult.Query<{ stringWithArgEnum: $SelectionSet }, Schema<$Context['scalars']>>,
         'stringWithArgEnum'
       >
     >
   >
   stringWithArgInputObject: <$SelectionSet>(
-    selectionSet?: Utils.Exact<$SelectionSet, SelectionSet.Query.stringWithArgInputObject>,
+    selectionSet?: $$Utilities.Exact<$SelectionSet, SelectionSet.Query.stringWithArgInputObject<$Context['scalars']>>,
   ) => Promise<
     Simplify<
-      Utils.HandleOutputGraffleRootField<
-        $Config,
-        InferResult.Query<{ stringWithArgInputObject: $SelectionSet }, Schema>,
+      $$Utilities.HandleOutputGraffleRootField<
+        $Context,
+        InferResult.Query<{ stringWithArgInputObject: $SelectionSet }, Schema<$Context['scalars']>>,
         'stringWithArgInputObject'
       >
     >
   >
   stringWithArgInputObjectRequired: <$SelectionSet>(
-    selectionSet: Utils.Exact<$SelectionSet, SelectionSet.Query.stringWithArgInputObjectRequired>,
+    selectionSet: $$Utilities.Exact<
+      $SelectionSet,
+      SelectionSet.Query.stringWithArgInputObjectRequired<$Context['scalars']>
+    >,
   ) => Promise<
     Simplify<
-      Utils.HandleOutputGraffleRootField<
-        $Config,
-        InferResult.Query<{ stringWithArgInputObjectRequired: $SelectionSet }, Schema>,
+      $$Utilities.HandleOutputGraffleRootField<
+        $Context,
+        InferResult.Query<{ stringWithArgInputObjectRequired: $SelectionSet }, Schema<$Context['scalars']>>,
         'stringWithArgInputObjectRequired'
       >
     >
@@ -478,108 +529,112 @@ export interface QueryMethods<$Config extends Utils.Config> {
    * The given arguments are reflected back as a JSON string.
    */
   stringWithArgs: <$SelectionSet>(
-    selectionSet?: Utils.Exact<$SelectionSet, SelectionSet.Query.stringWithArgs>,
+    selectionSet?: $$Utilities.Exact<$SelectionSet, SelectionSet.Query.stringWithArgs<$Context['scalars']>>,
   ) => Promise<
     Simplify<
-      Utils.HandleOutputGraffleRootField<
-        $Config,
-        InferResult.Query<{ stringWithArgs: $SelectionSet }, Schema>,
+      $$Utilities.HandleOutputGraffleRootField<
+        $Context,
+        InferResult.Query<{ stringWithArgs: $SelectionSet }, Schema<$Context['scalars']>>,
         'stringWithArgs'
       >
     >
   >
   stringWithListArg: <$SelectionSet>(
-    selectionSet?: Utils.Exact<$SelectionSet, SelectionSet.Query.stringWithListArg>,
+    selectionSet?: $$Utilities.Exact<$SelectionSet, SelectionSet.Query.stringWithListArg<$Context['scalars']>>,
   ) => Promise<
     Simplify<
-      Utils.HandleOutputGraffleRootField<
-        $Config,
-        InferResult.Query<{ stringWithListArg: $SelectionSet }, Schema>,
+      $$Utilities.HandleOutputGraffleRootField<
+        $Context,
+        InferResult.Query<{ stringWithListArg: $SelectionSet }, Schema<$Context['scalars']>>,
         'stringWithListArg'
       >
     >
   >
   stringWithListArgRequired: <$SelectionSet>(
-    selectionSet: Utils.Exact<$SelectionSet, SelectionSet.Query.stringWithListArgRequired>,
+    selectionSet: $$Utilities.Exact<$SelectionSet, SelectionSet.Query.stringWithListArgRequired<$Context['scalars']>>,
   ) => Promise<
     Simplify<
-      Utils.HandleOutputGraffleRootField<
-        $Config,
-        InferResult.Query<{ stringWithListArgRequired: $SelectionSet }, Schema>,
+      $$Utilities.HandleOutputGraffleRootField<
+        $Context,
+        InferResult.Query<{ stringWithListArgRequired: $SelectionSet }, Schema<$Context['scalars']>>,
         'stringWithListArgRequired'
       >
     >
   >
   stringWithRequiredArg: <$SelectionSet>(
-    selectionSet: Utils.Exact<$SelectionSet, SelectionSet.Query.stringWithRequiredArg>,
+    selectionSet: $$Utilities.Exact<$SelectionSet, SelectionSet.Query.stringWithRequiredArg<$Context['scalars']>>,
   ) => Promise<
     Simplify<
-      Utils.HandleOutputGraffleRootField<
-        $Config,
-        InferResult.Query<{ stringWithRequiredArg: $SelectionSet }, Schema>,
+      $$Utilities.HandleOutputGraffleRootField<
+        $Context,
+        InferResult.Query<{ stringWithRequiredArg: $SelectionSet }, Schema<$Context['scalars']>>,
         'stringWithRequiredArg'
       >
     >
   >
-  unionFooBar: <$SelectionSet>(selectionSet: Utils.Exact<$SelectionSet, SelectionSet.Query.unionFooBar>) => Promise<
+  unionFooBar: <$SelectionSet>(
+    selectionSet: $$Utilities.Exact<$SelectionSet, SelectionSet.Query.unionFooBar<$Context['scalars']>>,
+  ) => Promise<
     Simplify<
-      Utils.HandleOutputGraffleRootField<
-        $Config,
-        InferResult.Query<{ unionFooBar: $SelectionSet }, Schema>,
+      $$Utilities.HandleOutputGraffleRootField<
+        $Context,
+        InferResult.Query<{ unionFooBar: $SelectionSet }, Schema<$Context['scalars']>>,
         'unionFooBar'
       >
     >
   >
   unionFooBarNonNull: <$SelectionSet>(
-    selectionSet: Utils.Exact<$SelectionSet, SelectionSet.Query.unionFooBarNonNull>,
+    selectionSet: $$Utilities.Exact<$SelectionSet, SelectionSet.Query.unionFooBarNonNull<$Context['scalars']>>,
   ) => Promise<
     Simplify<
-      Utils.HandleOutputGraffleRootField<
-        $Config,
-        InferResult.Query<{ unionFooBarNonNull: $SelectionSet }, Schema>,
+      $$Utilities.HandleOutputGraffleRootField<
+        $Context,
+        InferResult.Query<{ unionFooBarNonNull: $SelectionSet }, Schema<$Context['scalars']>>,
         'unionFooBarNonNull'
       >
     >
   >
   unionFooBarWithArgs: <$SelectionSet>(
-    selectionSet: Utils.Exact<$SelectionSet, SelectionSet.Query.unionFooBarWithArgs>,
+    selectionSet: $$Utilities.Exact<$SelectionSet, SelectionSet.Query.unionFooBarWithArgs<$Context['scalars']>>,
   ) => Promise<
     Simplify<
-      Utils.HandleOutputGraffleRootField<
-        $Config,
-        InferResult.Query<{ unionFooBarWithArgs: $SelectionSet }, Schema>,
+      $$Utilities.HandleOutputGraffleRootField<
+        $Context,
+        InferResult.Query<{ unionFooBarWithArgs: $SelectionSet }, Schema<$Context['scalars']>>,
         'unionFooBarWithArgs'
       >
     >
   >
-  unionObject: <$SelectionSet>(selectionSet: Utils.Exact<$SelectionSet, SelectionSet.Query.unionObject>) => Promise<
+  unionObject: <$SelectionSet>(
+    selectionSet: $$Utilities.Exact<$SelectionSet, SelectionSet.Query.unionObject<$Context['scalars']>>,
+  ) => Promise<
     Simplify<
-      Utils.HandleOutputGraffleRootField<
-        $Config,
-        InferResult.Query<{ unionObject: $SelectionSet }, Schema>,
+      $$Utilities.HandleOutputGraffleRootField<
+        $Context,
+        InferResult.Query<{ unionObject: $SelectionSet }, Schema<$Context['scalars']>>,
         'unionObject'
       >
     >
   >
   unionObjectNonNull: <$SelectionSet>(
-    selectionSet: Utils.Exact<$SelectionSet, SelectionSet.Query.unionObjectNonNull>,
+    selectionSet: $$Utilities.Exact<$SelectionSet, SelectionSet.Query.unionObjectNonNull<$Context['scalars']>>,
   ) => Promise<
     Simplify<
-      Utils.HandleOutputGraffleRootField<
-        $Config,
-        InferResult.Query<{ unionObjectNonNull: $SelectionSet }, Schema>,
+      $$Utilities.HandleOutputGraffleRootField<
+        $Context,
+        InferResult.Query<{ unionObjectNonNull: $SelectionSet }, Schema<$Context['scalars']>>,
         'unionObjectNonNull'
       >
     >
   >
 }
 
-export interface BuilderMethodsRoot<$Config extends Utils.Config> {
-  mutation: MutationMethods<$Config>
-  query: QueryMethods<$Config>
+export interface BuilderMethodsRoot<$Context extends $$Utilities.ClientContext> {
+  mutation: MutationMethods<$Context>
+  query: QueryMethods<$Context>
 }
 
-export interface BuilderMethodsRootFn extends Utils.TypeFunction.Fn {
+export interface BuilderMethodsRootFn extends $$Utilities.TypeFunction.Fn {
   // @ts-expect-error parameter is Untyped.
-  return: BuilderMethodsRoot<this['params']['config']>
+  return: BuilderMethodsRoot<this['params']>
 }

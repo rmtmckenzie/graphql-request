@@ -1,54 +1,58 @@
 import { type Simplify } from 'type-fest'
 import type { InferResult } from '../../../../../../src/entrypoints/schema.js'
-import type * as Utils from '../../../../../../src/entrypoints/utilities-for-generated.js'
+import type * as $$Utilities from '../../../../../../src/entrypoints/utilities-for-generated.js'
 import type { Schema } from './Schema.js'
 import type * as SelectionSet from './SelectionSets.js'
 
-export interface QueryMethods<$Config extends Utils.Config> {
-  // todo Use a static type here?
-  $batch: <$SelectionSet>(selectionSet: Utils.Exact<$SelectionSet, SelectionSet.Query>) => Promise<
+export interface QueryMethods<$Context extends $$Utilities.ClientContext> {
+  $batch: <$SelectionSet>(
+    selectionSet: $$Utilities.Exact<$SelectionSet, SelectionSet.Query<$Context['scalars']>>,
+  ) => Promise<
     Simplify<
-      Utils.HandleOutput<
-        $Config,
-        InferResult.Query<$SelectionSet, Schema>
+      $$Utilities.HandleOutput<
+        $Context,
+        InferResult.Query<$SelectionSet, Schema<$Context['scalars']>>
       >
     >
   >
-  // todo Use a static type here?
   __typename: () => Promise<
     Simplify<
-      Utils.HandleOutputGraffleRootField<
-        $Config,
+      $$Utilities.HandleOutputGraffleRootField<
+        $Context,
         { __typename: 'Query' },
         '__typename'
       >
     >
   >
-  id: <$SelectionSet>(selectionSet?: Utils.Exact<$SelectionSet, SelectionSet.Query.id>) => Promise<
+  id: <$SelectionSet>(
+    selectionSet?: $$Utilities.Exact<$SelectionSet, SelectionSet.Query.id<$Context['scalars']>>,
+  ) => Promise<
     Simplify<
-      Utils.HandleOutputGraffleRootField<
-        $Config,
-        InferResult.Query<{ id: $SelectionSet }, Schema>,
+      $$Utilities.HandleOutputGraffleRootField<
+        $Context,
+        InferResult.Query<{ id: $SelectionSet }, Schema<$Context['scalars']>>,
         'id'
       >
     >
   >
-  idNonNull: <$SelectionSet>(selectionSet?: Utils.Exact<$SelectionSet, SelectionSet.Query.idNonNull>) => Promise<
+  idNonNull: <$SelectionSet>(
+    selectionSet?: $$Utilities.Exact<$SelectionSet, SelectionSet.Query.idNonNull<$Context['scalars']>>,
+  ) => Promise<
     Simplify<
-      Utils.HandleOutputGraffleRootField<
-        $Config,
-        InferResult.Query<{ idNonNull: $SelectionSet }, Schema>,
+      $$Utilities.HandleOutputGraffleRootField<
+        $Context,
+        InferResult.Query<{ idNonNull: $SelectionSet }, Schema<$Context['scalars']>>,
         'idNonNull'
       >
     >
   >
 }
 
-export interface BuilderMethodsRoot<$Config extends Utils.Config> {
-  query: QueryMethods<$Config>
+export interface BuilderMethodsRoot<$Context extends $$Utilities.ClientContext> {
+  query: QueryMethods<$Context>
 }
 
-export interface BuilderMethodsRootFn extends Utils.TypeFunction.Fn {
+export interface BuilderMethodsRootFn extends $$Utilities.TypeFunction.Fn {
   // @ts-expect-error parameter is Untyped.
-  return: BuilderMethodsRoot<this['params']['config']>
+  return: BuilderMethodsRoot<this['params']>
 }

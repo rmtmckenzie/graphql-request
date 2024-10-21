@@ -306,18 +306,6 @@ export namespace Schema {
   //
   //
 
-  // todo generate code like this:
-  export interface DateInterface2 extends $.Interface {
-    name: 'DateInterface1'
-    implementors: [DateObject1]
-    fields: {
-      date1: {
-        inlineType: [0]
-        namedType: $Scalar.Date
-      }
-    }
-  }
-
   export type DateInterface1 = $.Interface<'DateInterface1', {
     date1: $.Field<'date1', $.Output.Nullable<$Scalar.Date>, null>
   }, [DateObject1]>
@@ -381,6 +369,7 @@ export namespace Schema {
   }>
 
   export type Object1 = $.Object$2<'Object1', {
+    ABCEnum: $.Field<'ABCEnum', $.Output.Nullable<ABCEnum>, null>
     boolean: $.Field<'boolean', $.Output.Nullable<$Scalar.Boolean>, null>
     float: $.Field<'float', $.Output.Nullable<$Scalar.Float>, null>
     id: $.Field<'id', $.Output.Nullable<$Scalar.ID>, null>
@@ -458,11 +447,13 @@ export namespace Schema {
 //
 //
 
-import type * as Utilities from '../../../../../../src/entrypoints/utilities-for-generated.js'
+import type * as $$Utilities from '../../../../../../src/entrypoints/utilities-for-generated.js'
 import type * as Data from './Data.js'
 import type * as MethodsRoot from './MethodsRoot.js'
 
-export interface Schema extends Utilities.SchemaIndexBase {
+export interface Schema<$Scalars extends $$Utilities.SchemaKit.Scalar.ScalarMap = {}>
+  extends $$Utilities.SchemaIndexBase
+{
   name: Data.Name
   RootTypesPresent: ['Mutation', 'Query']
   RootUnion: Schema.Mutation | Schema.Query
@@ -523,6 +514,6 @@ export interface Schema extends Utilities.SchemaIndexBase {
     Error: Schema.Error
     Interface: Schema.Interface
   }
-  customScalars: Utilities.SchemaIndexBase['customScalars']
-  extensions: Utilities.GlobalRegistry.TypeExtensions
+  scalars: $Scalars
+  extensions: $$Utilities.GlobalRegistry.TypeExtensions
 }
