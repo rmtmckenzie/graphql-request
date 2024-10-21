@@ -33,6 +33,11 @@
         "default": "./build/entrypoints/schema.js"
       }
     },
+    "./generator-helpers/standard-scalar-types": {
+      "import": {
+        "default": "./build/entrypoints/generator-helpers/standardScalarTypes.js"
+      }
+    },
     "./utilities-for-generated": {
       "import": {
         "default": "./build/entrypoints/utilities-for-generated.js"

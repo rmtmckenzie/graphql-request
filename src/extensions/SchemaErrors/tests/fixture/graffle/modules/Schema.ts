@@ -1,4 +1,4 @@
-import type { SchemaKit as $ } from '../../../../../../entrypoints/utilities-for-generated.js'
+import type { Schema as $ } from '../../../../../../entrypoints/utilities-for-generated.js'
 import type * as $$Utilities from '../../../../../../entrypoints/utilities-for-generated.js'
 import type * as Data from './Data.js'
 import type * as MethodsRoot from './MethodsRoot.js'
@@ -445,9 +445,7 @@ export namespace Schema {
 //
 //
 //
-export interface Schema<$Scalars extends $$Utilities.SchemaKit.Scalar.ScalarMap = {}>
-  extends $$Utilities.SchemaIndexBase
-{
+export interface Schema<$Scalars extends $$Utilities.Schema.Scalar.ScalarMap = {}> extends $$Utilities.Schema {
   name: Data.Name
   RootTypesPresent: ['Mutation', 'Query']
   RootUnion: Schema.Mutation | Schema.Query

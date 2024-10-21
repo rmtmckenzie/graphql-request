@@ -1,6 +1,6 @@
 export const identifiers = {
   Schema: `Schema`,
-  $SchemaKit: `$SchemaKit`,
+  $Schema: `$Schema`,
   $$Utilities: `$$Utilities`,
   MethodsRoot: `MethodsRoot`,
   Scalar: `Scalar`,

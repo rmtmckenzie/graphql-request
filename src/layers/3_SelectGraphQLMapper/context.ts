@@ -1,13 +1,13 @@
 import type { Grafaid } from '../../lib/grafaid/__.js'
 import { Nodes } from '../../lib/grafaid/_Nodes.js'
-import type { SchemaKit } from '../../types/Schema/__.js'
+import type { Schema } from '../../types/Schema/__.js'
 import type { SchemaDrivenDataMap } from '../../types/SchemaDrivenDataMap/__.js'
 import { inferVariableType } from './inferVariableType.js'
 import type { Options } from './nodes/1_Document.js'
 
 export interface OperationContext {
   sddm?: SchemaDrivenDataMap
-  scalars: SchemaKit.Scalar.ScalarMap
+  scalars: Schema.Scalar.ScalarMap
   variables: {
     /**
      * Should variables be used for arguments?

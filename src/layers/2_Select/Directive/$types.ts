@@ -1,9 +1,9 @@
-import type { SchemaKit } from '../../../types/Schema/__.js'
+import type { Schema } from '../../../types/Schema/__.js'
 import type { Include, Skip } from './_.js'
 
 export interface Definition {
   name: string
-  type: SchemaKit.Directives.Directive
+  type: Schema.Directives.Directive
   normalizeArguments: (args: any) => Record<string, any>
 }
 

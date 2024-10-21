@@ -1,6 +1,6 @@
 import type * as $$Utilities from '../../../../../../entrypoints/utilities-for-generated.js'
 
-export * from '../../../../../../types/Schema/types/Scalar/scalars.js'
+export * from '../../../../../../types/Schema/types/Scalar/standardScalarTypes.js'
 
 //
 //
@@ -14,4 +14,4 @@ export * from '../../../../../../types/Schema/types/Scalar/scalars.js'
 //
 //
 
-export type Date = $$Utilities.SchemaKit.Scalar.ScalarCodecless<'Date'>
+export type Date = $$Utilities.Schema.Scalar.ScalarCodecless<'Date'>

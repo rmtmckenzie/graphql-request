@@ -1,6 +1,6 @@
 import type { Grafaid } from '../../lib/grafaid/__.js'
 import { isString } from '../../lib/prelude.js'
-import { SchemaKit } from '../Schema/__.js'
+import { Schema } from '../Schema/__.js'
 
 declare global {
   namespace GraffleGlobal {
@@ -98,7 +98,7 @@ export type Enum = GraffleGlobal.SchemaDrivenDataMap.Enum
 
 export type ArgumentsOrInputObjectFields = GraffleGlobal.SchemaDrivenDataMap.ArgumentsOrInputObjectFields
 
-export type Scalar = SchemaKit.Scalar
+export type Scalar = Schema.Scalar
 
 export type CustomScalarName = string
 
@@ -136,10 +136,10 @@ export const isEnum = (
 
 export const isCustomScalarName = (value: unknown): value is CustomScalarName => isString(value)
 
-export const isScalar = SchemaKit.Scalar.isScalar
+export const isScalar = Schema.Scalar.isScalar
 
 export const isScalarLike = (value: unknown): value is ScalarLike =>
-  SchemaKit.Scalar.isScalar(value) || isCustomScalarName(value)
+  Schema.Scalar.isScalar(value) || isCustomScalarName(value)
 
 export const isOutputObject = (
   node?: Node,

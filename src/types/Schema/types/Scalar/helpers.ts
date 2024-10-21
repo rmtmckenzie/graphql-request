@@ -1,6 +1,6 @@
 import type { Mapper } from './codec.js'
 import type { Scalar } from './Scalar.js'
-import { String } from './scalars.js'
+import { String } from './standardScalarTypes.js'
 
 export type GetEncoded<$Scalar> = $Scalar extends Scalar<infer _, infer _, infer $Encoded> ? $Encoded : never
 

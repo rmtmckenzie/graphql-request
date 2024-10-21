@@ -18,7 +18,7 @@ import type * as $$Utilities from '../../../../../../src/entrypoints/utilities-f
 //
 
 // Prefix with $ because this is not a schema type. A user could have a schema type named "Document" that this would conflict with.
-export interface $Document<$Scalars extends $$Utilities.SchemaKit.Scalar.ScalarMap = {}> {
+export interface $Document<$Scalars extends $$Utilities.Schema.Scalar.ScalarMap = {}> {
   mutation?: Record<string, Mutation<$Scalars>>
 }
 
@@ -52,7 +52,7 @@ export interface $Document<$Scalars extends $$Utilities.SchemaKit.Scalar.ScalarM
 
 // ----------------------------------------| Entrypoint Interface |
 
-export interface Mutation<$Scalars extends $$Utilities.SchemaKit.Scalar.ScalarMap = {}> {
+export interface Mutation<$Scalars extends $$Utilities.Schema.Scalar.ScalarMap = {}> {
   /**
    * Select the `id` field on the `Mutation` object. Its type is `ID` (a `Scalar`).
    */
@@ -84,18 +84,18 @@ export interface Mutation<$Scalars extends $$Utilities.SchemaKit.Scalar.ScalarMa
     | $Select.SelectAlias.SelectAlias<$Select.Indicator.NoArgsIndicator>
 }
 
-export interface Mutation$FragmentInline<$Scalars extends $$Utilities.SchemaKit.Scalar.ScalarMap = {}>
+export interface Mutation$FragmentInline<$Scalars extends $$Utilities.Schema.Scalar.ScalarMap = {}>
   extends Mutation<$Scalars>, $Select.Directive.$Groups.InlineFragment.Fields
 {}
 
 // ----------------------------------------| Fields |
 
 export namespace Mutation {
-  export type id<$Scalars extends $$Utilities.SchemaKit.Scalar.ScalarMap = {}> =
+  export type id<$Scalars extends $$Utilities.Schema.Scalar.ScalarMap = {}> =
     | $Select.Indicator.NoArgsIndicator
     | id$SelectionSet<$Scalars>
 
-  export interface id$SelectionSet<$Scalars extends $$Utilities.SchemaKit.Scalar.ScalarMap = {}>
+  export interface id$SelectionSet<$Scalars extends $$Utilities.Schema.Scalar.ScalarMap = {}>
     extends $Select.Bases.Base
   {}
 
@@ -106,18 +106,18 @@ export namespace Mutation {
    * that IDEs will display its contents (a union type) directly, rather than the name of this type.
    * In some cases, this is a preferable DX, making the types easier to read for users.
    */
-  export type id$Expanded<$Scalars extends $$Utilities.SchemaKit.Scalar.ScalarMap = {}> = $$Utilities.Simplify<
+  export type id$Expanded<$Scalars extends $$Utilities.Schema.Scalar.ScalarMap = {}> = $$Utilities.Simplify<
     | $Select.Indicator.NoArgsIndicator
     | id$SelectionSet<$Scalars>
   >
 
   // --------------------------------------------------------------------------------------------------
 
-  export type idNonNull<$Scalars extends $$Utilities.SchemaKit.Scalar.ScalarMap = {}> =
+  export type idNonNull<$Scalars extends $$Utilities.Schema.Scalar.ScalarMap = {}> =
     | $Select.Indicator.NoArgsIndicator
     | idNonNull$SelectionSet<$Scalars>
 
-  export interface idNonNull$SelectionSet<$Scalars extends $$Utilities.SchemaKit.Scalar.ScalarMap = {}>
+  export interface idNonNull$SelectionSet<$Scalars extends $$Utilities.Schema.Scalar.ScalarMap = {}>
     extends $Select.Bases.Base
   {}
 
@@ -128,7 +128,7 @@ export namespace Mutation {
    * that IDEs will display its contents (a union type) directly, rather than the name of this type.
    * In some cases, this is a preferable DX, making the types easier to read for users.
    */
-  export type idNonNull$Expanded<$Scalars extends $$Utilities.SchemaKit.Scalar.ScalarMap = {}> = $$Utilities.Simplify<
+  export type idNonNull$Expanded<$Scalars extends $$Utilities.Schema.Scalar.ScalarMap = {}> = $$Utilities.Simplify<
     | $Select.Indicator.NoArgsIndicator
     | idNonNull$SelectionSet<$Scalars>
   >
@@ -142,5 +142,5 @@ export namespace Mutation {
  *     would end up with an error of `export interface Foo extends Foo ...`
  */
 export namespace $NamedTypes {
-  export type $Mutation<$Scalars extends $$Utilities.SchemaKit.Scalar.ScalarMap = {}> = Mutation<$Scalars>
+  export type $Mutation<$Scalars extends $$Utilities.Schema.Scalar.ScalarMap = {}> = Mutation<$Scalars>
 }

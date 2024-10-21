@@ -1,10 +1,10 @@
 import { shallowMergeDefaults } from '../../../lib/prelude.js'
-import { SchemaKit } from '../../../types/Schema/__.js'
+import { Schema } from '../../../types/Schema/__.js'
 import type { Definition } from './$types.js'
 
 export const Include: Definition = {
   name: `include`,
-  type: SchemaKit.Directives.standardDirectivesByName.include,
+  type: Schema.Directives.standardDirectivesByName.include,
   normalizeArguments: (input: ArgsInput): Args => {
     return typeof input === `boolean`
       ? expandShortHand(input)

@@ -1,9 +1,9 @@
-import { SchemaKit } from '../../../types/Schema/__.js'
+import { Schema } from '../../../types/Schema/__.js'
 import type { Definition } from './$types.js'
 
 export const Skip: Definition = {
   name: `skip`,
-  type: SchemaKit.Directives.standardDirectivesByName.skip,
+  type: Schema.Directives.standardDirectivesByName.skip,
   normalizeArguments: (args: ArgsInput): Args => {
     return {
       if: typeof args === `boolean` ? args : args.if === undefined ? true : args.if,

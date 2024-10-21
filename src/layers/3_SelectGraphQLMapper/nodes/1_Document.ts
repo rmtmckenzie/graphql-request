@@ -1,4 +1,4 @@
-import type { SchemaDrivenDataMap, SchemaKit } from '../../../entrypoints/utilities-for-generated.js'
+import type { Schema, SchemaDrivenDataMap } from '../../../entrypoints/utilities-for-generated.js'
 import type { Grafaid } from '../../../lib/grafaid/__.js'
 import { Nodes } from '../../../lib/grafaid/_Nodes.js'
 import type { Select } from '../../2_Select/__.js'
@@ -34,7 +34,7 @@ export const toGraphQLDocument = (
 
 export interface Options {
   sddm?: SchemaDrivenDataMap | null
-  scalars?: SchemaKit.Scalar.ScalarMap
+  scalars?: Schema.Scalar.ScalarMap
   operationVariables?: boolean
 }
 

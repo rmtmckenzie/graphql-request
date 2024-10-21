@@ -1,4 +1,4 @@
-import { SchemaKit } from '../../entrypoints/schema.js'
+import { Schema } from '../../entrypoints/schema.js'
 import type { RegisteredScalars } from '../../layers/6_client/fluent.js'
 import { Grafaid } from '../../lib/grafaid/__.js'
 import { SchemaDrivenDataMap } from '../../types/SchemaDrivenDataMap/__.js'
@@ -55,13 +55,13 @@ const encodeInputFieldLike = (
    */
 
   if (SchemaDrivenDataMap.isCustomScalarName(sddmNode)) {
-    const scalar = SchemaKit.Scalar.lookupCustomScalarOrFallbackToString(scalars, sddmNode)
-    args[argName] = SchemaKit.Scalar.applyCodec(scalar.codec.encode, argValue)
+    const scalar = Schema.Scalar.lookupCustomScalarOrFallbackToString(scalars, sddmNode)
+    args[argName] = Schema.Scalar.applyCodec(scalar.codec.encode, argValue)
     return
   }
 
   if (SchemaDrivenDataMap.isScalar(sddmNode)) {
-    args[argName] = SchemaKit.Scalar.applyCodec(sddmNode.codec.encode, argValue)
+    args[argName] = Schema.Scalar.applyCodec(sddmNode.codec.encode, argValue)
     return
   }
 

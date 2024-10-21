@@ -14,8 +14,8 @@ import { createCodeGenerator } from '../helpers/moduleGeneratorRunner.js'
 import { getDocumentation, renderDocumentation, renderName, title1, typeTitle2SelectionSet } from '../helpers/render.js'
 import { ModuleGeneratorScalar } from './Scalar.js'
 
-const $ScalarsTypeParameter = `$Scalars extends ${identifiers.$$Utilities}.SchemaKit.Scalar.ScalarMap = {}`
-// `$Scalars extends ${identifiers.$$Utilities}.SchemaKit.Scalar.ScalarMap`
+const $ScalarsTypeParameter = `$Scalars extends ${identifiers.$$Utilities}.Schema.Scalar.ScalarMap = {}`
+// `$Scalars extends ${identifiers.$$Utilities}.Schema.Scalar.ScalarMap`
 
 export const ModuleGeneratorSelectionSets = createModuleGenerator(
   `SelectionSets`,
@@ -339,7 +339,7 @@ const renderArgumentType = (type: Grafaid.Schema.InputTypes): string => {
   if (Grafaid.Schema.isScalarType(sansNullabilityType)) {
     if (Grafaid.Schema.isScalarTypeCustom(sansNullabilityType)) {
       const scalarTypeRendered =
-        `${identifiers.$$Utilities}.SchemaKit.Scalar.GetDecoded<${identifiers.$$Utilities}.SchemaKit.Scalar.LookupCustomScalarOrFallbackToString<'${sansNullabilityType.name}', $Scalars>>`
+        `${identifiers.$$Utilities}.Schema.Scalar.GetDecoded<${identifiers.$$Utilities}.Schema.Scalar.LookupCustomScalarOrFallbackToString<'${sansNullabilityType.name}', $Scalars>>`
       return `${scalarTypeRendered} ${nullableRendered}`
     }
     const scalarTypeRendered =

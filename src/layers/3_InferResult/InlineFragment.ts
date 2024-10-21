@@ -1,11 +1,10 @@
-import type { Schema } from '../../generator/generators/Schema.js'
 import { type GetKeyOr } from '../../lib/prelude.js'
-import type { SchemaKit } from '../../types/Schema/__.js'
+import type { Schema } from '../../types/Schema/__.js'
 import type { Select } from '../2_Select/__.js'
 import type { Object } from './Object.js'
 
 // dprint-ignore
-export type InlineFragmentTypeConditional<$SelectionSet, $Node extends SchemaKit.OutputObject, $Index extends Schema> =
+export type InlineFragmentTypeConditional<$SelectionSet, $Node extends Schema.OutputObject, $Schema extends Schema> =
   $Node extends any // force distribution
     ? Object<
         & GetKeyOr<
@@ -14,7 +13,7 @@ export type InlineFragmentTypeConditional<$SelectionSet, $Node extends SchemaKit
             {}
           >
         & Select.InlineFragment.OmitInlineFragmentsWithTypeConditions<$SelectionSet>,
-        $Index,
+        $Schema,
         $Node
       >
     : never

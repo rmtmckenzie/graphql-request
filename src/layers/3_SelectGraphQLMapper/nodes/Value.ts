@@ -1,6 +1,6 @@
 import type { Grafaid } from '../../../lib/grafaid/__.js'
 import { Nodes } from '../../../lib/grafaid/_Nodes.js'
-import { SchemaKit } from '../../../types/Schema/__.js'
+import { Schema } from '../../../types/Schema/__.js'
 import { SchemaDrivenDataMap } from '../../../types/SchemaDrivenDataMap/__.js'
 import type { OperationContext } from '../context.js'
 import { type GraphQLPostOperationMapper } from '../mapper.js'
@@ -13,7 +13,7 @@ export const toGraphQLValue: ValueMapper = (context, sddm, value) => {
   if (SchemaDrivenDataMap.isScalarLike(sddm?.nt)) {
     const scalar = SchemaDrivenDataMap.isScalar(sddm.nt)
       ? sddm.nt
-      : SchemaKit.Scalar.lookupCustomScalarOrFallbackToString(context.scalars, sddm.nt)
+      : Schema.Scalar.lookupCustomScalarOrFallbackToString(context.scalars, sddm.nt)
     return applyScalar(context, scalar, value)
   }
 
@@ -82,7 +82,7 @@ interface AdditionalContext {
 
 const applyScalar = (
   context: OperationContext & AdditionalContext,
-  scalar: SchemaKit.Scalar,
+  scalar: Schema.Scalar,
   value: unknown,
 ): Grafaid.Document.ValueNode => {
   if (value === null) return Nodes.NullValue()

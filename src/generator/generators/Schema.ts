@@ -1,8 +1,6 @@
 import { Code } from '../../lib/Code.js'
 import { Grafaid } from '../../lib/grafaid/__.js'
 import { entries, isObjectEmpty, values } from '../../lib/prelude.js'
-import type { GlobalRegistry } from '../../types/GlobalRegistry/GlobalRegistry.js'
-import type { SchemaKit } from '../../types/Schema/__.js'
 import type { Config } from '../config/config.js'
 import { identifiers } from '../helpers/identifiers.js'
 import { createModuleGenerator } from '../helpers/moduleGenerator.js'
@@ -12,41 +10,6 @@ import { ModuleGeneratorData } from './Data.js'
 import { ModuleGeneratorMethodsRoot } from './MethodsRoot.js'
 import { ModuleGeneratorScalar } from './Scalar.js'
 
-/**
- * A generic schema type. Any particular schema will be a subtype of this, with
- * additional specificity such as on objects where here `Record` is used.
- */
-export interface Schema<
-  $Extensions extends GlobalRegistry.TypeExtensions = GlobalRegistry.TypeExtensions,
-  $Scalars extends SchemaKit.Scalar.ScalarMap = SchemaKit.Scalar.ScalarMap,
-> {
-  name: GlobalRegistry.ClientNames
-  RootTypesPresent: ('Query' | 'Mutation' | 'Subscription')[]
-  RootUnion: SchemaKit.RootType
-  Root: {
-    Query: null | SchemaKit.ObjectQuery
-    Mutation: null | SchemaKit.ObjectMutation
-    Subscription: null | SchemaKit.ObjectSubscription
-  }
-  allTypes: Record<
-    string,
-    | SchemaKit.Enum
-    | SchemaKit.ObjectQuery
-    | SchemaKit.ObjectMutation
-    | SchemaKit.OutputObject
-    | SchemaKit.Union
-    | SchemaKit.Interface
-  >
-  objects: Record<string, SchemaKit.OutputObject>
-  unions: Record<string, SchemaKit.Union>
-  interfaces: Record<string, SchemaKit.Interface>
-  /**
-   * A map of scalar definitions. Useful for custom scalars.
-   */
-  scalars: $Scalars
-  extensions: $Extensions
-}
-
 export const ModuleGeneratorSchema = createModuleGenerator(
   `Schema`,
   ({ config, code }) => {
@@ -54,7 +17,7 @@ export const ModuleGeneratorSchema = createModuleGenerator(
     code(`
       import type * as Data from './${ModuleGeneratorData.name}.js'
       import type * as ${identifiers.MethodsRoot} from './${ModuleGeneratorMethodsRoot.name}.js'
-      import type { SchemaKit as $ } from '${config.paths.imports.grafflePackage.utilitiesForGenerated}'
+      import type { Schema as $ } from '${config.paths.imports.grafflePackage.utilitiesForGenerated}'
       import type * as ${identifiers.$$Utilities} from '${config.paths.imports.grafflePackage.utilitiesForGenerated}'
       import type * as $Scalar from './${ModuleGeneratorScalar.name}.js'
     `)
@@ -146,7 +109,7 @@ export const SchemaGenerator = createCodeGenerator(
     // ---
 
     code(
-      `export interface ${identifiers.Schema}<$Scalars extends ${identifiers.$$Utilities}.SchemaKit.Scalar.ScalarMap = {}> extends ${identifiers.$$Utilities}.SchemaIndexBase
+      `export interface ${identifiers.Schema}<$Scalars extends ${identifiers.$$Utilities}.Schema.Scalar.ScalarMap = {}> extends ${identifiers.$$Utilities}.Schema
         ${Code.termObject(schema)}
       `,
     )

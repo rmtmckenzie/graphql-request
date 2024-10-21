@@ -1,5 +1,5 @@
 import type { UnionToTuple } from 'type-fest'
-import type { Schema } from '../../../generator/generators/Schema.js'
+import type { Schema } from '../../../entrypoints/schema.js'
 import type { IsTupleMultiple } from '../../../lib/prelude.js'
 import type { Select } from '../../2_Select/__.js'
 import type { InferResult } from '../../3_InferResult/__.js'

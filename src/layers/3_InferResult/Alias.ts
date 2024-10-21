@@ -1,6 +1,5 @@
-import type { Schema } from '../../generator/generators/Schema.js'
 import type { mergeObjectArray, ValuesOrEmptyObject } from '../../lib/prelude.js'
-import type { SchemaKit } from '../../types/Schema/__.js'
+import type { Schema } from '../../types/Schema/__.js'
 import type { Select } from '../2_Select/__.js'
 import type { Field } from './Field.js'
 
@@ -8,7 +7,7 @@ import type { Field } from './Field.js'
 export type Alias<
 	$SelectionSet,
 	$Schema extends Schema,
-	$Node extends SchemaKit.OutputObject
+	$Node extends Schema.OutputObject
 > =
   ValuesOrEmptyObject<
     {
@@ -32,7 +31,7 @@ type InferSelectAlias<
   $SelectAlias extends Select.SelectAlias.SelectAlias,
   $FieldName extends string,
   $Schema extends Schema,
-  $Node extends SchemaKit.OutputObject,
+  $Node extends Schema.OutputObject,
 > =
   $SelectAlias extends Select.SelectAlias.SelectAliasOne      ? InferSelectAliasOne<$SelectAlias, $FieldName, $Schema, $Node> :
   $SelectAlias extends Select.SelectAlias.SelectAliasMultiple ? InferSelectAliasMultiple<$SelectAlias, $FieldName, $Schema, $Node> :
@@ -42,7 +41,7 @@ type InferSelectAliasMultiple<
   $SelectAliasMultiple extends Select.SelectAlias.SelectAliasMultiple,
   $FieldName extends string,
   $Schema extends Schema,
-  $Node extends SchemaKit.OutputObject,
+  $Node extends Schema.OutputObject,
 > = mergeObjectArray<
   {
     [_ in keyof $SelectAliasMultiple]: InferSelectAliasOne<$SelectAliasMultiple[_], $FieldName, $Schema, $Node>
@@ -53,7 +52,7 @@ type InferSelectAliasOne<
   $SelectAliasOne extends Select.SelectAlias.SelectAliasOne,
   $FieldName extends string,
   $Schema extends Schema,
-  $Node extends SchemaKit.OutputObject,
+  $Node extends Schema.OutputObject,
 > = {
   [_ in $SelectAliasOne[0]]: Field<$SelectAliasOne[1], $Node['fields'][$FieldName], $Schema>
 }

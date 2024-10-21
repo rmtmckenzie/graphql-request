@@ -31,10 +31,10 @@ export const ModuleGeneratorScalar = createModuleGenerator(
         `)
         code(`type ${scalar.name}_ = typeof ${identifiers.CustomScalars}.${scalar.name}`)
         code(
-          `export type ${scalar.name}Decoded = ${identifiers.$$Utilities}.SchemaKit.Scalar.GetDecoded<${scalar.name}_>`,
+          `export type ${scalar.name}Decoded = ${identifiers.$$Utilities}.Schema.Scalar.GetDecoded<${scalar.name}_>`,
         )
         code(
-          `export type ${scalar.name}Encoded = ${identifiers.$$Utilities}.SchemaKit.Scalar.GetEncoded<${scalar.name}_>`,
+          `export type ${scalar.name}Encoded = ${identifiers.$$Utilities}.Schema.Scalar.GetEncoded<${scalar.name}_>`,
         )
         code()
       }
@@ -53,12 +53,12 @@ export const ModuleGeneratorScalar = createModuleGenerator(
       for (const scalar of config.schema.kindMap.GraphQLScalarTypeCustom) {
         code(typeTitle2(`custom scalar type`)(scalar))
         code()
-        code(`export type ${scalar.name} = ${identifiers.$$Utilities}.SchemaKit.Scalar.ScalarCodecless<'Date'>`)
+        code(`export type ${scalar.name} = ${identifiers.$$Utilities}.Schema.Scalar.ScalarCodecless<'Date'>`)
         // code(`import type { String as ${scalar.name} } from '${config.paths.imports.grafflePackage.scalars}'`)
         // code()
         // code(`export { String as ${scalar.name} } from '${config.paths.imports.grafflePackage.scalars}'`)
-        // code(`export type ${scalar.name}Decoded = SchemaKit.Scalar.GetDecoded<${scalar.name}>`)
-        // code(`export type ${scalar.name}Encoded = SchemaKit.Scalar.GetEncoded<${scalar.name}>`)
+        // code(`export type ${scalar.name}Decoded = Schema.Scalar.GetDecoded<${scalar.name}>`)
+        // code(`export type ${scalar.name}Encoded = Schema.Scalar.GetEncoded<${scalar.name}>`)
         // code()
       }
     }
