@@ -1,7 +1,7 @@
 import type { HasRequiredKeys } from 'type-fest'
 import type { Exact } from '../../lib/prelude.js'
+import type { GlobalRegistry } from '../../types/GlobalRegistry/GlobalRegistry.js'
 import type { SchemaDrivenDataMap } from '../../types/SchemaDrivenDataMap/__.js'
-import type { GlobalRegistry } from '../GlobalRegistry.js'
 import { type Client, create } from './client.js'
 import type { InputBase } from './Settings/Input.js'
 import type { NormalizeInput } from './Settings/InputToConfig.js'

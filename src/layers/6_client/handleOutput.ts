@@ -9,8 +9,8 @@ import {
   type GetOrNever,
   type Values,
 } from '../../lib/prelude.js'
+import type { GlobalRegistry } from '../../types/GlobalRegistry/GlobalRegistry.js'
 import type { TransportHttp } from '../5_request/types.js'
-import type { GlobalRegistry } from '../GlobalRegistry.js'
 import type { RunTypeHookOnRequestResult } from './extension/extension.js'
 import type { ClientContext } from './fluent.js'
 import {

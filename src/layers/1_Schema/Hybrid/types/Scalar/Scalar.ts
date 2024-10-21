@@ -1,6 +1,6 @@
 import type { IsAny, IsNever } from 'type-fest'
 import type { Grafaid } from '../../../../../lib/grafaid/__.js'
-import type { GlobalRegistry } from '../../../../GlobalRegistry.js'
+import type { GlobalRegistry } from '../../../../../types/GlobalRegistry/GlobalRegistry.js'
 import type { Codec, Mapper } from './codec.js'
 import { JavaScriptScalarCodecs } from './nativeScalarCodecs.js'
 

@@ -10,7 +10,7 @@ export type {
 } from '../layers/6_client/handleOutput.js'
 export { type DocumentRunner } from '../layers/6_client/requestMethods/document.js'
 export type { Config } from '../layers/6_client/Settings/Config.js'
-export { type GlobalRegistry } from '../layers/GlobalRegistry.js'
 export { type Exact, type ExactNonEmpty, type UnionExpanded } from '../lib/prelude.js'
 export { TypeFunction } from '../lib/type-function/__.js'
+export { type GlobalRegistry } from '../types/GlobalRegistry/GlobalRegistry.js'
 export { type SchemaDrivenDataMap } from '../types/SchemaDrivenDataMap/__.js'
