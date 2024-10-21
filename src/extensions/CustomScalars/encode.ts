@@ -2,7 +2,7 @@ import { SchemaKit } from '../../entrypoints/schema.js'
 import { applyCodec } from '../../layers/1_Schema/Hybrid/types/Scalar/Scalar.js'
 import type { RegisteredScalars } from '../../layers/6_client/fluent.js'
 import { Grafaid } from '../../lib/grafaid/__.js'
-import { SchemaDrivenDataMap } from './schemaDrivenDataMap/__.js'
+import { SchemaDrivenDataMap } from '../../types/SchemaDrivenDataMap/__.js'
 
 export const encodeRequestVariables = ({ sddm, request, scalars }: {
   sddm: SchemaDrivenDataMap

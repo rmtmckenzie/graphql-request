@@ -1,6 +1,6 @@
-import type { SchemaDrivenDataMap } from '../../extensions/CustomScalars/schemaDrivenDataMap/__.js'
 import type { Grafaid } from '../../lib/grafaid/__.js'
 import { Nodes } from '../../lib/grafaid/_Nodes.js'
+import type { SchemaDrivenDataMap } from '../../types/SchemaDrivenDataMap/__.js'
 import type { SchemaKit } from '../1_Schema/__.js'
 import { inferVariableType } from './inferVariableType.js'
 import type { Options } from './nodes/1_Document.js'

@@ -1,6 +1,6 @@
-import { ModuleGeneratorSchemaDrivenDataMap } from '../../extensions/CustomScalars/schemaDrivenDataMap/generator.js'
 import { createModuleGenerator } from '../helpers/moduleGenerator.js'
 import { ModuleGeneratorClient } from './Client.js'
+import { ModuleGeneratorSchemaDrivenDataMap } from './SchemaDrivenDataMap.js'
 import { ModuleGeneratorSelect } from './Select.js'
 import { ModuleGeneratorSelectionSets } from './SelectionSets.js'
 

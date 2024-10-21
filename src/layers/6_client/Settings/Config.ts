@@ -1,6 +1,6 @@
 import type { GraphQLSchema } from 'graphql'
-import type { SchemaDrivenDataMap } from '../../../extensions/CustomScalars/schemaDrivenDataMap/__.js'
 import type { RequireProperties } from '../../../lib/prelude.js'
+import type { SchemaDrivenDataMap } from '../../../types/SchemaDrivenDataMap/__.js'
 import type { TransportHttp, TransportMemory } from '../../5_request/types.js'
 import type { GlobalRegistry } from '../../GlobalRegistry.js'
 import type { Extension } from '../extension/extension.js'

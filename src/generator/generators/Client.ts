@@ -1,6 +1,6 @@
-import { ModuleGeneratorSchemaDrivenDataMap } from '../../extensions/CustomScalars/schemaDrivenDataMap/generator.js'
 import { createModuleGenerator } from '../helpers/moduleGenerator.js'
 import { ModuleGeneratorData } from './Data.js'
+import { ModuleGeneratorSchemaDrivenDataMap } from './SchemaDrivenDataMap.js'
 
 export const ModuleGeneratorClient = createModuleGenerator(
   `Client`,

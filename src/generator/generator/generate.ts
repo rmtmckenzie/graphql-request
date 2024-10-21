@@ -1,5 +1,4 @@
 import fs from 'node:fs/promises'
-import { ModuleGeneratorSchemaDrivenDataMap } from '../../extensions/CustomScalars/schemaDrivenDataMap/generator.js'
 import { createConfig } from '../config/config.js'
 import type { Input } from '../config/input.js'
 import { ModuleGenerator_ } from '../generators/_.js'
@@ -12,6 +11,7 @@ import { ModuleGeneratorMethodsRoot } from '../generators/MethodsRoot.js'
 import { ModuleGeneratorMethodsSelect } from '../generators/MethodsSelect.js'
 import { ModuleGeneratorScalar } from '../generators/Scalar.js'
 import { ModuleGeneratorSchema } from '../generators/Schema.js'
+import { ModuleGeneratorSchemaDrivenDataMap } from '../generators/SchemaDrivenDataMap.js'
 import { ModuleGeneratorSelect } from '../generators/Select.js'
 import { ModuleGeneratorSelectionSets } from '../generators/SelectionSets.js'
 

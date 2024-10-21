@@ -1,6 +1,6 @@
-import { Scalar, type Scalar as SchemaScalar } from '../../../layers/1_Schema/_.js'
-import type { Grafaid } from '../../../lib/grafaid/__.js'
-import { isString } from '../../../lib/prelude.js'
+import { Scalar, type Scalar as SchemaScalar } from '../../layers/1_Schema/_.js'
+import type { Grafaid } from '../../lib/grafaid/__.js'
+import { isString } from '../../lib/prelude.js'
 
 declare global {
   namespace GraffleGlobal {

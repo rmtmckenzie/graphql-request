@@ -3,7 +3,7 @@ import { Errors } from '../../lib/errors/__.js'
 import { normalizeRequestToNode } from '../../lib/grafaid/request.js'
 import { type ExcludeNullAndUndefined, isString } from '../../lib/prelude.js'
 import { isRecordLikeObject } from '../../lib/prelude.js'
-import { SchemaDrivenDataMap } from '../CustomScalars/schemaDrivenDataMap/__.js'
+import { SchemaDrivenDataMap } from '../../types/SchemaDrivenDataMap/__.js'
 import type { GeneratedExtensions } from './global.js'
 import { injectTypenameOnRootResultFields } from './injectTypenameOnRootResultFields.js'
 

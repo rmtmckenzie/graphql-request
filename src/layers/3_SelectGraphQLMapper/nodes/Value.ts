@@ -1,6 +1,6 @@
-import { SchemaDrivenDataMap } from '../../../extensions/CustomScalars/schemaDrivenDataMap/__.js'
 import type { Grafaid } from '../../../lib/grafaid/__.js'
 import { Nodes } from '../../../lib/grafaid/_Nodes.js'
+import { SchemaDrivenDataMap } from '../../../types/SchemaDrivenDataMap/__.js'
 import type { Scalar } from '../../1_Schema/_.js'
 import { SchemaKit } from '../../1_Schema/__.js'
 import type { OperationContext } from '../context.js'

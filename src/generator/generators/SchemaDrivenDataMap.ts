@@ -1,12 +1,12 @@
-import type { Config } from '../../../generator/config/config.js'
-import { ModuleGeneratorScalar } from '../../../generator/generators/Scalar.js'
-import { createModuleGenerator } from '../../../generator/helpers/moduleGenerator.js'
-import { createCodeGenerator } from '../../../generator/helpers/moduleGeneratorRunner.js'
-import { title1 } from '../../../generator/helpers/render.js'
-import { Code } from '../../../lib/Code.js'
-import { Grafaid } from '../../../lib/grafaid/__.js'
-import { entries } from '../../../lib/prelude.js'
-import { nullabilityFlags, propertyNames } from './types.js'
+import { Code } from '../../lib/Code.js'
+import { Grafaid } from '../../lib/grafaid/__.js'
+import { entries } from '../../lib/prelude.js'
+import { nullabilityFlags, propertyNames } from '../../types/SchemaDrivenDataMap/SchemaDrivenDataMap.js'
+import type { Config } from '../config/config.js'
+import { createModuleGenerator } from '../helpers/moduleGenerator.js'
+import { createCodeGenerator } from '../helpers/moduleGeneratorRunner.js'
+import { title1 } from '../helpers/render.js'
+import { ModuleGeneratorScalar } from './Scalar.js'
 
 const identifiers = {
   $Scalar: `$Scalar`,

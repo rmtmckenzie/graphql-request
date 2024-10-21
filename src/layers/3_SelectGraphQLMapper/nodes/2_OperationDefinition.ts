@@ -1,6 +1,6 @@
-import type { SchemaDrivenDataMap } from '../../../extensions/CustomScalars/schemaDrivenDataMap/__.js'
 import type { Grafaid } from '../../../lib/grafaid/__.js'
 import { Nodes } from '../../../lib/grafaid/_Nodes.js'
+import type { SchemaDrivenDataMap } from '../../../types/SchemaDrivenDataMap/__.js'
 import type { Select } from '../../2_Select/__.js'
 import { createOperationContext } from '../context.js'
 import { type GraphQLPreOperationMapper } from '../mapper.js'
