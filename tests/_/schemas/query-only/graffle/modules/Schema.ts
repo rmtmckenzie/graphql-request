@@ -20,7 +20,7 @@ export namespace Schema {
   //
   //
 
-  export type Query = $.ObjectQuery<{
+  export type Query = $.StandardTypes.Query<{
     id: $.Field<'id', $.Nullable<$Scalar.ID>, null>
     idNonNull: $.Field<'idNonNull', $Scalar.ID, null>
   }>

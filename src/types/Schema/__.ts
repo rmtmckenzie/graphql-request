@@ -1,12 +1,12 @@
 export * as Schema from './_.js'
 
 import type { GlobalRegistry } from '../GlobalRegistry/GlobalRegistry.js'
-import type { Enum } from './types/Enum.js'
-import type { Interface } from './types/Interface.js'
-import type { OutputObject } from './types/OutputObject.js'
-import type { Scalar } from './types/Scalar/Scalar.js'
-import type { Union } from './types/Union.js'
-import type { ObjectMutation, ObjectQuery, ObjectSubscription, RootType } from './typeTypes.js'
+import type { Enum } from './nodes/Enum.js'
+import type { Interface } from './nodes/Interface.js'
+import type { OutputObject } from './nodes/OutputObject.js'
+import type { Scalar } from './nodes/Scalar/Scalar.js'
+import type { Union } from './nodes/Union.js'
+import type { Mutation, Query, RootType, Subscription } from './StandardTypes/object.js'
 
 /**
  * A generic schema type. Any particular schema will be a subtype of this, with
@@ -20,15 +20,15 @@ export interface Schema<
   RootTypesPresent: ('Query' | 'Mutation' | 'Subscription')[]
   RootUnion: RootType
   Root: {
-    Query: null | ObjectQuery
-    Mutation: null | ObjectMutation
-    Subscription: null | ObjectSubscription
+    Query: null | Query
+    Mutation: null | Mutation
+    Subscription: null | Subscription
   }
   allTypes: Record<
     string,
     | Enum
-    | ObjectQuery
-    | ObjectMutation
+    | Query
+    | Mutation
     | OutputObject
     | Union
     | Interface

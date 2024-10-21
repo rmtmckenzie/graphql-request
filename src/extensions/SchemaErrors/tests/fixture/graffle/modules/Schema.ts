@@ -20,12 +20,12 @@ export namespace Schema {
   //
   //
 
-  export type Mutation = $.ObjectMutation<{
+  export type Mutation = $.StandardTypes.Mutation<{
     id: $.Field<'id', $.Nullable<$Scalar.ID>, null>
     idNonNull: $.Field<'idNonNull', $Scalar.ID, null>
   }>
 
-  export type Query = $.ObjectQuery<{
+  export type Query = $.StandardTypes.Query<{
     InputObjectNested: $.Field<
       'InputObjectNested',
       $.Nullable<$Scalar.ID>,

@@ -12,5 +12,5 @@ export { type Exact, type ExactNonEmpty, type UnionExpanded } from '../lib/prelu
 export { TypeFunction } from '../lib/type-function/__.js'
 export { type GlobalRegistry } from '../types/GlobalRegistry/GlobalRegistry.js'
 export { Schema } from '../types/Schema/__.js'
-export * from '../types/Schema/types/Scalar/standardScalarTypes.js'
+export * from '../types/Schema/StandardTypes/scalar.js'
 export { type SchemaDrivenDataMap } from '../types/SchemaDrivenDataMap/__.js'

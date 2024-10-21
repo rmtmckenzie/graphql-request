@@ -20,7 +20,7 @@ export namespace Schema {
   //
   //
 
-  export type Mutation = $.ObjectMutation<{
+  export type Mutation = $.StandardTypes.Mutation<{
     addPokemon: $.Field<
       'addPokemon',
       $.Nullable<Pokemon>,
@@ -34,7 +34,7 @@ export namespace Schema {
     >
   }>
 
-  export type Query = $.ObjectQuery<{
+  export type Query = $.StandardTypes.Query<{
     battles: $.Field<'battles', $.List<Battle>, null>
     beings: $.Field<'beings', $.List<Being>, null>
     pokemon: $.Field<'pokemon', $.Nullable<$.List<Pokemon>>, null>

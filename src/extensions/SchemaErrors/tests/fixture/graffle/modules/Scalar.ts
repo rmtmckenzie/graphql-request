@@ -1,6 +1,6 @@
 import type * as $$Utilities from '../../../../../../entrypoints/utilities-for-generated.js'
 
-export * from '../../../../../../types/Schema/types/Scalar/standardScalarTypes.js'
+export * from '../../../../../../types/Schema/StandardTypes/scalar.js'
 
 //
 //

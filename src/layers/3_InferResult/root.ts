@@ -6,7 +6,7 @@ import type { Object } from './Object.js'
 export type RootViaObject<
   $SelectionSet,
   $Schema extends Schema,
-  $RootType extends Schema.RootType,
+  $RootType extends Schema.StandardTypes.RootType,
 > = Root<
   $SelectionSet,
   $Schema,

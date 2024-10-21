@@ -20,7 +20,7 @@ export namespace Schema {
   //
   //
 
-  export type Mutation = $.ObjectMutation<{
+  export type Mutation = $.StandardTypes.Mutation<{
     id: $.Field<'id', $.Nullable<$Scalar.ID>, null>
     idNonNull: $.Field<'idNonNull', $Scalar.ID, null>
   }>

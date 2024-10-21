@@ -240,7 +240,7 @@ const concreteRenderers = defineConcreteRenderers({
   GraphQLObjectType: (config, node) => {
     const maybeRootTypeName = (Grafaid.Schema.RootTypeName as Record<string, Grafaid.Schema.RootTypeName>)[node.name]
     const type = maybeRootTypeName
-      ? `$.Object${maybeRootTypeName}<${renderOutputFields(config, node)}>`
+      ? `$.StandardTypes.${maybeRootTypeName}<${renderOutputFields(config, node)}>`
       : `$.OutputObject<${Code.string(node.name)}, ${renderOutputFields(config, node)}>`
     const doc = getDocumentation(config, node)
     const source = Code.export$(Code.type(node.name, type))

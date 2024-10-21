@@ -29,7 +29,7 @@ type SelectionNonSelectAlias<$SelectionSet , $Schema extends Schema, $SchemaNode
 
 // dprint-ignore
 export namespace Errors {
-  export type UnknownFieldName<$FieldName extends string, $Object extends Schema.RootType | Schema.OutputObject> =
+  export type UnknownFieldName<$FieldName extends string, $Object extends Schema.StandardTypes.RootType | Schema.OutputObject> =
     TSErrorDescriptive<'Object', `field "${$FieldName}" does not exist on object "${$Object['fields']['__typename']['type']['type']}"`>
 }
 

@@ -1,5 +1,5 @@
 import type { Directive } from '../Directive.js'
-import { Scalar } from '../types/Scalar/Scalar.js'
+import { Scalar } from '../nodes/Scalar/Scalar.js'
 
 export const IncludeDirective: Directive = {
   name: `include`,
