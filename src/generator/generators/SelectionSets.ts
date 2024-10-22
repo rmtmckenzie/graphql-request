@@ -7,12 +7,13 @@ import { Code } from '../../lib/Code.js'
 import { Grafaid } from '../../lib/grafaid/__.js'
 import { analyzeArgsNullability } from '../../lib/grafaid/schema/args.js'
 import { RootTypeName } from '../../lib/grafaid/schema/schema.js'
-import { entries, isString } from '../../lib/prelude.js'
-import { borderThinFullWidth } from '../../lib/text.js'
+import { entries } from '../../lib/prelude.js'
+import { Tex } from '../../lib/tex/__.js'
+import { borderThin } from '../../lib/tex/tex.js'
 import { identifiers } from '../helpers/identifiers.js'
 import { createModuleGenerator } from '../helpers/moduleGenerator.js'
 import { createCodeGenerator } from '../helpers/moduleGeneratorRunner.js'
-import { getDocumentation, renderDocumentation, renderName, title1, typeTitle2SelectionSet } from '../helpers/render.js'
+import { getTsDocContents, renderDocumentation, renderName, typeTitle2SelectionSet } from '../helpers/render.js'
 import type { KindRenderers } from '../helpers/types.js'
 import { ModuleGeneratorScalar } from './Scalar.js'
 
@@ -33,7 +34,7 @@ export const ModuleGeneratorSelectionSets = createModuleGenerator(
       code(`import type * as $Scalar from './${ModuleGeneratorScalar.name}.js'`)
     }
     code()
-    code(title1(`Document`))
+    code(Tex.title1(`Document`))
     code()
     code(
       `// Prefix with $ because this is not a schema type. A user could have a schema type named "Document" that this would conflict with.`,
@@ -47,7 +48,7 @@ export const ModuleGeneratorSelectionSets = createModuleGenerator(
     code()
 
     kindEntries.forEach(([name, kind]) => {
-      code(title1(name))
+      code(Tex.title1(name))
       code()
       kind.forEach(type => {
         code(kindRenderMap[name]({ config, type: type as never }))
@@ -80,13 +81,16 @@ const renderKindUnion = createCodeGenerator<{ type: Grafaid.Schema.UnionType }>(
       .join(
         `\n`,
       )
-    code(`
-      export interface ${renderName(type)}<${$ScalarsTypeParameter}> {
+    code(Code.tsInterface$({
+      export: true,
+      name: type.name,
+      typeParameters: $ScalarsTypeParameter,
+      fields: `
         ${fragmentsInlineType}
         ${H.fragmentInlineField(type)}
         ${H.__typenameField(`union`)}
-      }
-    `)
+      `,
+    }))
 
     code(H.fragmentInlineInterface(type))
     code()
@@ -132,7 +136,7 @@ const renderKindInterface = createCodeGenerator<{ type: Grafaid.Schema.Interface
 
     code()
     code(`// Interface Type: ${type.name}`)
-    code(`// ${borderThinFullWidth}`)
+    code(`// ${borderThin}`)
     code()
 
     const doc = renderDocumentation(config, type)
@@ -209,7 +213,7 @@ const renderKindOutputObject = createCodeGenerator<{ type: Grafaid.Schema.Object
 
     code(`
       export namespace ${renderName(type)} {
-        ${fields.map((field) => renderOutputField({ config, field })).join(`\n// ${borderThinFullWidth}\n\n`)}
+        ${fields.map((field) => renderOutputField({ config, field })).join(`\n// ${borderThin}\n\n`)}
       }
     `)
     code()
@@ -241,7 +245,7 @@ const renderOutputField = createCodeGenerator<{ field: Grafaid.Schema.Field<any,
       && argsAnalysis.isAllNullable
     const indicator = isCanBeIndicator ? `$Select.Indicator.NoArgsIndicator` : ``
 
-    code(H.tsType(field, Code.unionItems([indicator, selectionSetRef])))
+    code(H.tsType(field, Code.tsUnionItems([indicator, selectionSetRef])))
     code()
 
     const propertyArguments = renderFieldPropertyArguments({
@@ -257,19 +261,29 @@ const renderOutputField = createCodeGenerator<{ field: Grafaid.Schema.Field<any,
       ? H.namedTypesReference(fieldNamedType)
       : null
 
-    code(H.tsInterface(selectionSetName, [`$Select.Bases.Base`, objectLikeTypeReference], propertyArguments))
+    code(Code.tsInterface$({
+      export: true,
+      name: H.referenceSig(selectionSetName),
+      extends: [`$Select.Bases.Base`, objectLikeTypeReference],
+      fields: propertyArguments,
+    }))
     code()
 
     if (argsAnalysis.hasAny) {
       const fields = field.args.map(arg => renderArgumentLike({ config, arg })).join(`\n`)
-      code(H.tsInterface(argumentsName, null, fields))
+      code(Code.tsInterface$({
+        export: true,
+        name: H.referenceSig(argumentsName),
+        extends: `$Select.Bases.Base`,
+        fields,
+      }))
       code()
     }
 
     code(`// --- expanded ---`)
     code()
 
-    code(H.tsTypeExpanded(field, Code.unionItems([indicator, selectionSetRef])))
+    code(H.tsTypeExpanded(field, Code.tsUnionItems([indicator, selectionSetRef])))
     code()
 
     code()
@@ -307,8 +321,8 @@ const renderArgumentLike = createCodeGenerator<{ arg: Grafaid.Schema.Argument | 
       ? Select.Arguments.enumKeyPrefix
       : ``
     const typeRendered = renderArgumentType(arg.type)
-    const tsDoc = getDocumentation(config, arg)
-    code(tsDoc)
+    const tsDoc = getTsDocContents(config, arg)
+    code(Code.TSDoc(tsDoc))
     code(`${enumKeyPrefix}${arg.name}${H.propOpt(arg.type)}: ${typeRendered}`)
   },
 )
@@ -382,13 +396,6 @@ namespace H {
 
   export const maybeList = (type: string) => {
     return `${type} | Array<${type}>`
-  }
-
-  export const tsInterface = (name: Name, extendsClause: null | (string | null)[], fields: string) => {
-    const extendsClause_ = extendsClause
-      ? ` extends ${isString(extendsClause) ? extendsClause : extendsClause.join(`, `)}`
-      : ``
-    return `export interface ${referenceSig(name)} ${extendsClause_} { ${fields} }`
   }
 
   export const tsType = (name: Name, type: string) => {

@@ -1,13 +1,19 @@
-import { entries, isString } from './prelude.js'
-import { linesPrepend, linesTrim } from './text.js'
+import { renderName } from '../generator/helpers/render.js'
+import { entries, isString, toArray } from './prelude.js'
+import { linesPrepend, linesTrim } from './tex/tex.js'
 
 type FieldTuple = [k: string, v: string | null, tsDoc?: string | null]
 
 export namespace Code {
-  export const field = (name: string, type: string, options?: { tsDoc?: string | null; optional?: boolean }) => {
+  export const field = (
+    name: string,
+    type: string | TermObject,
+    options?: { tsDoc?: string | null; optional?: boolean },
+  ) => {
     const tsDoc = options?.tsDoc ? TSDoc(options.tsDoc) + `\n` : ``
     const optional = options?.optional ? `?` : ``
-    return `${tsDoc}${name}${optional}: ${type}`
+    const type_ = typeof type === `string` ? type : termObject(type)
+    return `${tsDoc}${name}${optional}: ${type_}`
   }
   export interface DirectiveTermObject {
     $spread?: string[]
@@ -38,8 +44,10 @@ export namespace Code {
 
   type Field = TermPrimitive | DirectiveTermObject | TermObject
 
+  export const directiveField = (input: { $TS_DOC?: null | string; $VALUE: Field }): DirectiveField => input
+
   interface DirectiveField {
-    $TS_DOC?: string
+    $TS_DOC?: string | null
     $VALUE: Field
   }
 
@@ -74,27 +82,27 @@ export namespace Code {
   }
 
   export const termObjectFields = (object: TermObject | DirectiveTermObject): string =>
-    termFieldsFromTuples(
-      entries(object).map(([key, value]): FieldTuple => {
+    entries(object)
+      .map(([key, value]): FieldTuple => {
         if (value === null) return [key, null]
 
         const [valueNormalized, tsDoc] = isDirectiveTermObject(value)
           ? [directiveTermObject(value), null]
           : isDirectiveField(value)
-          ? [termObjectField(value.$VALUE), value.$TS_DOC]
+          ? [termObjectField(value.$VALUE), value.$TS_DOC ? TSDoc(value.$TS_DOC) : null]
           : isString(value) || typeof value === `number` || typeof value === `boolean`
           ? [String(value), null]
           : [termObject(value as any), null]
         return [key, valueNormalized, tsDoc]
-      }),
-    )
+      })
+      .map(termFieldFromTuple)
+      .join(`\n`)
 
   const termObjectField = (field: Field): string => {
     if (isFieldPrimitive(field)) return String(field)
     return termObject(field)
   }
 
-  export const termFieldsFromTuples = (fields: FieldTuple[]) => fields.map(termFieldFromTuple).join(`\n`)
   export const termList = (value: string[]) => `[${value.join(`, `)}]`
   export const termFieldFromTuple = (tuple: FieldTuple) => Code.termField(tuple[0], tuple[1], { tsDoc: tuple[2] })
   export const termField = (
@@ -111,9 +119,9 @@ export namespace Code {
 
   // type
   export const nullable = (type: string) => `${type} | null`
-  export const union = (name: string, types: string[]) => `type ${name} =\n| ${Code.unionItems(types)}`
-  export const unionItems = (types: (string | null)[]) => types.filter(_ => _ !== null).join(`\n| `)
-  export const tuple = (types: string[]) => termList(types)
+  export const union = (name: string, types: string[]) => `type ${name} =\n| ${Code.tsUnionItems(types)}`
+  export const tsUnionItems = (types: (string | null)[]) => types.filter(_ => _ !== null).join(`\n| `)
+  export const tsTuple = (types: string[]) => termList(types)
   export const list = (type: string) => `Array<${type}>`
   export const optionalField = (name: string, type: string) => Code.field(name, type, { optional: true })
   export const fields = (fieldTypes: string[]) => fieldTypes.join(`\n`)
@@ -139,21 +147,72 @@ export namespace Code {
       ),
     )
   }
-  export const type = (name: string, type: string) => `type ${name} = ${type}`
-  export const interface$ = (name: string, object: string) => `interface ${name} ${object}`
-  export const export$ = (thing: string) => `export ${thing}`
-  export const namespace = (name: string, content: string) => `namespace ${name} ${Code.object(content)}`
+
+  export const tsType = (name: string, type: string | TermObject) => {
+    const type_ = typeof type === `string` ? type : termObject(type)
+    return `type ${renderName(name)} = ${type_}`
+  }
+
+  type TypeParametersInput = string | null | (string | null)[]
+
+  const tsTypeParameters = (typeParameters: TypeParametersInput): string => {
+    if (typeParameters === null) return ``
+    if (Array.isArray(typeParameters) && typeParameters.length === 0) return ``
+    return `<${toArray(typeParameters).filter(_ => _ !== null).join(`, `)}>`
+  }
+
+  type ExtendsClauseInput = string | null | (string | null)[]
+
+  export const tsInterface = (
+    name: string,
+    typeParameters: TypeParametersInput,
+    extendsClause: ExtendsClauseInput,
+    fields: string | TermObject,
+  ) => {
+    return tsInterface$({
+      name,
+      typeParameters,
+      extends: extendsClause,
+      fields,
+    })
+  }
+
+  export const tsInterface$ = (
+    { name, typeParameters, extends: extends_, fields, tsDoc, export: export_ }: {
+      name: string
+      typeParameters?: TypeParametersInput
+      extends?: ExtendsClauseInput
+      fields?: string | TermObject
+      tsDoc?: string | null
+      export?: boolean
+    },
+  ) => {
+    const tsDoc_ = tsDoc ? TSDoc(tsDoc) + `\n` : ``
+    const export__ = export_ === false ? `` : `export `
+    const typeParametersClause = tsTypeParameters(typeParameters ?? null)
+    const extends__ = toArray(extends_).filter(_ => Boolean(_))
+    const extends___ = extends__.length > 0
+      ? ` extends ${extends__.join(`, `)}`
+      : ``
+    const block = typeof fields === `string` ? `{${fields}}` : termObject(fields ?? {})
+    const name_ = renderName(name)
+    return `${tsDoc_} ${export__} interface ${name_} ${typeParametersClause} ${extends___} ${block}`
+  }
+
+  export const esmExport = (thing: string) => {
+    return `export ${thing}`
+  }
+
+  export const tsNamespace = (name: string, content: string) => {
+    return `namespace ${renderName(name)} ${Code.object(content)}`
+  }
   // term or type
   export const propertyAccess = (object: string, name: string) => `${object}.${name}`
   export const string = (str: string) => `"${str}"`
   export const block = (content: string) => `{\n${content}\n}`
   export const boolean = (value: boolean) => value ? `true` : `false`
-  export const TSDoc = <$Content extends string | null>(content: $Content): $Content => {
-    return (content === null ? null : `/**\n${linesPrepend(`* `, linesTrim(content)) || `*`}\n*/`) as $Content
-  }
-  export const TSDocWithBlock = (content: string | null, block: string) => {
-    const tsDoc = TSDoc(content)
-    return tsDoc === null ? block : `${tsDoc}\n${block}`
+  export const TSDoc = (content: string | null): string => {
+    return content === null ? `` : `/**\n${linesPrepend(`* `, linesTrim(content)) || `*`}\n*/`
   }
 
   export const group = (...content: string[]) => content.join(`\n`)
