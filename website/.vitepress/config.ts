@@ -48,6 +48,17 @@ const sidebars = fixLinks(generateSidebar([
     useTitleFromFileHeading: true,
     keepMarkdownSyntaxFromTitle: true,
   },
+  {
+    hyphenToSpace: true,
+    capitalizeEachWords: true,
+    scanStartPath: 'content/extensions',
+    resolvePath: '/extensions/',
+    prefixSeparator: '_',
+    removePrefixAfterOrdering: true,
+    useTitleFromFrontmatter: true,
+    useTitleFromFileHeading: true,
+    keepMarkdownSyntaxFromTitle: true,
+  },
 ]) as SidebarMulti)
 
 sidebars['/examples/'].items.find(_ => _.text === 'About')!.items!.unshift({ text: 'Introduction', link: '/' })
@@ -128,6 +139,7 @@ export default defineConfig({
     nav: [
       { text: 'Guides', link: '/guides' },
       { text: 'Examples', link: '/examples' },
+      { text: 'Extensions', link: '/extensions' },
     ],
     sidebar: {
       ...sidebars,
