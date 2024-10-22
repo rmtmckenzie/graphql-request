@@ -3,8 +3,8 @@ import { Date } from '../../../tests/_/fixtures/scalars.js'
 import { createResponse, test } from '../../../tests/_/helpers.js'
 import { db } from '../../../tests/_/schemas/db.js'
 import type { Graffle } from '../../../tests/_/schemas/kitchen-sink/graffle/__.js'
-import { Select } from '../../layers/2_Select/__.js'
-import { SelectionSetGraphqlMapper } from '../../layers/3_SelectGraphQLMapper/__.js'
+import { Select } from '../../documentBuilder/Select/__.js'
+import { SelectionSetGraphqlMapper } from '../../documentBuilder/SelectGraphQLMapper/__.js'
 import { Grafaid } from '../../lib/grafaid/__.js'
 
 type TestCase = [

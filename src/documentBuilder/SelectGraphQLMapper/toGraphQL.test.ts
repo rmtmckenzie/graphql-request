@@ -5,7 +5,7 @@ import { schemaDrivenDataMap } from '../../../tests/_/schemas/kitchen-sink/graff
 import type * as SelectionSets from '../../../tests/_/schemas/kitchen-sink/graffle/modules/SelectionSets.js'
 import { Grafaid } from '../../lib/grafaid/__.js'
 import type { Schema } from '../../types/Schema/__.js'
-import { Select } from '../2_Select/__.js'
+import { Select } from '../Select/__.js'
 import { toGraphQLDocument } from './nodes/1_Document.js'
 
 type CasesDescriptiveQuery = [

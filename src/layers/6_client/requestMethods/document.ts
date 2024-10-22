@@ -1,8 +1,8 @@
 import type { UnionToTuple } from 'type-fest'
+import type { InferResult } from '../../../documentBuilder/InferResult/__.js'
+import type { Select } from '../../../documentBuilder/Select/__.js'
 import type { Schema } from '../../../entrypoints/schema.js'
 import type { IsTupleMultiple } from '../../../lib/prelude.js'
-import type { Select } from '../../2_Select/__.js'
-import type { InferResult } from '../../3_InferResult/__.js'
 import type { ClientContext } from '../fluent.js'
 import { type HandleOutput } from '../handleOutput.js'
 

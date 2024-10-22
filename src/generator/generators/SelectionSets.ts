@@ -2,7 +2,7 @@
 // todo: on union fields, JSDoc that mentions the syntax `on*`
 
 import { pick } from 'es-toolkit'
-import { Select } from '../../layers/2_Select/__.js'
+import { Select } from '../../documentBuilder/Select/__.js'
 import { Code } from '../../lib/Code.js'
 import { Grafaid } from '../../lib/grafaid/__.js'
 import { analyzeArgsNullability } from '../../lib/grafaid/schema/args.js'

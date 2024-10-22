@@ -1,6 +1,6 @@
 import { expect, test } from 'vitest'
-import { normalizeOrThrow } from '../../layers/2_Select/document.js'
-import { SelectionSetGraphqlMapper } from '../../layers/3_SelectGraphQLMapper/__.js'
+import { normalizeOrThrow } from '../../documentBuilder/Select/document.js'
+import { SelectionSetGraphqlMapper } from '../../documentBuilder/SelectGraphQLMapper/__.js'
 import { graffleMappedResultToRequest } from '../../layers/5_request/core.js'
 import { injectTypenameOnRootResultFields } from './injectTypenameOnRootResultFields.js'
 import { GraffleSchemaErrors } from './tests/fixture/graffle/__.js'

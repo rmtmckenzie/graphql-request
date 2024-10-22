@@ -1,5 +1,5 @@
 export { type Simplify } from 'type-fest'
-export * from '../layers/2_Select/__.js'
+export * from '../documentBuilder/Select/__.js'
 export { type ClientContext } from '../layers/6_client/fluent.js'
 export type {
   ConfigGetOutputError,

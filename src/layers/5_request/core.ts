@@ -1,4 +1,5 @@
 import { type ExecutionResult } from 'graphql'
+import { SelectionSetGraphqlMapper } from '../../documentBuilder/SelectGraphQLMapper/__.js'
 import { Anyware } from '../../lib/anyware/__.js'
 import type { Grafaid } from '../../lib/grafaid/__.js'
 import { getOperationDefinition, OperationTypeToAccessKind, print } from '../../lib/grafaid/document.js'
@@ -13,7 +14,6 @@ import {
 } from '../../lib/grafaid/http/http.js'
 import { mergeRequestInit, searchParamsAppendAll } from '../../lib/http.js'
 import { casesExhausted, isString } from '../../lib/prelude.js'
-import { SelectionSetGraphqlMapper } from '../3_SelectGraphQLMapper/__.js'
 import type { GraffleExecutionResultVar } from '../6_client/handleOutput.js'
 import type { Config } from '../6_client/Settings/Config.js'
 import { MethodMode, type MethodModeGetReads } from '../6_client/transportHttp/request.js'
