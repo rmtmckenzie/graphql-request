@@ -12,6 +12,10 @@ hero:
     - theme: alt
       text: Examples
       link: /examples
+    - theme: alt
+      text: Extensions
+      link: /extensions
+
   image:
     src: /_assets/logo-dark-squared.png
     alt: Graffle
