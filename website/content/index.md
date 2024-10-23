@@ -27,21 +27,21 @@ features:
     details: Powerful type-safe extension system. Intercept and manipulate inputs, outputs, and core with hooks; Add new methods; And more.
     icon: 🧰
   - title: Ecosystem
-    details: Ready to go extensions for things like OpenTelemetry and file uploads to meet real world project needs.
+    details: Meet real-world project needs with extensions for common and niche needs like OpenTelemetry, file uploads, schema errors, and more.
     icon: 📦
   - title: Multi-Transport
-    details: Not just a great way to query GraphQL APIs. Execute documents against in-memory schemas just as easily with nearly the same interface.
+    details: Not just a great way to query GraphQL APIs. Execute documents against in-memory schemas just as easily with the same interface.
     icon: 🚛
-  - title: Opt-in Generation
-    details: Begin with a traditional static library and seamlessly transition to a more powerful generated one when you want.
+  - title: Custom Scalars
+    details: Easily add client-side codecs for custom scalars in the schema to enable automatic encoding of arguments and decoding of data on every request.
     icon: 🧙
-  - title: Type Safe Results <br/><span style="opacity:0.25;">( gen )</span>
-    details: All result types are automatically inferred based on your document structure across all GraphQL features including selection sets, directives, fragments, interfaces, and unions.
+  - title: Document Builder
+    details: Optional TypeScript alternative to GQL syntax for building type-safe documents including tailored methods for root fields, batch method for multiple root fields, an a document method for 1:1 with GraphQL.
+    icon: 🪵
+  - title: Type Safe Results <br/><span style="opacity:0.25;">( Document Builder )</span>
+    details: Automatically inferred type safe results based on your document's structure including selection sets, aliases, directives, inline fragments, unions, and more.
     icon: ⛑️
-  - title: Schema Tailored Methods<br/><span style="opacity:0.25;">( gen )</span>
-    details: Range of methods to suit your input needs ranging from creating whole documents to selecting on exactly one Query Mutation or Subscription field.
-    icon: 🪡
-  - title: Schema Errors<br/><span style="opacity:0.25;">( gen )</span>
+  - title: Schema Errors<br/><span style="opacity:0.25;">( Extension )</span>
     details: First class support for schemas that have modelled errors into their design. Result Fields can be made to throw on errors or automatically map to error classes.
     icon: 🎲
 ---
