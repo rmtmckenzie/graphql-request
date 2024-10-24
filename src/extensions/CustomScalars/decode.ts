@@ -28,29 +28,29 @@ export const decodeResultData = ({ request, data, sddm, scalars }: {
   if (!sddmOutputObject) return
   if (!data) return
 
-  for (const [key, value] of Object.entries(data)) {
-    const documentField = findDocumentField(request.operation.selectionSet, key)
-    const kSchema = documentField?.name.value ?? key
-    const sddmOutputField = sddmOutputObject.f[kSchema]
-    if (!sddmOutputField?.nt) continue
-
-    decodeResultValue({
-      parentContext: { type: `object`, object: data, key },
-      value,
-      sddmNode: sddmOutputField.nt,
-      documentPart: documentField?.selectionSet ?? null,
-      scalars,
-    })
-  }
+  decodeResultValue({
+    parentContext: null,
+    value: data,
+    sddmNode: sddmOutputObject,
+    documentPart: request.operation.selectionSet,
+    scalars,
+  })
 }
 
 const decodeResultValue = (input: {
-  parentContext: { type: `object`; object: Record<string, any>; key: string } | {
-    type: `list`
-    object: any[]
-    key: number
-  }
-  value: Value
+  parentContext:
+    | null
+    | {
+      type: `object`
+      object: Record<string, any>
+      fieldName: string
+    }
+    | {
+      type: `list`
+      object: any[]
+      index: number
+    }
+  value: Grafaid.SomeFieldData
   sddmNode: SchemaDrivenDataMap.OutputNodes
   documentPart: null | Grafaid.Document.SelectionSetNode
   scalars: Schema.Scalar.ScalarMap
@@ -65,7 +65,7 @@ const decodeResultValue = (input: {
     // todo test case of array data of scalars
     value.forEach((item, index) => {
       decodeResultValue({
-        parentContext: { type: `list`, object: value, key: index },
+        parentContext: { type: `list`, object: value, index },
         value: item,
         sddmNode,
         documentPart,
@@ -79,13 +79,16 @@ const decodeResultValue = (input: {
       // todo in strict mode throw error that sddmNode is inconsistent with data shape.
     }
     const object = value
-    for (const [key, value] of Object.entries(object)) {
-      const documentField = findDocumentField(documentPart, key)
-      const kSchema = documentField?.name.value ?? key
+    for (const [fieldName, value] of Object.entries(object)) {
+      // TODO optimize field lookup
+      // We need a smart algorithm that considers:
+      // key space of schema vs key space of data
+      const documentField = findDocumentField(documentPart, fieldName)
+      const kSchema = documentField?.name.value ?? fieldName
       const sddmOutputField = sddmNode.f[kSchema]
       if (!sddmOutputField?.nt) continue
       decodeResultValue({
-        parentContext: { type: `object`, object, key },
+        parentContext: { type: `object`, object, fieldName },
         value,
         sddmNode: sddmOutputField.nt,
         documentPart: documentField?.selectionSet ?? null,
@@ -93,20 +96,24 @@ const decodeResultValue = (input: {
       })
     }
   } else {
+    if (!parentContext) {
+      // Should be impossible. Strict mode could error here.
+      return
+    }
     if (SchemaDrivenDataMap.isScalar(sddmNode)) {
       const decodedValue = Schema.Scalar.applyCodec(sddmNode.codec.decode, value)
       if (parentContext.type === `object`) {
-        parentContext.object[parentContext.key] = decodedValue
+        parentContext.object[parentContext.fieldName] = decodedValue
       } else {
-        parentContext.object[parentContext.key] = decodedValue
+        parentContext.object[parentContext.index] = decodedValue
       }
     } else if (SchemaDrivenDataMap.isCustomScalarName(sddmNode)) {
       const scalar = Schema.Scalar.lookupCustomScalarOrFallbackToString(scalars, sddmNode)
       const decodedValue = Schema.Scalar.applyCodec(scalar.codec.decode, value)
       if (parentContext.type === `object`) {
-        parentContext.object[parentContext.key] = decodedValue
+        parentContext.object[parentContext.fieldName] = decodedValue
       } else {
-        parentContext.object[parentContext.key] = decodedValue
+        parentContext.object[parentContext.index] = decodedValue
       }
     } else {
       // enums not decoded.
@@ -116,23 +123,19 @@ const decodeResultValue = (input: {
 
 const findDocumentField = (
   selectionSet: null | Grafaid.Document.SelectionSetNode,
-  k: string,
+  fieldName: string,
 ): Grafaid.Document.FieldNode | null => {
   if (!selectionSet) return null
 
   for (const selection of selectionSet.selections) {
-    if (selection.kind === Kind.FIELD && (selection.alias?.value ?? selection.name.value) === k) {
+    if (selection.kind === Kind.FIELD && (selection.alias?.value ?? selection.name.value) === fieldName) {
       return selection
     }
     if (selection.kind === Kind.INLINE_FRAGMENT) {
-      const result = findDocumentField(selection.selectionSet, k)
+      const result = findDocumentField(selection.selectionSet, fieldName)
       if (result !== null) return result
     }
   }
 
   return null
-}
-
-type Value = Grafaid.Schema.StandardScalarRuntimeTypes[] | Grafaid.Schema.StandardScalarRuntimeTypes | null | {
-  [k: string]: Value
 }

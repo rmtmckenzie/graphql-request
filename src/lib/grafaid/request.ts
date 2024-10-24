@@ -31,8 +31,17 @@ export type Variables = {
   [key: string]: string | boolean | null | number | Variables
 }
 
-export type SomeObjectData = Record<string, any>
-export type SomeFieldData = SomeObjectData | Grafaid.Schema.StandardScalarRuntimeTypes
+export type SomeObjectData = {
+  [fieldName: string]: any // SomeFieldData <-- If we put this here tsc has crashes with OOM.
+}
+
+export type SomeFieldData =
+  | null
+  | Grafaid.Schema.StandardScalarRuntimeTypes
+  | Grafaid.Schema.StandardScalarRuntimeTypes[]
+  | {
+    [fieldName: string]: SomeFieldData
+  }
 
 export type GraphQLExecutionResultError = Errors.ContextualAggregateError<GraphQLError>
 

@@ -4,7 +4,7 @@ title: Getting Started
 
 # Getting Started
 
-This short guide will shepherd you through an example beginning from basic usage an then demonstrating use of the optional document builder. Node is used but Deno and Bun users should be able to follow along as well.
+This short guide will take you from basic usage to use of the optional document builder. Node is used but Deno and Bun users should be able to follow along as well.
 
 ## 🏡 Setup Your Project
 
@@ -24,7 +24,7 @@ pnpm add --development typescript tsx @tsconfig/strictest
 ```
 
 ```sh
-touch tsconfig.json
+touch tsconfig.json main.ts
 ```
 
 ```json tsconfig.json
