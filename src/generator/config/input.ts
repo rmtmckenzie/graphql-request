@@ -12,11 +12,27 @@ export interface InputLint {
   missingCustomScalarCodec?: boolean
 }
 
+export const OutputCase = {
+  pascal: `pascal`,
+  camel: `camel`,
+  kebab: `kebab`,
+  snake: `snake`,
+} as const
+export type InputOutputCase = keyof typeof OutputCase
+
 export interface Input {
   /**
-   * File system API to use. By default uses the Node.js file system API.
+   * File system API to use.
+   *
+   * By default uses the Node.js file system API.
    */
   fs?: Fs
+  /**
+   * What naming convention to use for generated files and directories.
+   *
+   * @defaultValue `kebab`
+   */
+  outputCase?: InputOutputCase
   /**
    * The name of the client. This will affect:
    *
@@ -105,11 +121,11 @@ export interface Input {
    */
   sourceDirPath?: string
   /**
-   * File path to your custom scalar codecs module.
+   * File path to your scalars module.
    *
-   * If not set, Graffle will look for a file called `customScalarCodecs.ts` in the project directory.
+   * If not set, Graffle will look for a file called `scalars.ts` in the project directory.
    */
-  customScalarCodecs?: string
+  scalars?: string
   /**
    * Override import paths to graffle package within the generated code.
    * Used by Graffle test suite to have generated clients point to source
