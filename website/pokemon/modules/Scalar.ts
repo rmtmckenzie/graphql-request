@@ -15,3 +15,25 @@ export * from "graffle/generator-helpers/standard-scalar-types";
 //
 
 export type Date = $$Utilities.Schema.Scalar.ScalarCodecless<"Date">;
+
+//
+//
+//
+//
+//
+//
+// ==================================================================================================
+//                                              Registry
+// ==================================================================================================
+//
+//
+//
+//
+//
+//
+
+export const $registry = {
+  map: {},
+} as $Registry;
+
+export type $Registry = $$Utilities.Schema.Scalar.Registry.Empty;

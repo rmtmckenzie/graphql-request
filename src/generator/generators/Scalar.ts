@@ -1,4 +1,6 @@
+import { Code } from '../../lib/Code.js'
 import { Grafaid } from '../../lib/grafaid/__.js'
+import { Tex } from '../../lib/tex/__.js'
 import { identifiers } from '../helpers/identifiers.js'
 import { createModuleGenerator } from '../helpers/moduleGenerator.js'
 import { typeTitle2 } from '../helpers/render.js'
@@ -62,5 +64,42 @@ export const ModuleGeneratorScalar = createModuleGenerator(
         // code()
       }
     }
+    code()
+
+    code(Tex.title1(`Registry`))
+    code()
+
+    const runtimeMap = config.options.customScalars
+      ? config.schema.kindMap.list.ScalarCustom.map(_ => {
+        return [_.name, _.name]
+      })
+      : {}
+
+    const buildtimeMap = config.options.customScalars
+      ? config.schema.kindMap.list.ScalarCustom.map(_ => {
+        return [_.name, _.name + `_`]
+      })
+      : {}
+
+    code(`
+      export const $registry = {
+        map: ${Code.termObject(runtimeMap)},
+      } as $Registry
+    `)
+    code()
+
+    const typeScalarRegistry = config.options.customScalars
+      // dprint-ignore
+      ? `$$Utilities.Schema.Scalar.Registry<
+          ${Code.termObject(buildtimeMap)},
+          ${Code.tsUnionItems(config.schema.kindMap.list.ScalarCustom.map(_ => `${identifiers.$$Utilities}.Schema.Scalar.GetEncoded<${_.name}_>`))},
+          ${Code.tsUnionItems(config.schema.kindMap.list.ScalarCustom.map(_ => `${identifiers.$$Utilities}.Schema.Scalar.GetDecoded<${_.name}_>`))},
+        >`
+      : `$$Utilities.Schema.Scalar.Registry.Empty`
+
+    code(Code.tsAlias$({
+      name: `$Registry`,
+      type: typeScalarRegistry,
+    }))
   },
 )
