@@ -1,3 +1,5 @@
+import type { IntrospectionOptions } from 'graphql'
+import type { Fs } from '../../lib/fsp.js'
 import type { Grafaid } from '../../lib/grafaid/__.js'
 import type { Extension } from '../extension/types.js'
 
@@ -11,6 +13,10 @@ export interface InputLint {
 }
 
 export interface Input {
+  /**
+   * File system API to use. By default uses the Node.js file system API.
+   */
+  fs?: Fs
   /**
    * The name of the client. This will affect:
    *
@@ -36,8 +42,14 @@ export interface Input {
   /**
    * The schema to use for generation. Can be an existing SDL file on disk, a schema instance already in memory, or an endpoint that will be introspected.
    */
-  schema: Grafaid.Schema.Schema | {
+  schema: {
     type: 'sdl'
+    sdl: string
+  } | {
+    type: 'instance'
+    instance: Grafaid.Schema.Schema
+  } | {
+    type: 'sdlFile'
     /**
      * Defaults to the source directory if set, otherwise the current working directory.
      */
@@ -45,6 +57,7 @@ export interface Input {
   } | {
     type: 'url'
     url: URL
+    options?: InputIntrospectionOptions
   }
   /**
    * If the schema comes from a non-sdl-file source like a GraphQL endpoint URL, should a derived SDL file be written to disk?
@@ -129,6 +142,43 @@ export interface Input {
    * are or have gentime components.
    */
   extensions?: Extension[]
+}
+
+export interface InputIntrospectionOptions extends IntrospectionOptions {
+  /**
+   * Whether to include descriptions in the introspection result.
+   * @defaultValue `true`
+   */
+  descriptions?: boolean
+  /**
+   * Whether to include `specifiedByURL` in the introspection result.
+   * @defaultValue `true`
+   */
+  specifiedByUrl?: boolean
+  /**
+   * Whether to include `isRepeatable` flag on directives.
+   * @defaultValue `true`
+   */
+  directiveIsRepeatable?: boolean
+  /**
+   * Whether to include `description` field on schema.
+   * @defaultValue `true`
+   */
+  schemaDescription?: boolean
+  /**
+   * Whether target GraphQL server support deprecation of input values.
+   *
+   * By default an attempt will be made to introspect this information
+   * and if it fails then fallback to false for this option.
+   */
+  inputValueDeprecation?: boolean
+  /**
+   * Whether target GraphQL server supports `@oneOf` input objects.
+   *
+   * By default an attempt will be made to introspect this information
+   * and if it fails then fallback to false for this option.
+   */
+  oneOf?: boolean
 }
 
 export interface InputLibraryPaths {
