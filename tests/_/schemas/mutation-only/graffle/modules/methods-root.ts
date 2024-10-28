@@ -7,7 +7,8 @@ export interface MutationMethods<$Context extends $$Utilities.ClientContext> {
   $batch: <$SelectionSet>(
     selectionSet: $$Utilities.Exact<$SelectionSet, $$SelectionSets.Mutation<$Context['scalars']>>,
   ) => Promise<
-    $$Utilities.Simplify<
+    $$Utilities.SimplifyExcept<
+      $Context['scalars']['typesDecoded'],
       $$Utilities.HandleOutput<
         $Context,
         InferResult.OperationMutation<$SelectionSet, $$Schema.Schema<$Context['scalars']>>
@@ -27,7 +28,8 @@ export interface MutationMethods<$Context extends $$Utilities.ClientContext> {
   id: <$SelectionSet>(
     selectionSet?: $$Utilities.Exact<$SelectionSet, $$SelectionSets.Mutation.id<$Context['scalars']>>,
   ) => Promise<
-    $$Utilities.Simplify<
+    $$Utilities.SimplifyExcept<
+      $Context['scalars']['typesDecoded'],
       $$Utilities.HandleOutputGraffleRootField<
         $Context,
         InferResult.OperationMutation<{ id: $SelectionSet }, $$Schema.Schema<$Context['scalars']>>,
@@ -39,7 +41,8 @@ export interface MutationMethods<$Context extends $$Utilities.ClientContext> {
   idNonNull: <$SelectionSet>(
     selectionSet?: $$Utilities.Exact<$SelectionSet, $$SelectionSets.Mutation.idNonNull<$Context['scalars']>>,
   ) => Promise<
-    $$Utilities.Simplify<
+    $$Utilities.SimplifyExcept<
+      $Context['scalars']['typesDecoded'],
       $$Utilities.HandleOutputGraffleRootField<
         $Context,
         InferResult.OperationMutation<{ idNonNull: $SelectionSet }, $$Schema.Schema<$Context['scalars']>>,
