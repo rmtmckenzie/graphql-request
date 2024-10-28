@@ -8,9 +8,9 @@ This example shows the default output behavior.
 
 <!-- dprint-ignore-start -->
 ```ts twoslash
-import { Pokemon } from './pokemon/__.js'
+import { Graffle } from './graffle/__.js'
 
-const pokemon = Pokemon.create()
+const pokemon = Graffle.create()
 
 const pokemons = await pokemon.query.pokemons({ name: true })
 

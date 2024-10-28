@@ -4,9 +4,9 @@
 <!-- dprint-ignore-start -->
 ```ts twoslash
 // import { parse, print } from 'graphql'
-import { Pokemon } from './pokemon/__.js'
+import { Graffle } from './graffle/__.js'
 
-const pokemon = Pokemon.create()
+const pokemon = Graffle.create()
 
 const pokemons = await pokemon.query.$batch({
   ___: {

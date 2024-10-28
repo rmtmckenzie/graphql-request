@@ -8,7 +8,7 @@
 import { ConsoleSpanExporter, SimpleSpanProcessor } from '@opentelemetry/sdk-trace-base'
 import { NodeTracerProvider } from '@opentelemetry/sdk-trace-node'
 import { Opentelemetry } from 'graffle/extensions/opentelemetry'
-import { Pokemon } from './pokemon/__.js'
+import { Graffle } from './graffle/__.js'
 
 // Setup Opentelemetry
 // 1. Initialize the OpenTelemetry provider
@@ -19,7 +19,7 @@ const provider = new NodeTracerProvider()
 provider.addSpanProcessor(processor)
 provider.register()
 
-const graffle = Pokemon.create().use(Opentelemetry())
+const graffle = Graffle.create().use(Opentelemetry())
 const data = await graffle.gql`query { pokemons { name } }`.send()
 console.log(data)
 ```
@@ -37,14 +37,14 @@ console.log(data)
     }
   },
   instrumentationScope: { name: 'graffle', version: undefined, schemaUrl: undefined },
-  traceId: '5ca1327ba8580d760bbbfffe8b50d251',
-  parentId: '2ea299a84fb29c28',
+  traceId: 'a15d7e95d85b3bf2bc123f8acaf94d5d',
+  parentId: '6bd4cb15802af388',
   traceState: undefined,
   name: 'encode',
-  id: '8e51c21dd5598fa0',
+  id: 'da01b95998af1310',
   kind: 0,
-  timestamp: 1730084004129000,
-  duration: 1373.917,
+  timestamp: 1730125689574000,
+  duration: 1388.042,
   attributes: {},
   status: { code: 0 },
   events: [],
@@ -64,14 +64,14 @@ console.log(data)
     }
   },
   instrumentationScope: { name: 'graffle', version: undefined, schemaUrl: undefined },
-  traceId: '5ca1327ba8580d760bbbfffe8b50d251',
-  parentId: '2ea299a84fb29c28',
+  traceId: 'a15d7e95d85b3bf2bc123f8acaf94d5d',
+  parentId: '6bd4cb15802af388',
   traceState: undefined,
   name: 'pack',
-  id: '6637a07a9d49825c',
+  id: '269378c8ef1b74a2',
   kind: 0,
-  timestamp: 1730084004132000,
-  duration: 15243.042,
+  timestamp: 1730125689577000,
+  duration: 11309.583,
   attributes: {},
   status: { code: 0 },
   events: [],
@@ -91,14 +91,14 @@ console.log(data)
     }
   },
   instrumentationScope: { name: 'graffle', version: undefined, schemaUrl: undefined },
-  traceId: '5ca1327ba8580d760bbbfffe8b50d251',
-  parentId: '2ea299a84fb29c28',
+  traceId: 'a15d7e95d85b3bf2bc123f8acaf94d5d',
+  parentId: '6bd4cb15802af388',
   traceState: undefined,
   name: 'exchange',
-  id: 'e753b4385e42b648',
+  id: 'bf1490ed8d17bfba',
   kind: 0,
-  timestamp: 1730084004148000,
-  duration: 31860.542,
+  timestamp: 1730125689589000,
+  duration: 20820.458,
   attributes: {},
   status: { code: 0 },
   events: [],
@@ -118,14 +118,14 @@ console.log(data)
     }
   },
   instrumentationScope: { name: 'graffle', version: undefined, schemaUrl: undefined },
-  traceId: '5ca1327ba8580d760bbbfffe8b50d251',
-  parentId: '2ea299a84fb29c28',
+  traceId: 'a15d7e95d85b3bf2bc123f8acaf94d5d',
+  parentId: '6bd4cb15802af388',
   traceState: undefined,
   name: 'unpack',
-  id: '1fef254d2f9ea4dc',
+  id: '9b7ed752b79d9543',
   kind: 0,
-  timestamp: 1730084004180000,
-  duration: 1743.583,
+  timestamp: 1730125689610000,
+  duration: 1649.458,
   attributes: {},
   status: { code: 0 },
   events: [],
@@ -145,14 +145,14 @@ console.log(data)
     }
   },
   instrumentationScope: { name: 'graffle', version: undefined, schemaUrl: undefined },
-  traceId: '5ca1327ba8580d760bbbfffe8b50d251',
-  parentId: '2ea299a84fb29c28',
+  traceId: 'a15d7e95d85b3bf2bc123f8acaf94d5d',
+  parentId: '6bd4cb15802af388',
   traceState: undefined,
   name: 'decode',
-  id: 'afcb093f6aa833d5',
+  id: '3aafa22c23adfb5d',
   kind: 0,
-  timestamp: 1730084004182000,
-  duration: 225.25,
+  timestamp: 1730125689612000,
+  duration: 209.833,
   attributes: {},
   status: { code: 0 },
   events: [],
@@ -172,14 +172,14 @@ console.log(data)
     }
   },
   instrumentationScope: { name: 'graffle', version: undefined, schemaUrl: undefined },
-  traceId: '5ca1327ba8580d760bbbfffe8b50d251',
+  traceId: 'a15d7e95d85b3bf2bc123f8acaf94d5d',
   parentId: undefined,
   traceState: undefined,
   name: 'request',
-  id: '2ea299a84fb29c28',
+  id: '6bd4cb15802af388',
   kind: 0,
-  timestamp: 1730084004128000,
-  duration: 54074.875,
+  timestamp: 1730125689573000,
+  duration: 38858.25,
   attributes: {},
   status: { code: 0 },
   events: [],
