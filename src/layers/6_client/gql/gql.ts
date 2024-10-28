@@ -7,7 +7,6 @@ import {
   type TemplateStringsArguments,
 } from '../../../lib/template-string.js'
 import { RequestCore } from '../../5_request/__.js' // todo
-import type { InterfaceRaw } from '../../5_request/types.js'
 import { type ClientContext, defineTerminus } from '../fluent.js'
 import { handleOutput } from '../handleOutput.js'
 import type { Config } from '../Settings/Config.js'
@@ -37,7 +36,6 @@ export const gqlProperties = defineTerminus((state) => {
   return {
     gql: (...args: gqlArguments) => {
       const { document: query } = resolveGqlArguments(args)
-      const interfaceType: InterfaceRaw = `raw`
       const transportType = state.config.transport.type
       const url = state.config.transport.type === `http` ? state.config.transport.url : undefined
       const schema = state.config.transport.type === `http` ? undefined : state.config.transport.schema
@@ -61,7 +59,6 @@ export const gqlProperties = defineTerminus((state) => {
           }
 
           const initialInput = {
-            interfaceType,
             transportType,
             state,
             url,
