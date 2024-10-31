@@ -15,8 +15,8 @@ export interface Use<$Args extends Chain.Extension.Parameters<Use_>> {
    */
   use: <$Extension extends Extension>(extension: $Extension) => Chain.Definition.MaterializeWithNewContext<
     (
-      $Extension['typeHooks']['property'] extends Chain.Extension
-        ? Chain.Definition.Extend<$Args['chain'], $Extension['typeHooks']['property']>
+      $Extension['typeHooks']['chainExtension'] extends Chain.Extension
+        ? Chain.Definition.Extend<$Args['chain'], $Extension['typeHooks']['chainExtension']>
         : $Args['chain']
     ),
     // If the extension adds type hooks, merge them into the config.

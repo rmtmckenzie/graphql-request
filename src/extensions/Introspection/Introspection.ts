@@ -65,7 +65,7 @@ export const Introspection = (input?: Input) => {
 }
 
 type IntrospectionExtension = Extension<{
-  property: Introspect_
+  chainExtension: Introspect_
 }>
 
 interface Introspect_ extends Chain.Extension {

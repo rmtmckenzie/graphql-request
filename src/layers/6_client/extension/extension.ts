@@ -14,7 +14,7 @@ export interface TypeHooks {
   /**
    * Extend chaining interface with new methods.
    */
-  property?: Chain.Extension
+  chainExtension?: Chain.Extension
   /**
    * Manipulate the execution result of a request.
    *
@@ -47,29 +47,7 @@ export interface EmptyTypeHooks {
   onRequestDocumentRootType: undefined
 }
 
-export interface Extension<$TypeHooks extends TypeHooks = TypeHooks> extends Base, Fn {
-  typeHooks: $TypeHooks
-}
-
-export namespace Extension {
-  export namespace Hooks {
-    export interface OnRequestDocumentRootType extends Fn {}
-    export namespace OnRequestDocumentRootType {
-      export interface Params {
-        selectionRootType: Select.SelectionSet.RootType
-      }
-    }
-    export interface OnRequestResult extends Fn {}
-    export namespace OnRequestResult {
-      export interface Params<$Extensions extends GlobalRegistry.Extensions = GlobalRegistry.Extensions> {
-        result: GraffleExecutionResultEnvelope
-        registeredSchema: GlobalRegistry.Client<$Extensions>
-      }
-    }
-  }
-}
-
-interface Base {
+export interface Extension<$TypeHooks extends TypeHooks = TypeHooks> extends Fn {
   /**
    * The name of the extension
    */
@@ -100,6 +78,28 @@ interface Base {
       client: Client<Context>
     },
   ) => unknown
+  /**
+   * TODO
+   */
+  typeHooks: $TypeHooks
+}
+
+export namespace Extension {
+  export namespace Hooks {
+    export interface OnRequestDocumentRootType extends Fn {}
+    export namespace OnRequestDocumentRootType {
+      export interface Params {
+        selectionRootType: Select.SelectionSet.RootType
+      }
+    }
+    export interface OnRequestResult extends Fn {}
+    export namespace OnRequestResult {
+      export interface Params<$Extensions extends GlobalRegistry.Extensions = GlobalRegistry.Extensions> {
+        result: GraffleExecutionResultEnvelope
+        registeredSchema: GlobalRegistry.Client<$Extensions>
+      }
+    }
+  }
 }
 
 export const createExtension = <$Extension extends Extension = Extension<EmptyTypeHooks>>(

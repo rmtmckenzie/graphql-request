@@ -35,7 +35,7 @@ export const Throws = () => {
 }
 
 type ThrowsExtension = Extension<{
-  property: Throws_
+  chainExtension: Throws_
 }>
 
 interface Throws_ extends Chain.Extension {
