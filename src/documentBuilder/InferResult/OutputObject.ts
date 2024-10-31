@@ -6,21 +6,35 @@ import type { Alias } from './Alias.js'
 import type { OutputField } from './OutputField.js'
 import type { ScalarsWildcard } from './ScalarsWildcard.js'
 
+// dprint-ignore
 export type OutputObject<$SelectionSet, $Schema extends Schema, $Node extends Schema.OutputObject> =
   Select.SelectScalarsWildcard.IsSelectScalarsWildcard<$SelectionSet> extends true
     // todo what about when scalars wildcard is combined with other fields like relations?
     ? ScalarsWildcard<$SelectionSet, $Schema, $Node>
     : SimplifyExcept<
-      $Schema['scalars']['typesDecoded'],
-      & SelectionNonSelectAlias<$SelectionSet, $Schema, $Node>
-      & Alias<$Schema, $Node, $SelectionSet>
-    >
+        $Schema['scalars']['typesDecoded'],
+        & NonAlias<$SelectionSet, $Schema, $Node>
+        & Alias<$Schema, $Node, $SelectionSet>
+      >
 
-type SelectionNonSelectAlias<$SelectionSet, $Schema extends Schema, $Node extends Schema.OutputObject> = {
+type NonAlias<$SelectionSet, $Schema extends Schema, $Node extends Schema.OutputObject> = {
   [$Key in PickSelectsPositiveIndicatorAndNotSelectAlias<$SelectionSet>]: $Key extends keyof $Node['fields']
     ? OutputField<$SelectionSet[$Key], $Node['fields'][$Key], $Schema>
     : Errors.UnknownFieldName<$Key, $Node>
 }
+
+// dprint-ignore
+export type PickSelectsPositiveIndicatorAndNotSelectAlias<$SelectionSet> = StringKeyof<
+  {
+    [
+      $FieldName in keyof $SelectionSet as $SelectionSet[$FieldName] extends Select.Indicator.Negative
+        ? never
+        : $SelectionSet[$FieldName] extends any[]
+          ? never
+          : $FieldName
+    ]: 0
+  }
+>
 
 export namespace Errors {
   export type UnknownFieldName<
@@ -28,13 +42,3 @@ export namespace Errors {
     $Object extends Schema.OutputObject,
   > = TSErrorDescriptive<'Object', `field "${$FieldName}" does not exist on object "${$Object['name']}"`>
 }
-
-export type PickSelectsPositiveIndicatorAndNotSelectAlias<$SelectionSet> = StringKeyof<
-  {
-    [
-      $FieldName in keyof $SelectionSet as $SelectionSet[$FieldName] extends Select.Indicator.Negative ? never
-        : $SelectionSet[$FieldName] extends any[] ? never
-        : $FieldName
-    ]: 0
-  }
->

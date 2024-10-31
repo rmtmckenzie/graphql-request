@@ -3,6 +3,8 @@ import tsEslint from 'typescript-eslint'
 
 export default tsEslint.config({
   ignores: [
+    'playground/**/*',
+    'graffle/**/*',
     'project/**/*',
     'examples/35_custom-scalar/custom-scalar.ts',
     'eslint.config.js',
