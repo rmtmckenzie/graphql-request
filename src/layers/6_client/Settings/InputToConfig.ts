@@ -8,7 +8,6 @@ import type { InputOutputEnvelopeLonghand, InputStatic, URLInput } from './Input
 
 // dprint-ignore
 export type NormalizeInput<$Input extends InputStatic> = {
-  initialInput: $Input
   name: HandleName<$Input>
   schemaMap: ConfigManager.OrDefault<$Input['schemaMap'], null>
   transport: HandleTransport<$Input>
@@ -50,7 +49,6 @@ export const inputToConfig = <$Input extends InputStatic>(
   const transport = handleTransport(input)
 
   return {
-    initialInput: input,
     // todo fixme: passes before generation
     // eslint-disable-next-line
     // @ts-ignore

@@ -4,7 +4,6 @@ import type { TransportHttp, TransportMemory } from '../../../requestPipeline/Tr
 import type { GlobalRegistry } from '../../../types/GlobalRegistry/GlobalRegistry.js'
 import type { SchemaDrivenDataMap } from '../../../types/SchemaDrivenDataMap/__.js'
 import type { TransportHttpInput } from '../transportHttp/request.js'
-import type { InputStatic } from './Input.js'
 
 export type OutputChannel = 'throw' | 'return'
 
@@ -107,10 +106,6 @@ export interface TransportConfigMemory {
 }
 
 export type Config = {
-  /**
-   * The initial input that was given to derive this config.
-   */
-  initialInput: InputStatic
   name: GlobalRegistry.ClientNames // todo remove? it is in context
   output: OutputConfig
   schemaMap: SchemaDrivenDataMap | null

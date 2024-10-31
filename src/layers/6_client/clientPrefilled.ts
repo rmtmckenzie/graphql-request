@@ -17,7 +17,7 @@ export const createPrefilled: CreatePrefilled = (name, schemaMap, scalars, schem
       name,
       extensions: [],
       scalars,
-      retry: null,
+      // retry: null,
       input: {
         schema: schemaUrl,
         // eslint-disable-next-line

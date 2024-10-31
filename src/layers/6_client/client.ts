@@ -48,7 +48,7 @@ export const create: Create = (input) => {
     name: input.name ?? `default`, // todo import from shared constants
     extensions: [],
     scalars: Schema.Scalar.Registry.empty,
-    retry: null,
+    // retry: null,
     input,
   })
   return createWithContext(initialContext)

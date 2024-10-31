@@ -1,5 +1,5 @@
-import type { Anyware } from '../../lib/anyware/__.js'
-import type { RequestPipeline } from '../../requestPipeline/__.js'
+// import type { Anyware } from '../../lib/anyware/__.js'
+// import type { RequestPipeline } from '../../requestPipeline/__.js'
 import type { Schema } from '../../types/Schema/__.js'
 import type { Extension } from './extension/extension.js'
 import type { Config } from './Settings/Config.js'
@@ -8,9 +8,12 @@ import { inputToConfig } from './Settings/InputToConfig.js'
 
 export interface Context {
   name: string
+  /**
+   * The initial input that was given to derive the config.
+   */
   input: InputStatic
   config: Config
-  retry: Anyware.Extension2<RequestPipeline.Core, { retrying: true }> | null
+  // retry: Anyware.Extension2<RequestPipeline.Core, { retrying: true }> | null
   extensions: Extension[]
   scalars: Schema.Scalar.Registry
   typeHooks: {

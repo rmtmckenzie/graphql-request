@@ -22,10 +22,12 @@ export interface With<$Args extends Chain.Extension.Parameters<With_>> {
     // @ts-ignore Passes after generation
   ) => Chain.Definition.MaterializeWithNewContext<
     $Args['chain'],
-    ConfigManager.SetAtPath<
+    ConfigManager.SetProperties<
       $Args['context'],
-      ['config'],
-      NormalizeInput<$Args['context']['config']['initialInput'] & $Input>
+      {
+        input: $Args['context']['input'] & $Input
+        config: NormalizeInput<$Args['context']['input'] & $Input>
+      }
     >
   >
 }

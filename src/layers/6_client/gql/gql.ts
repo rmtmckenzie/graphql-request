@@ -75,7 +75,7 @@ export const gqlProperties = Chain.Extension.create<Gql_>((_, context) => {
 
           const result = await RequestPipeline.anyware.run({
             initialInput,
-            retryingExtension: context.retry as any,
+            // retryingExtension: context.retry as any,
             extensions: context.extensions.filter(_ => _.onRequest !== undefined).map(_ => _.onRequest!) as any,
           })
 
