@@ -1,6 +1,6 @@
 import { describe, expectTypeOf, test } from 'vitest'
 import { schema } from '../../../../tests/_/schemas/kitchen-sink/schema.js'
-import { type Extension } from '../../../layers/6_client/extension/extension.js'
+import { type Extension } from '../../../extension/extension.js'
 import { SchemaErrors } from '../runtime.js'
 import { GraffleSchemaErrors } from './fixture/graffle/__.js'
 

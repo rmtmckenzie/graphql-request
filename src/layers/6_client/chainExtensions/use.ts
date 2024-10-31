@@ -1,7 +1,7 @@
+import type { Extension } from '../../../extension/extension.js'
 import { Chain } from '../../../lib/chain/__.js'
 import type { ConfigManager } from '../../../lib/config-manager/__.js'
 import { type Context } from '../context.js'
-import type { Extension } from './extension.js'
 
 export interface Use_ extends Chain.Extension {
   context: Context

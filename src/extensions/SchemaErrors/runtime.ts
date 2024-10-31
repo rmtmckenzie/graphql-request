@@ -1,4 +1,4 @@
-import { createExtension, type Extension } from '../../layers/6_client/extension/extension.js'
+import { createExtension, type Extension } from '../../extension/extension.js'
 import { Errors } from '../../lib/errors/__.js'
 import { normalizeRequestToNode } from '../../lib/grafaid/request.js'
 import { type ExcludeNullAndUndefined, isString } from '../../lib/prelude.js'

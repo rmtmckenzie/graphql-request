@@ -1,7 +1,7 @@
 import { getIntrospectionQuery, type IntrospectionQuery } from 'graphql'
 import type { Extension, SimplifyNullable } from '../../entrypoints/main.js'
+import { createExtension } from '../../extension/extension.js'
 import type { Context } from '../../layers/6_client/context.js'
-import { createExtension } from '../../layers/6_client/extension/extension.js'
 import type { HandleOutput } from '../../layers/6_client/handleOutput.js'
 import type { Chain } from '../../lib/chain/__.js'
 import { createConfig, type Input } from './config.js'

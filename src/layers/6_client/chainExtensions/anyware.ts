@@ -1,8 +1,8 @@
+import { createExtension } from '../../../extension/extension.js'
 import type { Anyware, Anyware as AnywareLib } from '../../../lib/anyware/__.js'
 import { Chain } from '../../../lib/chain/__.js'
 import type { RequestPipeline } from '../../../requestPipeline/__.js'
 import { type Context } from '../context.js'
-import { createExtension } from '../extension/extension.js'
 
 export interface Anyware_ extends Chain.Extension {
   context: Context
