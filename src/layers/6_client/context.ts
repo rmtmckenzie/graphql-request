@@ -1,5 +1,4 @@
 import type { Anyware } from '../../lib/anyware/__.js'
-import type { Chain } from '../../lib/chain/__.js'
 import type { RequestPipeline } from '../../requestPipeline/__.js'
 import type { Schema } from '../../types/Schema/__.js'
 import type { Extension } from './extension/extension.js'
@@ -16,13 +15,11 @@ export interface Context {
   scalars: Schema.Scalar.Registry
   typeHooks: {
     onRequestResult: Extension.Hooks.OnRequestResult[]
-    property: Chain.Extension[]
     onRequestDocumentRootType: Extension.Hooks.OnRequestDocumentRootType[]
   }
 }
 
 export type TypeHooksEmpty = {
-  property: []
   onRequestDocumentRootType: []
   onRequestResult: []
 }

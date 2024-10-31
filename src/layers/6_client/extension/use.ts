@@ -23,9 +23,10 @@ export interface Use<$Args extends Chain.Extension.Parameters<Use_>> {
     ConfigManager.SetAtPath<
       $Args['context'],
       ['typeHooks', 'onRequestResult'],
+      // dprint-ignore
       (
-        $Extension['typeHooks']['onRequestResult'] extends undefined ? $Args['context']['typeHooks']['onRequestResult']
-          // dprint-ignore
+        $Extension['typeHooks']['onRequestResult'] extends undefined
+          ? $Args['context']['typeHooks']['onRequestResult']
           : [
             ...$Args['context']['typeHooks']['onRequestResult'],
               $Extension['typeHooks']['onRequestResult'],
