@@ -1,4 +1,10 @@
-import { type BuilderConfig, createExtension, type Extension, type WithInput } from '../../entrypoints/main.js'
+import {
+  type AssertExtends,
+  type BuilderConfig,
+  createExtension,
+  type Extension,
+  type WithInput,
+} from '../../entrypoints/main.js'
 import type { ConfigManager } from '../../lib/config-manager/__.js'
 // todo: no deep imports, rethink these utilities and/or how they are exported from the graffle package.
 import type { Context } from '../../layers/6_client/context.js'
@@ -34,8 +40,7 @@ type ThrowsExtension = Extension<{
 
 interface Throws_ extends Chain.Extension {
   context: Context
-  // @ts-expect-error untyped params
-  return: Throws<this['params']>
+  return: Throws<AssertExtends<this['params'], Chain.Extension.Parameters<Throws_>>>
 }
 
 interface Throws<$Args extends Chain.Extension.Parameters<Throws_>> {

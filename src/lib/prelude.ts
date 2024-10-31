@@ -600,7 +600,7 @@ export type GetOrNever<$O extends object, $P extends string> =
     : never
 
 // dprint-ignore
-export type AssertConstraint<$Constraint, $Type> =
+export type AssertExtends<$Type, $Constraint> =
   $Type extends $Constraint
     ? $Type
     : never
@@ -636,5 +636,3 @@ export type SimplifyExcept<$ExcludeType, $Type> =
     : $Type extends $ExcludeType
       ? $Type
       : {[TypeKey in keyof $Type]: $Type[TypeKey]}
-
-export type ForceExtends<T, U> = T extends U ? T : U

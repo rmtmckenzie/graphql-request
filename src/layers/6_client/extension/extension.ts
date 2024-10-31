@@ -1,7 +1,7 @@
 import type { Select } from '../../../documentBuilder/Select/__.js'
 import type { Anyware } from '../../../lib/anyware/__.js'
 import type { Chain } from '../../../lib/chain/__.js'
-import type { AssertConstraint } from '../../../lib/prelude.js'
+import type { AssertExtends } from '../../../lib/prelude.js'
 import type { TypeFunction } from '../../../lib/type-function/__.js'
 import type { Fn } from '../../../lib/type-function/TypeFunction.js'
 import type { RequestPipeline } from '../../../requestPipeline/__.js'
@@ -36,9 +36,9 @@ export interface TypeHooks {
 export type RunTypeHookOnRequestResult<
   $Context extends Context,
   $Params extends Extension.Hooks.OnRequestResult.Params,
-> = AssertConstraint<
-  Extension.Hooks.OnRequestResult.Params,
-  TypeFunction.CallPipeline<$Context['config']['typeHooks']['onRequestResult'], $Params>
+> = AssertExtends<
+  TypeFunction.CallPipeline<$Context['config']['typeHooks']['onRequestResult'], $Params>,
+  Extension.Hooks.OnRequestResult.Params
 >
 
 export interface EmptyTypeHooks {

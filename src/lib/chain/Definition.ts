@@ -1,5 +1,5 @@
 import type { Simplify } from 'type-fest'
-import type { ForceExtends, mergeArrayOfObjects } from '../prelude.js'
+import type { AssertExtends, mergeArrayOfObjects } from '../prelude.js'
 import type { TypeFunction } from '../type-function/__.js'
 import type { Context, Extension } from './Extension.js'
 
@@ -9,7 +9,7 @@ import type { Context, Extension } from './Extension.js'
  */
 export interface ChainDefinition_<$Extensions extends [...Extension[]] = [...Extension[]]> extends TypeFunction.Fn {
   extensions: $Extensions
-  return: ChainDefinition_<ForceExtends<this['params'], Extension[]>>
+  return: ChainDefinition_<AssertExtends<this['params'], Extension[]>>
 }
 
 type CallChainDefinition<_ extends ChainDefinition_, $Arguments extends [...Extension[]]> = TypeFunction.Call<
