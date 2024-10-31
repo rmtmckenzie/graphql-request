@@ -1,5 +1,7 @@
+import { defaultName } from '../../generator/config/defaults.js'
 import type { Chain } from '../../lib/chain/__.js'
 import { proxyGet } from '../../lib/prelude.js'
+import type { GlobalRegistry } from '../../types/GlobalRegistry/GlobalRegistry.js'
 import { Schema } from '../../types/Schema/__.js'
 import { type Anyware_, AnywareExtension } from './chainExtensions/anyware.js'
 import type { Internal_ } from './chainExtensions/internal.js'
@@ -34,7 +36,7 @@ type Create = <$Input extends InputStatic>(input: $Input) =>
   // eslint-disable-next-line
   // @ts-ignore
   Client<{
-    name: $Input['name']
+    name: HandleName<$Input>
     input: $Input
     config: NormalizeInput<$Input>
     retry: null
@@ -45,7 +47,7 @@ type Create = <$Input extends InputStatic>(input: $Input) =>
 
 export const create: Create = (input) => {
   const initialContext = createContext({
-    name: input.name ?? `default`, // todo import from shared constants
+    name: input.name ?? defaultName,
     extensions: [],
     scalars: Schema.Scalar.Registry.empty,
     // retry: null,
@@ -93,3 +95,6 @@ export const createWithContext = (
 
   return clientProxy
 }
+
+type HandleName<$Input extends InputStatic> = $Input['name'] extends string ? $Input['name']
+  : GlobalRegistry.DefaultClientName

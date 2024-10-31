@@ -37,8 +37,8 @@ interface Fixtures {
   fetch: Mock<(request: Request) => Promise<Response>>
   pokemonService: SchemaService
   graffle: Client<Context>
-  kitchenSink: Client<ConfigManager.SetAtPath<Context, ['config', 'name'], 'default'>>
-  kitchenSinkHttp: Client<ConfigManager.SetAtPath<Context, ['config', 'name'], 'default'>>
+  kitchenSink: Client<ConfigManager.SetAtPath<Context, ['name'], 'default'>>
+  kitchenSinkHttp: Client<ConfigManager.SetAtPath<Context, ['name'], 'default'>>
   kitchenSinkData: typeof db
   project: Project
 }

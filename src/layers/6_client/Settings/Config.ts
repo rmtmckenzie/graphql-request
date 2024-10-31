@@ -1,7 +1,6 @@
 import type { GraphQLSchema } from 'graphql'
 import type { RequireProperties } from '../../../lib/prelude.js'
 import type { TransportHttp, TransportMemory } from '../../../requestPipeline/Transport.js'
-import type { GlobalRegistry } from '../../../types/GlobalRegistry/GlobalRegistry.js'
 import type { SchemaDrivenDataMap } from '../../../types/SchemaDrivenDataMap/__.js'
 import type { TransportHttpInput } from '../transportHttp/request.js'
 
@@ -106,7 +105,6 @@ export interface TransportConfigMemory {
 }
 
 export type Config = {
-  name: GlobalRegistry.ClientNames // todo remove? it is in context
   output: OutputConfig
   schemaMap: SchemaDrivenDataMap | null
   transport: TransportConfigHttp | TransportConfigMemory

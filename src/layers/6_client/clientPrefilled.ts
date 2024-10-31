@@ -56,7 +56,7 @@ export type CreatePrefilled = <
 // @ts-ignore passes after generation
 Client<{
   name: $Name
-  input: $Input & { name: $Name; schemaMap: SchemaDrivenDataMap }
+  input: $Input & { schemaMap: SchemaDrivenDataMap }
   retry: null
   scalars: $Scalars
   extensions: []

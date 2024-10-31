@@ -27,17 +27,17 @@ export type RequestMethods<$Arguments extends Chain.Extension.Parameters<Request
       // GlobalRegistry.Has<$Context['name']> extends false
       // eslint-disable-next-line
       // @ts-ignore passes after generation
-      GlobalRegistry.Has<$Arguments['context']['config']['name']> extends false
+      GlobalRegistry.Has<$Arguments['context']['name']> extends false
         ? {}
         :
           (
             // eslint-disable-next-line
             // @ts-ignore Passes after generation
-            & TypeFunction.Call<GlobalRegistry.GetOrDefault<$Arguments['context']['config']['name']>['interfaces']['Root'], $Arguments['context']>
+            & TypeFunction.Call<GlobalRegistry.GetOrDefault<$Arguments['context']['name']>['interfaces']['Root'], $Arguments['context']>
             & {
                 // eslint-disable-next-line
                 // @ts-ignore Passes after generation
-                document: TypeFunction.Call<GlobalRegistry.GetOrDefault<$Arguments['context']['config']['name']>['interfaces']['Document'], $Arguments['context']>
+                document: TypeFunction.Call<GlobalRegistry.GetOrDefault<$Arguments['context']['name']>['interfaces']['Document'], $Arguments['context']>
               }
           )
     )

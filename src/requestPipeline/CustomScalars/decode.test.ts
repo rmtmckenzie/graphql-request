@@ -26,6 +26,7 @@ const withBatch: TestCaseWith = [
   {},
   async ([_, query, responseData, expectedData], { fetch, kitchenSinkHttp: kitchenSink }) => {
     fetch.mockResolvedValueOnce(createResponse({ data: responseData }))
+    kitchenSink._.name
     expect(await kitchenSink.scalar(DateScalar).query.$batch(query)).toEqual(expectedData)
   },
 ]

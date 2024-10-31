@@ -16,6 +16,11 @@ export interface Context {
   // retry: Anyware.Extension2<RequestPipeline.Core, { retrying: true }> | null
   extensions: Extension[]
   scalars: Schema.Scalar.Registry
+  /**
+   * Type level augmentations.
+   *
+   * @remarks Typically added by extensions. Added here upon use for optimized type-level reads later on.
+   */
   typeHooks: {
     onRequestResult: Extension.Hooks.OnRequestResult[]
     onRequestDocumentRootType: Extension.Hooks.OnRequestDocumentRootType[]

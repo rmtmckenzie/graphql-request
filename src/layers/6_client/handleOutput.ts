@@ -140,7 +140,9 @@ type HandleOutput_Extensions<$Context extends Context, $Envelope extends Graffle
     // @ts-ignore fixme
     RunTypeHookOnRequestResult<$Context, {
       result: $Envelope
-      registeredSchema: GlobalRegistry.GetOrDefault<$Context['config']['name']>
+      // eslint-disable-next-line
+      // @ts-ignore fixme
+      registeredSchema: GlobalRegistry.GetOrDefault<$Context['name']>
     }>['result']
   >
 
