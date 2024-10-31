@@ -2,7 +2,8 @@ import { Chain } from '../../../lib/chain/__.js'
 import type { ConfigManager } from '../../../lib/config-manager/__.js'
 import { mergeHeadersInit, mergeRequestInit } from '../../../lib/http.js'
 import { type Context } from '../context.js'
-import type { AddIncrementalInput, WithInput } from '../Settings/inputIncrementable/inputIncrementable.js'
+import type { WithInput } from '../Settings/inputIncrementable/inputIncrementable.js'
+import type { NormalizeInput } from '../Settings/InputToConfig.js'
 
 export interface With_ extends Chain.Extension {
   context: Context
@@ -21,7 +22,11 @@ export interface With<$Args extends Chain.Extension.Parameters<With_>> {
     // @ts-ignore Passes after generation
   ) => Chain.Definition.MaterializeWithNewContext<
     $Args['chain'],
-    ConfigManager.SetAtPath<$Args['context'], ['config'], AddIncrementalInput<$Args['context']['config'], $Input>>
+    ConfigManager.SetAtPath<
+      $Args['context'],
+      ['config'],
+      NormalizeInput<$Args['context']['config']['initialInput'] & $Input>
+    >
   >
 }
 

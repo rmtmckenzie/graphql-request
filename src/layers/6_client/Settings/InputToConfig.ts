@@ -12,11 +12,6 @@ export type NormalizeInput<$Input extends InputStatic> = {
   name: HandleName<$Input>
   schemaMap: ConfigManager.OrDefault<$Input['schemaMap'], null>
   transport: HandleTransport<$Input>
-  typeHooks: {
-    property: []
-    onRequestDocumentRootType: []
-    onRequestResult: []
-  },
   output: {
     defaults: {
       errorChannel: ConfigManager.ReadOrDefault<$Input, ['output', 'defaults', 'errorChannel'], 'throw'>

@@ -8,12 +8,12 @@ const g = GraffleSchemaErrors.create({ schema }).use(SchemaErrors())
 
 // todo move test to test suite for .use method
 test(`config type is augmented with type hook`, () => {
-  expectTypeOf<typeof g._.config.typeHooks.onRequestResult>().toMatchTypeOf<[Extension.Hooks.OnRequestResult]>()
+  expectTypeOf<typeof g._.typeHooks.onRequestResult>().toMatchTypeOf<[Extension.Hooks.OnRequestResult]>()
 })
 
 test(`config type is augmented with type hook after "with"`, () => {
   const g2 = g.with({ output: { defaults: { errorChannel: `throw` } } })
-  expectTypeOf<typeof g2._.config.typeHooks.onRequestResult>().toMatchTypeOf<[Extension.Hooks.OnRequestResult]>()
+  expectTypeOf<typeof g2._.typeHooks.onRequestResult>().toMatchTypeOf<[Extension.Hooks.OnRequestResult]>()
 })
 
 const resultFieldSelect =

@@ -37,7 +37,7 @@ export type RunTypeHookOnRequestResult<
   $Context extends Context,
   $Params extends Extension.Hooks.OnRequestResult.Params,
 > = AssertExtends<
-  TypeFunction.CallPipeline<$Context['config']['typeHooks']['onRequestResult'], $Params>,
+  TypeFunction.CallPipeline<$Context['typeHooks']['onRequestResult'], $Params>,
   Extension.Hooks.OnRequestResult.Params
 >
 

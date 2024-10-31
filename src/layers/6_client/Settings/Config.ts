@@ -3,7 +3,6 @@ import type { RequireProperties } from '../../../lib/prelude.js'
 import type { TransportHttp, TransportMemory } from '../../../requestPipeline/Transport.js'
 import type { GlobalRegistry } from '../../../types/GlobalRegistry/GlobalRegistry.js'
 import type { SchemaDrivenDataMap } from '../../../types/SchemaDrivenDataMap/__.js'
-import type { Extension } from '../extension/extension.js'
 import type { TransportHttpInput } from '../transportHttp/request.js'
 import type { InputStatic } from './Input.js'
 
@@ -112,9 +111,6 @@ export type Config = {
    * The initial input that was given to derive this config.
    */
   initialInput: InputStatic
-  typeHooks: {
-    onRequestResult: Extension.Hooks.OnRequestResult[]
-  }
   name: GlobalRegistry.ClientNames // todo remove? it is in context
   output: OutputConfig
   schemaMap: SchemaDrivenDataMap | null

@@ -46,8 +46,8 @@ assertEqual<ConfigManager.SetAtPath<a1, ['c'], 9>            , { a: { b: number 
 assertEqual<
   ConfigManager.SetAtPath<
     Context,
-    ['config', 'typeHooks', 'onRequestResult'],
-    Context['config']['typeHooks']['onRequestResult']
+    ['typeHooks', 'onRequestResult'],
+    Context['typeHooks']['onRequestResult']
   >,
   Context
 >()

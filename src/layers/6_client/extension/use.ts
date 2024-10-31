@@ -17,19 +17,17 @@ export interface Use<$Args extends Chain.Extension.Parameters<Use_>> {
     (
       $Extension['typeHooks']['property'] extends Chain.Extension
         ? Chain.Definition.Extend<$Args['chain'], $Extension['typeHooks']['property']>
-        // ? $Args['chain']
         : $Args['chain']
     ),
     // If the extension adds type hooks, merge them into the config.
     ConfigManager.SetAtPath<
       $Args['context'],
-      ['config', 'typeHooks', 'onRequestResult'],
+      ['typeHooks', 'onRequestResult'],
       (
-        $Extension['typeHooks']['onRequestResult'] extends undefined
-          ? $Args['context']['config']['typeHooks']['onRequestResult']
+        $Extension['typeHooks']['onRequestResult'] extends undefined ? $Args['context']['typeHooks']['onRequestResult']
           // dprint-ignore
           : [
-            ...$Args['context']['config']['typeHooks']['onRequestResult'],
+            ...$Args['context']['typeHooks']['onRequestResult'],
               $Extension['typeHooks']['onRequestResult'],
             ]
       )

@@ -1,8 +1,6 @@
 import type { Transport, TransportMemory } from '../../../../requestPipeline/Transport.js'
 import type { GlobalRegistry } from '../../../../types/GlobalRegistry/GlobalRegistry.js'
 import type { TransportHttpInput } from '../../transportHttp/request.js'
-import type { Config } from '../Config.js'
-import type { NormalizeInput } from '../InputToConfig.js'
 import type { OutputInput } from './output.js'
 
 // dprint-ignore
@@ -25,10 +23,3 @@ export type IncrementableInputContext = {
     type: Transport
   }
 }
-
-// dprint-ignore
-export type AddIncrementalInput<$Config extends Config, $Input extends WithInput> =
-  & Omit<NormalizeInput<$Config['initialInput'] & $Input>, 'typeHooks'>
-  & {
-      typeHooks: $Config['typeHooks']
-    }

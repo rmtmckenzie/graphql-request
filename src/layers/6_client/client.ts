@@ -1,7 +1,7 @@
 import type { Chain } from '../../lib/chain/__.js'
 import { proxyGet } from '../../lib/prelude.js'
 import { Schema } from '../../types/Schema/__.js'
-import { type Context, type ContextWithoutConfig, createContext } from './context.js'
+import { type Context, type ContextWithoutConfig, createContext, type TypeHooksEmpty } from './context.js'
 import { type Use_, useProperties } from './extension/use.js'
 import { type Gql_, gqlProperties } from './gql/gql.js'
 import { type Anyware_, AnywareExtension } from './properties/anyware.js'
@@ -28,14 +28,6 @@ export type Client<$Context extends Context> = Chain.Definition.MaterializeWithN
   $Context
 >
 
-// export type IncrementWthNewConfig<
-//   $Parameters extends FnParametersProperty,
-//   $ConfigNew extends Context['config'],
-// > = Chain.IncrementWthNewContext<
-//   $Parameters,
-//   ConfigManager.SetProperty<$Parameters['state']['context'], 'config', $ConfigNew>
-// >
-
 // dprint-ignore
 type Create = <$Input extends InputStatic>(input: $Input) =>
   // todo fixme
@@ -48,43 +40,44 @@ type Create = <$Input extends InputStatic>(input: $Input) =>
     retry: null
     extensions: []
     scalars: {}
+    typeHooks: TypeHooksEmpty,
   }>
 
 export const create: Create = (input) => {
-  const initialState = createContext({
+  const initialContext = createContext({
     name: input.name ?? `default`, // todo import from shared constants
     extensions: [],
     scalars: Schema.Scalar.Registry.empty,
     retry: null,
     input,
   })
-  return createWithState(initialState)
+  return createWithContext(initialContext)
 }
 
-export const createWithState = (
-  initialState: ContextWithoutConfig,
+export const createWithContext = (
+  initialContext: ContextWithoutConfig,
 ) => {
-  const state = createContext(initialState)
+  const context = createContext(initialContext)
 
   // @ts-expect-error ignoreme
   const clientDirect: Client = {
-    _: state,
-    ...gqlProperties(createWithState, state),
-    ...withProperties(createWithState, state),
-    ...useProperties(createWithState, state),
-    ...AnywareExtension(createWithState, state),
-    ...scalarProperties(createWithState, state),
+    _: context,
+    ...gqlProperties(createWithContext, context),
+    ...withProperties(createWithContext, context),
+    ...useProperties(createWithContext, context),
+    ...AnywareExtension(createWithContext, context),
+    ...scalarProperties(createWithContext, context),
   }
 
   // todo test that access to this works without generation in a unit like test. We discovered bug and covered this in an e2e test.
   Object.assign(clientDirect, {
-    ...requestMethodsProperties(createWithState, state),
+    ...requestMethodsProperties(createWithContext, context),
   })
 
   const clientProxy = proxyGet(clientDirect, ({ path, property }) => {
     // eslint-disable-next-line
     // @ts-ignore fixme "Type instantiation is excessively deep and possibly infinite"
-    const onGetHandlers = state.extensions.map(_ => _.onBuilderGet).filter(_ => _ !== undefined)
+    const onGetHandlers = context.extensions.map(_ => _.onBuilderGet).filter(_ => _ !== undefined)
 
     for (const onGetHandler of onGetHandlers) {
       const result = onGetHandler({
