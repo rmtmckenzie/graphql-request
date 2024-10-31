@@ -1,6 +1,7 @@
 // import type { Anyware } from '../../lib/anyware/__.js'
 // import type { RequestPipeline } from '../../requestPipeline/__.js'
 import type { Schema } from '../../types/Schema/__.js'
+import type { SchemaDrivenDataMap } from '../../types/SchemaDrivenDataMap/SchemaDrivenDataMap.js'
 import type { Extension } from './extension/extension.js'
 import type { Config } from './Settings/Config.js'
 import type { InputStatic } from './Settings/Input.js'
@@ -13,6 +14,8 @@ export interface Context {
    */
   input: InputStatic
   config: Config
+  schemaMap: SchemaDrivenDataMap | null
+
   // retry: Anyware.Extension2<RequestPipeline.Core, { retrying: true }> | null
   extensions: Extension[]
   scalars: Schema.Scalar.Registry

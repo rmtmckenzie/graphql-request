@@ -12,7 +12,7 @@ export const SchemaErrors = () => {
     name: `SchemaErrors`,
     onRequest: async ({ pack }) => {
       const state = pack.input.state
-      const sddm = state.config.schemaMap
+      const sddm = state.schemaMap
 
       if (!sddm) return pack()
 

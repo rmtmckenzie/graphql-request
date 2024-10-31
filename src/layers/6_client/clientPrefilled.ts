@@ -17,6 +17,7 @@ export const createPrefilled: CreatePrefilled = (name, schemaMap, scalars, schem
       name,
       extensions: [],
       scalars,
+      schemaMap,
       // retry: null,
       input: {
         schema: schemaUrl,
@@ -24,7 +25,6 @@ export const createPrefilled: CreatePrefilled = (name, schemaMap, scalars, schem
         // @ts-ignore passes after generation
         ...input,
         name,
-        schemaMap,
       },
     })
 
@@ -56,7 +56,8 @@ export type CreatePrefilled = <
 // @ts-ignore passes after generation
 Client<{
   name: $Name
-  input: $Input & { schemaMap: SchemaDrivenDataMap }
+  schemaMap: SchemaDrivenDataMap
+  input: $Input
   retry: null
   scalars: $Scalars
   extensions: []

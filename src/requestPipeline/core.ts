@@ -38,7 +38,7 @@ export const anyware = Anyware.create<HookSequence, HookMap, Grafaid.FormattedEx
   hookNamesOrderedBySequence,
   hooks: {
     encode: ({ input }) => {
-      const sddm = input.state.config.schemaMap
+      const sddm = input.state.schemaMap
       const scalars = input.state.scalars.map
       if (sddm) {
         const request = normalizeRequestToNode(input.request)
@@ -181,9 +181,9 @@ export const anyware = Anyware.create<HookSequence, HookMap, Grafaid.FormattedEx
       // giving an operation name that doesn't match any in the document,
       // then don't attempt to decode.
       const isError = !input.result.data && (input.result.errors?.length ?? 0) > 0
-      if (input.state.config.schemaMap && !isError) {
+      if (input.state.schemaMap && !isError) {
         decodeResultData({
-          sddm: input.state.config.schemaMap,
+          sddm: input.state.schemaMap,
           request: normalizeRequestToNode(previous.pack.input.request),
           data: input.result.data,
           scalars: input.state.scalars.map,

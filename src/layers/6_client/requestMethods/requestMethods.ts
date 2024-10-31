@@ -122,7 +122,7 @@ const executeDocument = async (
 
   const request = graffleMappedResultToRequest(
     SelectionSetGraphqlMapper.toGraphQL(document, {
-      sddm: state.config.schemaMap,
+      sddm: state.schemaMap,
       // todo test that when custom scalars are used they are mapped correctly
       scalars: state.scalars.map,
     }),

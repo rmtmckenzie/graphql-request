@@ -1,5 +1,6 @@
 import { defaultName } from '../../generator/config/defaults.js'
 import type { Chain } from '../../lib/chain/__.js'
+import type { ConfigManager } from '../../lib/config-manager/__.js'
 import { proxyGet } from '../../lib/prelude.js'
 import type { GlobalRegistry } from '../../types/GlobalRegistry/GlobalRegistry.js'
 import { Schema } from '../../types/Schema/__.js'
@@ -39,6 +40,7 @@ type Create = <$Input extends InputStatic>(input: $Input) =>
     name: HandleName<$Input>
     input: $Input
     config: NormalizeInput<$Input>
+    schemaMap: ConfigManager.OrDefault<$Input['schemaMap'], null>
     retry: null
     extensions: []
     scalars: {}
@@ -48,6 +50,7 @@ type Create = <$Input extends InputStatic>(input: $Input) =>
 export const create: Create = (input) => {
   const initialContext = createContext({
     name: input.name ?? defaultName,
+    schemaMap: input.schemaMap ?? null,
     extensions: [],
     scalars: Schema.Scalar.Registry.empty,
     // retry: null,

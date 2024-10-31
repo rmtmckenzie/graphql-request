@@ -8,7 +8,6 @@ import type { InputOutputEnvelopeLonghand, InputStatic, URLInput } from './Input
 
 // dprint-ignore
 export type NormalizeInput<$Input extends InputStatic> = {
-  schemaMap: ConfigManager.OrDefault<$Input['schemaMap'], null>
   transport: HandleTransport<$Input>
   output: {
     defaults: {
