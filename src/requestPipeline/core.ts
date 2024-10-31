@@ -92,7 +92,6 @@ export const anyware = Anyware.create<HookSequence, HookMap, Grafaid.FormattedEx
                   },
                   {
                     headers: input.state.config.transport.config.headers,
-                    signal: input.state.config.transport.config.signal,
                   },
                 ),
                 input.state.config.transport.config.raw,

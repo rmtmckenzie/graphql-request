@@ -15,8 +15,8 @@ const graffle = Graffle.create({
 graffle
 
 const resultPromise = graffle
-  .with({ transport: { signal: abortController.signal } })
-  //                           ^^^^^^^^^^^^^^^
+  .with({ transport: { raw: { signal: abortController.signal } } })
+  //                                  ^^^^^^^^^^^^^^^
   .gql`
     {
       pokemon {

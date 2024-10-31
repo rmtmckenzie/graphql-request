@@ -23,7 +23,6 @@ export type TransportHttpInput = {
    */
   methodMode?: MethodMode
   headers?: HeadersInit
-  signal?: AbortSignal | null
   raw?: RequestInit
 }
 

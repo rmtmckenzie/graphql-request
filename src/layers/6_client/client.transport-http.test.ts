@@ -106,7 +106,7 @@ describe(`configuration`, () => {
     const abortErrorMessagePattern = /This operation was aborted|AbortError: The operation was aborted/
     test(`to constructor`, async () => {
       const abortController = new AbortController()
-      const graffle = Graffle.create({ schema, transport: { signal: abortController.signal } })
+      const graffle = Graffle.create({ schema, transport: { raw: { signal: abortController.signal } } })
       const resultPromise = graffle.gql`query { id }`.send()
       abortController.abort()
       const { caughtError } = await resultPromise.catch((caughtError: unknown) => ({ caughtError })) as any as {
@@ -116,7 +116,7 @@ describe(`configuration`, () => {
     })
     test(`to "with"`, async () => {
       const abortController = new AbortController()
-      const graffle = Graffle.create({ schema }).with({ transport: { signal: abortController.signal } })
+      const graffle = Graffle.create({ schema }).with({ transport: { raw: { signal: abortController.signal } } })
       const resultPromise = graffle.gql`query { id }`.send()
       abortController.abort()
       const { caughtError } = await resultPromise.catch((caughtError: unknown) => ({ caughtError })) as any as {
