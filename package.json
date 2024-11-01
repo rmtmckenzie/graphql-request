@@ -3,33 +3,10 @@
   "version": "0.0.0-dripip",
   "packageManager": "pnpm@9.4.0",
   "type": "module",
-  "bin": {
-    "graffle": "./build/cli/generate.js"
-  },
+  "main": "./build/entrypoints/main.js",
   "exports": {
     ".": {
-      "import": {
-        "types": "./build/entrypoints/main.d.ts",
-        "default": "./build/entrypoints/main.js"
-      }
-    },
-    "./alpha/client": {
-      "import": {
-        "types": "./build/entrypoints/alpha/client.d.ts",
-        "default": "./build/entrypoints/alpha/client.js"
-      }
-    },
-    "./alpha/schema": {
-      "import": {
-        "types": "./build/entrypoints/alpha/schema.d.ts",
-        "default": "./build/entrypoints/alpha/schema.js"
-      }
-    },
-    "./alpha/schema/scalars": {
-      "import": {
-        "types": "./build/entrypoints/alpha/scalars.d.ts",
-        "default": "./build/entrypoints/alpha/scalars.js"
-      }
+      "default": "./build/entrypoints/main.js"
     }
   },
   "files": [
@@ -69,7 +46,7 @@
     "check:publint": "publint run --strict",
     "prepublishOnly": "pnpm build",
     "build:docs": "doctoc README.md --notitle && dprint fmt README.md",
-    "build": "pnpm clean && pnpm tsc --project tsconfig.build.json && chmod +x ./build/cli/generate.js",
+    "build": "pnpm clean && pnpm tsc --project tsconfig.build.json",
     "clean": "tsc --build --clean && rm -rf build",
     "test": "vitest",
     "test:web": "vitest --environment jsdom",
@@ -80,26 +57,10 @@
     "release:pr": "dripip pr"
   },
   "dependencies": {
-    "@graphql-typed-document-node/core": "^3.2.0",
-    "@molt/command": "^0.9.0",
-    "zod": "^3.23.8"
+    "@graphql-typed-document-node/core": "^3.2.0"
   },
   "peerDependencies": {
-    "@dprint/formatter": "^0.3.0",
-    "@dprint/typescript": "^0.91.1",
-    "dprint": "^0.46.2",
     "graphql": "14 - 16"
-  },
-  "peerDependenciesMeta": {
-    "dprint": {
-      "optional": true
-    },
-    "@dprint/formatter": {
-      "optional": true
-    },
-    "@dprint/typescript": {
-      "optional": true
-    }
   },
   "devDependencies": {
     "@arethetypeswrong/cli": "^0.15.3",
