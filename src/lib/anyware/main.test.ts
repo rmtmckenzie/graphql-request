@@ -4,8 +4,8 @@ import { describe, expect, test, vi } from 'vitest'
 import { Errors } from '../errors/__.js'
 import type { ContextualError } from '../errors/ContextualError.js'
 import { Anyware } from './__.js'
+import { core, createHook, initialInput, oops, run, runWithOptions } from './__.test-helpers.js'
 import { createRetryingExtension } from './main.js'
-import { core, createHook, initialInput, oops, run, runWithOptions } from './specHelpers.js'
 
 describe(`no extensions`, () => {
   test(`passthrough to implementation`, async () => {

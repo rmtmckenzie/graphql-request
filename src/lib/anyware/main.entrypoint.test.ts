@@ -2,7 +2,7 @@
 
 import { describe, expect, test } from 'vitest'
 import type { ContextualAggregateError } from '../errors/ContextualAggregateError.js'
-import { run } from './specHelpers.js'
+import { run } from './__.test-helpers.js'
 
 describe(`invalid destructuring cases`, () => {
   test(`noParameters`, async () => {
