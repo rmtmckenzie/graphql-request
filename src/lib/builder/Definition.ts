@@ -53,15 +53,15 @@ export type AddExtension<$Chain_ extends Definition_, $Extension_ extends Extens
 export type MaterializeGeneric<$Chain_ extends Definition_> = 
   Simplify<
     Private.Add<
-      mergeArrayOfObjects<
-        MaterializeExtensionsGeneric<$Chain_, $Chain_['extensions']>
-      >,
       {
         chain: $Chain_,
         context: mergeArrayOfObjects<
           MaterializeExtensionsGenericContext<$Chain_['extensions']>
         >
-      }
+      },
+      mergeArrayOfObjects<
+        MaterializeExtensionsGeneric<$Chain_, $Chain_['extensions']>
+      >
     >
   >
 
@@ -81,15 +81,15 @@ type MaterializeExtensionsGenericContext<$Extensions extends [...Extension[]]> =
 export type MaterializeSpecific<$Chain_ extends Definition_> = 
   Simplify<
     Private.Add<
-      mergeArrayOfObjects<
-        MaterializeExtensionsInitial<$Chain_, $Chain_['extensions']>
-      >,
       {
         chain: $Chain_,
         context: mergeArrayOfObjects<
           MaterializeExtensionsInitialContext<$Chain_['extensions']>
         >
-      }
+      },
+      mergeArrayOfObjects<
+        MaterializeExtensionsInitial<$Chain_, $Chain_['extensions']>
+      >
     >
   >
 
@@ -109,17 +109,17 @@ type MaterializeExtensionsInitialContext<$Extensions extends [...Extension[]]> =
 export type MaterializeWithNewContext<$Chain_ extends Definition_, $Context extends Context> =
   // Simplify<
     Private.Add<
+      {
+        chain: $Chain_,
+        context: $Context
+      },
       mergeArrayOfObjects<
         MaterializeExtensionsWithNewState<
           $Chain_,
           $Context,
           $Chain_['extensions']
         >
-      >,
-      {
-        chain: $Chain_,
-        context: $Context
-      }
+      >
     >
 // >
 

@@ -32,7 +32,7 @@ export type RequestPipeline<$Config extends Config = Config> = Anyware.Pipeline<
   GraffleExecutionResultVar<$Config>
 >
 
-export const RequestPipeline = Anyware.create<HookSequence, HookMap, Grafaid.FormattedExecutionResult>({
+export const RequestPipeline = Anyware.Pipeline.create<HookSequence, HookMap, Grafaid.FormattedExecutionResult>({
   // If core errors caused by an abort error then raise it as a direct error.
   // This is an expected possible error. Possible when user cancels a request.
   passthroughErrorWith: (signal) => {
@@ -86,7 +86,7 @@ export const RequestPipeline = Anyware.create<HookSequence, HookMap, Grafaid.For
             const methodMode = input.state.config.transport.config.methodMode
             const requestMethod = methodMode === MethodMode.post
               ? `post`
-              : methodMode === MethodMode.getReads // eslint-disable-line
+              : methodMode === MethodMode.getReads
               ? OperationTypeToAccessKind[operationType] === `read` ? `get` : `post`
               : casesExhausted(methodMode)
 

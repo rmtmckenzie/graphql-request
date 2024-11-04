@@ -25,11 +25,11 @@ export namespace Private {
    *
    * The given data will be added to the type under a symbol that is private to this library.
    */
-  export type Add<$Type extends object, $PrivateData extends Data> =
-    & $Type
+  export type Add<$PrivateData extends Data, $Type extends object> =
     & {
       [privateSymbol]: $PrivateData
     }
+    & $Type
 
   /**
    * Get the private data from a type.

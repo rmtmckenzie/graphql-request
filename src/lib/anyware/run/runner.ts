@@ -7,7 +7,7 @@ import type { HookName } from '../hook/definition.js'
 import type { HookResultErrorExtension } from '../hook/private.js'
 import type { SomePublicHookEnvelope } from '../hook/public.js'
 import { createRetryingInterceptor, type Interceptor, type InterceptorInput } from '../Interceptor.js'
-import type { Pipeline } from '../Pipeline.js'
+import type { Pipeline } from '../Pipeline/Pipeline.js'
 import { getEntrypoint } from './getEntrypoint.js'
 import { runPipeline } from './runPipeline.js'
 

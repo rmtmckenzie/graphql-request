@@ -12,7 +12,7 @@ import type { Builder } from './__.js'
   type B = Builder.Definition.AddExtension<Builder.Definition.Empty, ex1_>
   assertEqual<B['extensions'], [ex1_]>()
   type b = Builder.Definition.MaterializeSpecific<B>
-  assertEqual<b, Private.Add<{ a: 1 }, { chain: B; context: {} }>>()
+  assertEqual<b, Private.Add<{ chain: B; context: {} }, { a: 1 }>>()
 }
 // ---------------------------------------------------------------------------------------------------------------------
 {
@@ -24,7 +24,7 @@ import type { Builder } from './__.js'
   type B = Builder.Definition.AddExtensions<Builder.Definition.Empty, [ex1_]>
   assertEqual<B['extensions'], [ex1_]>()
   type b = Builder.Definition.MaterializeSpecific<B>
-  assertEqual<b, Private.Add<{ a: 1 }, { chain: B; context: {} }>>()
+  assertEqual<b, Private.Add<{ chain: B; context: {} }, { a: 1 }>>()
 }
 // ---------------------------------------------------------------------------------------------------------------------
 {
@@ -37,7 +37,7 @@ import type { Builder } from './__.js'
   }
   type B = Builder.Definition.AddExtension<Builder.Definition.Empty, Reflect_>
   type b = Builder.Definition.MaterializeSpecific<B>
-  assertEqual<b, Private.Add<{ reflect: 'context' | 'chain' }, { chain: B; context: {} }>>()
+  assertEqual<b, Private.Add<{ chain: B; context: {} }, { reflect: 'context' | 'chain' }>>()
 }
 // ---------------------------------------------------------------------------------------------------------------------
 {

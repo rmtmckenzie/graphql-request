@@ -1,10 +1,10 @@
-import { type FindValueAfter, type IsLastValue, type MaybePromise } from '../prelude.js'
-import type { HookDefinitionMap, HookSequence } from './hook/definition.js'
-import type { HookResultError, InferPrivateHookInput } from './hook/private.js'
+import { type FindValueAfter, type IsLastValue, type MaybePromise } from '../../prelude.js'
+import type { HookDefinitionMap, HookSequence } from '../hook/definition.js'
+import type { HookResultError, InferPrivateHookInput } from '../hook/private.js'
+import { createRunner, type Runner } from '../run/runner.js'
 import type { Pipeline } from './Pipeline.js'
-import { createRunner, type Runner } from './run/runner.js'
 
-export { type HookDefinitionMap } from './hook/definition.js'
+export { type HookDefinitionMap } from '../hook/definition.js'
 
 export type PipelineInput<
   $HookSequence extends HookSequence = HookSequence,
@@ -79,7 +79,5 @@ export const create = <
 
 export type Builder<$Pipeline extends Pipeline> = {
   pipeline: $Pipeline
-  // todo
-  // use:
   run: Runner<$Pipeline>
 }

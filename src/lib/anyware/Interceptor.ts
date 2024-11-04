@@ -1,7 +1,7 @@
 import type { Deferred, MaybePromise } from '../prelude.js'
 import type { Private } from '../private.js'
 import type { InferPublicHooks, SomePublicHookEnvelope } from './hook/public.js'
-import type { Pipeline } from './Pipeline.js'
+import type { Pipeline } from './Pipeline/Pipeline.js'
 
 export type InterceptorOptions = {
   retrying: boolean
