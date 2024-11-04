@@ -1,6 +1,6 @@
 import type { Errors } from '../../errors/__.js'
 import type { Deferred, MaybePromise, SomeFunction, TakeValuesBefore } from '../../prelude.js'
-import type { Extension } from '../main.js'
+import type { InterceptorGeneric } from '../Interceptor.js'
 import type { HookDefinitionMap, HookSequence } from './definition.js'
 
 export type InferPrivateHookInput<
@@ -50,7 +50,7 @@ export interface HookResultCompleted {
   type: 'completed'
   effectiveInput: object
   result: unknown
-  nextExtensionsStack: readonly Extension[]
+  nextExtensionsStack: readonly InterceptorGeneric[]
 }
 
 export type HookResultError = HookResultErrorExtension | HookResultErrorImplementation | HookResultErrorUser
@@ -68,7 +68,7 @@ export interface HookResultErrorExtension {
   hookName: string
   source: 'extension'
   error: Error
-  extensionName: string
+  interceptorName: string
 }
 
 export interface HookResultErrorImplementation {

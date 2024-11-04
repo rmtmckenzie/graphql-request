@@ -5,7 +5,7 @@ import { Errors } from '../errors/__.js'
 import type { ContextualError } from '../errors/ContextualError.js'
 import { Anyware } from './__.js'
 import { core, createHook, initialInput, oops, run, runWithOptions } from './__.test-helpers.js'
-import { createRetryingExtension } from './main.js'
+import { createRetryingInterceptor } from './Interceptor.js'
 
 describe(`no extensions`, () => {
   test(`passthrough to implementation`, async () => {
@@ -178,11 +178,11 @@ describe(`errors`, () => {
       {
         "cause": [Error: oops],
         "context": {
-          "extensionName": "anonymous",
           "hookName": "a",
+          "interceptorName": "anonymous",
           "source": "extension",
         },
-        "result": [ContextualError: There was an error in the extension "anonymous" (use named functions to improve this error message) while running hook "a".],
+        "result": [ContextualError: There was an error in the interceptor "anonymous" (use named functions to improve this error message) while running hook "a".],
       }
     `)
   })
@@ -198,11 +198,11 @@ describe(`errors`, () => {
       {
         "cause": [Error: oops],
         "context": {
-          "extensionName": "anonymous",
           "hookName": "a",
+          "interceptorName": "anonymous",
           "source": "extension",
         },
-        "result": [ContextualError: There was an error in the extension "anonymous" (use named functions to improve this error message) while running hook "a".],
+        "result": [ContextualError: There was an error in the interceptor "anonymous" (use named functions to improve this error message) while running hook "a".],
       }
     `)
   })
@@ -261,9 +261,9 @@ describe(`errors`, () => {
         passthroughErrorInstanceOf: [SpecialError1],
       })
       // dprint-ignore
-      expect(anyware.run({ initialInput: { throws: new Error('oops') }, extensions: [] })).resolves.toBeInstanceOf(Errors.ContextualError)
+      expect(anyware.run({ initialInput: { throws: new Error('oops') }, interceptors: [] })).resolves.toBeInstanceOf(Errors.ContextualError)
       // dprint-ignore
-      expect(anyware.run({ initialInput: { throws: new SpecialError1('oops') }, extensions: [] })).resolves.toBeInstanceOf(SpecialError1)
+      expect(anyware.run({ initialInput: { throws: new SpecialError1('oops') }, interceptors: [] })).resolves.toBeInstanceOf(SpecialError1)
     })
     test('via passthroughErrorInstanceOf (multiple)', async () => {
       const anyware = Anyware.create<['a'], Anyware.HookDefinitionMap<['a']>>({
@@ -272,9 +272,9 @@ describe(`errors`, () => {
         passthroughErrorInstanceOf: [SpecialError1, SpecialError2],
       })
       // dprint-ignore
-      expect(anyware.run({ initialInput: { throws: new Error('oops') }, extensions: [] })).resolves.toBeInstanceOf(Errors.ContextualError)
+      expect(anyware.run({ initialInput: { throws: new Error('oops') }, interceptors: [] })).resolves.toBeInstanceOf(Errors.ContextualError)
       // dprint-ignore
-      expect(anyware.run({ initialInput: { throws: new SpecialError2('oops') }, extensions: [] })).resolves.toBeInstanceOf(SpecialError2)
+      expect(anyware.run({ initialInput: { throws: new SpecialError2('oops') }, interceptors: [] })).resolves.toBeInstanceOf(SpecialError2)
     })
     test('via passthroughWith', async () => {
       const anyware = Anyware.create<['a'], Anyware.HookDefinitionMap<['a']>>({
@@ -287,9 +287,9 @@ describe(`errors`, () => {
         },
       })
       // dprint-ignore
-      expect(anyware.run({ initialInput: { throws: new Error('oops') }, extensions: [] })).resolves.toBeInstanceOf(Errors.ContextualError)
+      expect(anyware.run({ initialInput: { throws: new Error('oops') }, interceptors: [] })).resolves.toBeInstanceOf(Errors.ContextualError)
       // dprint-ignore
-      expect(anyware.run({ initialInput: { throws: new SpecialError1('oops') }, extensions: [] })).resolves.toBeInstanceOf(SpecialError1)
+      expect(anyware.run({ initialInput: { throws: new SpecialError1('oops') }, interceptors: [] })).resolves.toBeInstanceOf(SpecialError1)
     })
   })
 })
@@ -297,7 +297,7 @@ describe(`errors`, () => {
 describe('retrying extension', () => {
   test('if hook fails, extension can retry, then short-circuit', async () => {
     core.hooks.a.run.mockReset().mockRejectedValueOnce(oops).mockResolvedValueOnce(1)
-    const result = await run(createRetryingExtension(async function foo({ a }) {
+    const result = await run(createRetryingInterceptor(async function foo({ a }) {
       const result1 = await a()
       expect(result1).toEqual(oops)
       const result2 = await a()
@@ -311,7 +311,7 @@ describe('retrying extension', () => {
   describe('errors', () => {
     test('not last extension', async () => {
       const result = await run(
-        createRetryingExtension(async function foo({ a }) {
+        createRetryingInterceptor(async function foo({ a }) {
           return a()
         }),
         async function bar({ a }) {
@@ -332,7 +332,7 @@ describe('retrying extension', () => {
     test('call hook twice even though it succeeded the first time', async () => {
       let neverRan = true
       const result = await run(
-        createRetryingExtension(async function foo({ a }) {
+        createRetryingInterceptor(async function foo({ a }) {
           const result1 = await a()
           expect('b' in result1).toBe(true)
           await a() // <-- Extension bug here under test.
@@ -341,13 +341,13 @@ describe('retrying extension', () => {
       )
       expect(neverRan).toBe(true)
       expect(result).toMatchInlineSnapshot(
-        `[ContextualError: There was an error in the extension "foo".]`,
+        `[ContextualError: There was an error in the interceptor "foo".]`,
       )
       expect((result as Errors.ContextualError).context).toMatchInlineSnapshot(
         `
         {
-          "extensionName": "foo",
           "hookName": "a",
+          "interceptorName": "foo",
           "source": "extension",
         }
       `,

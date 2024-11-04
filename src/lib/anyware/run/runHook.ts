@@ -1,13 +1,15 @@
-import { Errors } from '../errors/__.js'
-import { casesExhausted, createDeferred, debugSub, errorFromMaybeError } from '../prelude.js'
-import type { HookResult, HookResultErrorAsync, Slots } from './hook/private.js'
-import { createPublicHook, type SomePublicHookEnvelope } from './hook/public.js'
-import type { Core, Extension, ResultEnvelop } from './main.js'
+import { Errors } from '../../errors/__.js'
+import { casesExhausted, createDeferred, debugSub, errorFromMaybeError } from '../../prelude.js'
+import type { HookResult, HookResultErrorAsync, Slots } from '../hook/private.js'
+import { createPublicHook, type SomePublicHookEnvelope } from '../hook/public.js'
+import type { InterceptorGeneric } from '../Interceptor.js'
+import type { Pipeline } from '../Pipeline.js'
+import type { ResultEnvelop } from './resultEnvelope.js'
 
 type HookDoneResolver = (input: HookResult) => void
 
 interface Input {
-  core: Core
+  pipeline: Pipeline
   name: string
   done: HookDoneResolver
   inputOriginalOrFromExtension: object
@@ -19,7 +21,7 @@ interface Input {
   /**
    * The extensions that are at this hook awaiting.
    */
-  extensionsStack: readonly Extension[]
+  interceptorsStack: readonly InterceptorGeneric[]
   /**
    * The extensions that have advanced past this hook, to their next hook,
    * and are now awaiting.
@@ -27,23 +29,23 @@ interface Input {
    * @remarks every extension popped off the stack is added here (except those
    * that short-circuit the pipeline or enter passthrough mode).
    */
-  nextExtensionsStack: readonly Extension[]
+  nextExtensionsStack: readonly InterceptorGeneric[]
   asyncErrorDeferred: HookResultErrorAsync
 }
 
-const createExecutableChunk = <$Extension extends Extension>(extension: $Extension) => ({
+const createExecutableChunk = <$Extension extends InterceptorGeneric>(extension: $Extension) => ({
   ...extension,
   currentChunk: createDeferred<SomePublicHookEnvelope | ($Extension['retrying'] extends true ? Error : never)>(),
 })
 
 export const runHook = async (
   {
-    core,
+    pipeline,
     name,
     done,
     inputOriginalOrFromExtension,
     previous,
-    extensionsStack,
+    interceptorsStack,
     nextExtensionsStack,
     asyncErrorDeferred,
     customSlots,
@@ -53,7 +55,7 @@ export const runHook = async (
 
   debugHook(`advance to next extension`)
 
-  const [extension, ...extensionsStackRest] = extensionsStack
+  const [extension, ...extensionsStackRest] = interceptorsStack
   const isLastExtension = extensionsStackRest.length === 0
   if (!isLastExtension && extension?.retrying) {
     done({
@@ -97,7 +99,7 @@ export const runHook = async (
           asyncErrorDeferred.resolve({
             type: `error`,
             source: `extension`,
-            extensionName: extension.name,
+            interceptorName: extension.name,
             hookName: name,
             error: new Errors.ContextualError(`Only a retrying extension can retry hooks.`, {
               hookName: name,
@@ -109,7 +111,7 @@ export const runHook = async (
           asyncErrorDeferred.resolve({
             type: `error`,
             source: `extension`,
-            extensionName: extension.name,
+            interceptorName: extension.name,
             hookName: name,
             error: new Errors.ContextualError(
               `Only after failure can a hook be called again by a retrying extension.`,
@@ -124,13 +126,13 @@ export const runHook = async (
           debugExtension(`execute branch: retry`)
           const extensionRetry = createExecutableChunk(extension)
           void runHook({
-            core,
+            pipeline,
             name,
             done,
             previous,
             inputOriginalOrFromExtension,
             asyncErrorDeferred,
-            extensionsStack: [extensionRetry],
+            interceptorsStack: [extensionRetry],
             nextExtensionsStack,
             customSlots: customSlotsResolved,
           })
@@ -151,13 +153,13 @@ export const runHook = async (
         const nextNextHookStack = [...nextExtensionsStack, extensionWithNextChunk] // tempting to mutate here but simpler to think about as copy.
         hookInvokedDeferred.resolve(true)
         void runHook({
-          core,
+          pipeline,
           name,
           done,
           previous,
           asyncErrorDeferred,
           inputOriginalOrFromExtension: inputResolved,
-          extensionsStack: extensionsStackRest,
+          interceptorsStack: extensionsStackRest,
           nextExtensionsStack: nextNextHookStack,
           customSlots: customSlotsResolved,
         })
@@ -206,13 +208,13 @@ export const runHook = async (
         debugExtension(`extension returned`)
         if (result === envelope) {
           void runHook({
-            core,
+            pipeline,
             name,
             done,
             previous,
             inputOriginalOrFromExtension,
             asyncErrorDeferred,
-            extensionsStack: extensionsStackRest,
+            interceptorsStack: extensionsStackRest,
             nextExtensionsStack,
             customSlots,
           })
@@ -228,7 +230,7 @@ export const runHook = async (
           hookName: name,
           source: `extension`,
           error: errorFromMaybeError(result),
-          extensionName: extension.name,
+          interceptorName: extension.name,
         })
         return
       }
@@ -248,7 +250,7 @@ export const runHook = async (
   } /* reached core for this hook */ else {
     debugHook(`no more extensions to advance, run implementation`)
 
-    const implementation = core.hooks[name]
+    const implementation = pipeline.hooks[name]
     if (!implementation) {
       throw new Errors.ContextualError(`Implementation not found for hook name ${name}`, { hookName: name })
     }

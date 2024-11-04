@@ -1,29 +1,33 @@
-import type { Errors } from '../errors/__.js'
-import { ContextualError } from '../errors/ContextualError.js'
-import { casesExhausted, createDeferred, debug } from '../prelude.js'
-import type { HookResult, HookResultErrorAsync } from './hook/private.js'
-import { defaultFunctionName } from './lib.js'
-import type { Core, Extension, ResultEnvelop } from './main.js'
-import { createResultEnvelope } from './main.js'
+import type { Errors } from '../../errors/__.js'
+import { ContextualError } from '../../errors/ContextualError.js'
+import { casesExhausted, createDeferred, debug } from '../../prelude.js'
+import type { HookResult, HookResultErrorAsync } from '../hook/private.js'
+import type { InterceptorGeneric } from '../Interceptor.js'
+import type { Pipeline } from '../Pipeline.js'
+import { createResultEnvelope } from './resultEnvelope.js'
+import type { ResultEnvelop } from './resultEnvelope.js'
 import { runHook } from './runHook.js'
 
+export const defaultFunctionName = `anonymous`
+
 interface Input {
-  core: Core
+  pipeline: Pipeline
   hookNamesOrderedBySequence: readonly string[]
   originalInputOrResult: unknown
-  extensionsStack: readonly Extension[]
+  interceptorsStack: readonly InterceptorGeneric[]
   asyncErrorDeferred: HookResultErrorAsync
   previous: object
 }
 
 export const runPipeline = async (
-  { core, hookNamesOrderedBySequence, originalInputOrResult, extensionsStack, asyncErrorDeferred, previous }: Input,
+  { pipeline, hookNamesOrderedBySequence, originalInputOrResult, interceptorsStack, asyncErrorDeferred, previous }:
+    Input,
 ): Promise<ResultEnvelop | Errors.ContextualError> => {
   const [hookName, ...hookNamesRest] = hookNamesOrderedBySequence
 
   if (!hookName) {
     debug(`pipeline: ending`)
-    const result = await runPipelineEnd({ extensionsStack, result: originalInputOrResult })
+    const result = await runPipelineEnd({ interceptorsStack, result: originalInputOrResult })
     debug(`pipeline: returning`)
     return createResultEnvelope(result)
   }
@@ -33,12 +37,12 @@ export const runPipeline = async (
   const done = createDeferred<HookResult>({ strict: false })
 
   void runHook({
-    core,
+    pipeline,
     name: hookName,
     done: done.resolve,
     inputOriginalOrFromExtension: originalInputOrResult as object,
     previous,
-    extensionsStack,
+    interceptorsStack,
     asyncErrorDeferred,
     customSlots: {},
     nextExtensionsStack: [],
@@ -58,10 +62,10 @@ export const runPipeline = async (
         },
       }
       return await runPipeline({
-        core,
+        pipeline,
         hookNamesOrderedBySequence: hookNamesRest,
         originalInputOrResult: result,
-        extensionsStack: nextExtensionsStack,
+        interceptorsStack: nextExtensionsStack,
         previous: nextPrevious,
         asyncErrorDeferred,
       })
@@ -75,14 +79,14 @@ export const runPipeline = async (
       debug(`signal: error`)
       signal
 
-      if (core.passthroughErrorWith) {
-        if (core.passthroughErrorWith(signal)) {
+      if (pipeline.passthroughErrorWith) {
+        if (pipeline.passthroughErrorWith(signal)) {
           return signal.error as any // todo change return type to be unknown since this function could permit anything?
         }
       }
 
-      if (core.passthroughErrorInstanceOf) {
-        if (core.passthroughErrorInstanceOf.some(_ => signal.error instanceof _)) {
+      if (pipeline.passthroughErrorInstanceOf) {
+        if (pipeline.passthroughErrorInstanceOf.some(_ => signal.error instanceof _)) {
           return signal.error as any // todo change return type to include object... given this instanceof permits that?
         }
       }
@@ -92,17 +96,17 @@ export const runPipeline = async (
       switch (signal.source) {
         case `extension`: {
           // todo test these 2 branches explicitly
-          const nameTip = signal.extensionName === defaultFunctionName
+          const nameTip = signal.interceptorName === defaultFunctionName
             ? ` (use named functions to improve this error message)`
             : ``
           const message = wasAsync
-            ? `There was an error in the extension "${signal.extensionName}"${nameTip}.`
-            : `There was an error in the extension "${signal.extensionName}"${nameTip} while running hook "${signal.hookName}".`
+            ? `There was an error in the interceptor "${signal.interceptorName}"${nameTip}.`
+            : `There was an error in the interceptor "${signal.interceptorName}"${nameTip} while running hook "${signal.hookName}".`
 
           return new ContextualError(message, {
             hookName: signal.hookName,
             source: signal.source,
-            extensionName: signal.extensionName,
+            interceptorName: signal.interceptorName,
           }, signal.error)
         }
         case `implementation`: {
@@ -122,17 +126,17 @@ export const runPipeline = async (
 }
 
 const runPipelineEnd = async ({
-  extensionsStack,
+  interceptorsStack,
   result,
-}: { result: unknown; extensionsStack: readonly Extension[] }): Promise<unknown> => {
-  const [extension, ...extensionsRest] = extensionsStack
-  if (!extension) return result
+}: { result: unknown; interceptorsStack: readonly InterceptorGeneric[] }): Promise<unknown> => {
+  const [interceptor, ...interceptorsRest] = interceptorsStack
+  if (!interceptor) return result
 
-  debug(`extension ${extension.name}: end`)
-  extension.currentChunk.resolve(result as any)
-  const nextResult = await extension.body.promise
+  debug(`interceptor ${interceptor.name}: end`)
+  interceptor.currentChunk.resolve(result as any)
+  const nextResult = await interceptor.body.promise
   return await runPipelineEnd({
-    extensionsStack: extensionsRest,
+    interceptorsStack: interceptorsRest,
     result: nextResult,
   })
 }
