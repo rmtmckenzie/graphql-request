@@ -1,7 +1,7 @@
 import { createExtension } from '../../extension/extension.js'
-import type { Anyware, Anyware as AnywareLib } from '../../lib/anyware/__.js'
+import type { Anyware as AnywareLib } from '../../lib/anyware/__.js'
 import { Builder } from '../../lib/builder/__.js'
-import type { RequestPipeline } from '../../requestPipeline/__.js'
+import type { requestPipeline } from '../../requestPipeline/__.js'
 import { type Context } from '../context.js'
 
 export interface BuilderExtensionAnyware extends Builder.Extension {
@@ -15,13 +15,15 @@ export interface Anyware<$Arguments extends Builder.Extension.Parameters<Builder
    * TODO Anyware Docs.
    */
   anyware: (
-    interceptor: AnywareLib.Interceptor<RequestPipeline.RequestPipeline<$Arguments['context']['config']>>,
+    interceptor: AnywareLib.Interceptor.InferConstructor<
+      requestPipeline.Spec<$Arguments['context']['config']>
+    >,
   ) => Builder.Definition.MaterializeWithNewContext<$Arguments['chain'], $Arguments['context']>
 }
 
 export const builderExtensionAnyware = Builder.Extension.create<BuilderExtensionAnyware>((builder, context) => {
   const properties = {
-    anyware: (interceptor: Anyware.Interceptor<RequestPipeline.RequestPipeline>) => {
+    anyware: (interceptor: AnywareLib.Interceptor.InferConstructor<requestPipeline.Spec>) => {
       return builder({
         ...context,
         extensions: [

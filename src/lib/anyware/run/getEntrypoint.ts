@@ -1,7 +1,8 @@
 import { analyzeFunction } from '../../analyze-function.js'
 import { ContextualError } from '../../errors/ContextualError.js'
-import type { HookName } from '../hook/definition.js'
-import type { NonRetryingInterceptorInput } from '../Interceptor.js'
+import type { ExecutableStepRuntime } from '../ExecutableStep.js'
+import type { NonRetryingInterceptorInput } from '../Interceptor/Interceptor.js'
+import type { PipelineExecutable } from '../Pipeline/Executable.js'
 
 export class ErrorAnywareInterceptorEntrypoint extends ContextualError<
   'ErrorGraffleInterceptorEntryHook',
@@ -9,7 +10,7 @@ export class ErrorAnywareInterceptorEntrypoint extends ContextualError<
 > {
   // todo add to context: parameters value parsed and raw
   constructor(context: { issue: InterceptorEntryHookIssue }) {
-    super(`Interceptor must destructure the first parameter passed to it and select exactly one entrypoint.`, context)
+    super(`Interceptor must destructure the first parameter passed to it and select exactly one step.`, context)
   }
 }
 
@@ -19,14 +20,16 @@ export const InterceptorEntryHookIssue = {
   notDestructured: `notDestructured`,
   destructuredWithoutEntryHook: `destructuredWithoutEntryHook`,
   multipleDestructuredHookNames: `multipleDestructuredHookNames`,
+  invalidDestructuredHookNames: `invalidDestructuredHookNames`,
 } as const
 
 export type InterceptorEntryHookIssue = typeof InterceptorEntryHookIssue[keyof typeof InterceptorEntryHookIssue]
 
-export const getEntrypoint = (
-  hookNames: readonly string[],
+export const getEntryStep = (
+  pipeline: PipelineExecutable,
   interceptor: NonRetryingInterceptorInput,
-): ErrorAnywareInterceptorEntrypoint | HookName => {
+): ErrorAnywareInterceptorEntrypoint | ExecutableStepRuntime => {
+  const stepsIndex = pipeline.stepsIndex
   const x = analyzeFunction(interceptor)
   if (x.parameters.length > 1) {
     return new ErrorAnywareInterceptorEntrypoint({ issue: InterceptorEntryHookIssue.multipleParameters })
@@ -41,16 +44,22 @@ export const getEntrypoint = (
       if (p.names.length === 0) {
         return new ErrorAnywareInterceptorEntrypoint({ issue: InterceptorEntryHookIssue.destructuredWithoutEntryHook })
       }
-      const hooks = p.names.filter(_ => hookNames.includes(_ as any))
+      const steps = p.names.filter(_ => stepsIndex.has(_))
 
-      if (hooks.length > 1) {
+      if (steps.length > 1) {
         return new ErrorAnywareInterceptorEntrypoint({ issue: InterceptorEntryHookIssue.multipleDestructuredHookNames })
       }
-      const hook = hooks[0]
-      if (!hook) {
+      const stepName = steps[0]
+
+      if (!stepName) {
+        return new ErrorAnywareInterceptorEntrypoint({ issue: InterceptorEntryHookIssue.invalidDestructuredHookNames })
+      }
+
+      const step = stepsIndex.get(stepName)
+      if (!step) {
         return new ErrorAnywareInterceptorEntrypoint({ issue: InterceptorEntryHookIssue.destructuredWithoutEntryHook })
       } else {
-        return hook
+        return step
       }
     }
   }

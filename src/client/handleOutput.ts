@@ -11,6 +11,7 @@ import {
   type GetOrNever,
   type Values,
 } from '../lib/prelude.js'
+import type { requestPipeline } from '../requestPipeline/RequestPipeline.js'
 import type { GlobalRegistry } from '../types/GlobalRegistry/GlobalRegistry.js'
 import type { TransportHttp } from '../types/Transport.js'
 import type { Context } from './context.js'
@@ -22,16 +23,7 @@ import {
   readConfigErrorCategoryOutputChannel,
 } from './Settings/Config.js'
 
-/**
- * Types of "other" Graffle Error.
- */
-export type ErrorsOther =
-  | Errors.ContextualError
-  // Possible from http transport fetch with abort controller.
-  | DOMException
-
 export type GraffleExecutionResultEnvelope<$Config extends Config = Config> =
-  // & ExecutionResult
   & {
     errors?: ReadonlyArray<
       // formatted comes from http transport
@@ -56,17 +48,13 @@ export type GraffleExecutionResultEnvelope<$Config extends Config = Config> =
       }
     : {})
 
-export type GraffleExecutionResultVar<$Config extends Config = Config> =
-  | GraffleExecutionResultEnvelope<$Config>
-  | ErrorsOther
-
 export const handleOutput = (
   state: Context,
-  result: GraffleExecutionResultVar,
+  result: requestPipeline.Result,
 ) => {
   if (isContextConfigTraditionalGraphQLOutput(state.config)) {
     if (result instanceof Error) throw result
-    return result
+    return result.value
   }
 
   const config = state.config
@@ -93,11 +81,11 @@ export const handleOutput = (
     return isEnvelope ? { errors: [result] } : result
   }
 
-  if (result.errors && result.errors.length > 0) {
+  if (result.value.errors && result.value.errors.length > 0) {
     const error = new Errors.ContextualAggregateError(
       `One or more errors in the execution result.`,
       {},
-      result.errors.map(e => {
+      result.value.errors.map(e => {
         if (e instanceof Error) return e
         const { message, ...context } = e
         return new Errors.ContextualError(message, context)
@@ -105,14 +93,14 @@ export const handleOutput = (
     )
     if (isThrowExecution) throw error
     if (isReturnExecution) return error
-    return isEnvelope ? { ...result, errors: [...result.errors ?? [], error] } : error
+    return isEnvelope ? { ...result.value, errors: [...result.value.errors ?? [], error] } : error
   }
 
   if (isEnvelope) {
-    return result
+    return result.value
   }
 
-  return result.data
+  return result.value.data
 }
 
 /**
@@ -156,49 +144,10 @@ type HandleOutput_Envelope<$Context extends Context, $Envelope extends GraffleEx
     ? $Envelope
     : ExcludeUndefined<$Envelope['data']> // todo make data field not undefinable
 
-// type HandleOutputGql_Envelope
-
-//  | IfConfiguredGetOutputErrorReturns<$Config>
-//  | (
-//       $Config['output']['envelope']['enabled'] extends true
-//         // todo even when envelope is enabled, its possible errors can not be included in its output.
-//         // When not, undefined should be removed from the data property.
-//         ? Envelope<$Config, $Data>
-//         // Note 1
-//         // `undefined` is not a possible type because that would only happen if an error occurred.
-//         // If an error occurs when the envelope is disabled then either it throws or is returned.
-//         // No case swallows the error and returns undefined data.
-//         //
-//         // Note 2
-//         // null is possible because of GraphQL null propagation.
-//         // todo We need to integrate this reality into the the other typed non-envelope output types too.
-//         : $Data | null
-//    )
-
-// // dprint-ignore
-// export type HandleOutputGraffleRootType<$Config extends Config, $Data> =
-//    | IfConfiguredGetOutputErrorReturns<$Config>
-//    | (
-//         $Config['output']['envelope']['enabled'] extends true
-//           ? Envelope<$Config, $Data>
-//           : $Data
-//      )
-
-// // dprint-ignore
-// export type HandleOutputGraffleRootField<$Config extends Config, $RootFieldName extends string, $Data> =
-//     | IfConfiguredGetOutputErrorReturns<$Config>
-//     | (
-//         $Config['output']['envelope']['enabled'] extends true
-//           // todo: a typed execution result that allows for additional error types.
-//           // currently it is always graphql execution error however envelope configuration can put more errors into that.
-//           ? Envelope<$Config, { [_ in $RootFieldName]: $Data }>
-//           : $Data
-//       )
-
 // dprint-ignore
 type IfConfiguredGetOutputErrorReturns<$Context extends Context> =
-  | (ConfigGetOutputError<$Context, 'execution'>  extends 'return'  ? GraphQLExecutionResultError  : never)
-  | (ConfigGetOutputError<$Context, 'other'>      extends 'return'  ? ErrorsOther                  : never)
+  | (ConfigGetOutputError<$Context, 'execution'>  extends 'return'  ? GraphQLExecutionResultError   : never)
+  | (ConfigGetOutputError<$Context, 'other'>      extends 'return'  ? requestPipeline.ResultFailure : never)
 
 // dprint-ignore
 export type ConfigGetOutputError<$Context extends Context, $ErrorCategory extends ErrorCategory> =

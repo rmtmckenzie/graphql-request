@@ -1,4 +1,5 @@
 import type { HasRequiredKeys, IsAny, IsEmptyObject, IsNever, IsUnknown, Simplify } from 'type-fest'
+import type { ConfigManager } from './config-manager/__.js'
 
 /* eslint-disable */
 export type RemoveIndex<T> = {
@@ -253,9 +254,9 @@ export type MaybePromise<T> = T | Promise<T>
 
 export const capitalizeFirstLetter = (string: string) => string.charAt(0).toUpperCase() + string.slice(1)
 
-export type SomeAsyncFunction = (...args: unknown[]) => Promise<unknown>
+export type SomeAsyncFunction = (...args: any[]) => Promise<any>
 
-export type SomeFunction = (...args: unknown[]) => MaybePromise<any>
+export type SomeFunction = (...args: any[]) => MaybePromise<any>
 
 export type Deferred<T> = {
   promise: Promise<T>
@@ -298,7 +299,84 @@ export const debugSub = (...args: any[]) => (...subArgs: any[]) => {
   debug(...args, ...subArgs)
 }
 
-export type PlusOneUpToTen<n extends number> = n extends 0 ? 1
+export namespace Tuple {
+  export type NonEmpty = [any, ...any[]]
+  // dprint-ignore
+  export type IntersectItems<$Items extends readonly any[]> =
+    $Items extends [infer $First, ...infer $Rest extends any[]]
+      ? $First & IntersectItems<$Rest>
+      : {}
+
+  // dprint-ignore
+  export type ToIndexByObjectKey<$Items extends readonly object[], $Key extends keyof $Items[number]> =
+    Simplify<
+      IntersectItems<{
+        [$Index in keyof $Items]:
+          $Key extends keyof $Items[$Index]
+          ? {
+              [_ in $Items[$Index][$Key] & string]: $Items[$Index]
+            }
+          : never
+      }>
+    >
+
+  // dprint-ignore
+  export type GetAtNextIndex<$Items extends readonly any[], $Index extends NumberLiteral> =
+    $Items[PlusOne<$Index>]
+
+  // dprint-ignore
+  export type GetNextIndexOr<$Items extends readonly any[], $Index extends number, $Or> =
+    ConfigManager.OrDefault<GetAtNextIndex<$Items, $Index>, $Or>
+
+  // dprint-ignore
+  export type DropUntilIndex<$Items extends readonly any[], $Index extends NumberLiteral> =
+    $Index extends 0                                  ? $Items :
+    $Items extends readonly [infer _, ...infer $Rest] ? DropUntilIndex<$Rest, MinusOne<$Index>> :
+                                                        []
+
+  export type IndexPlusOne<$Index extends NumberLiteral> = PlusOne<$Index>
+
+  export type GetLastValue<T extends readonly [any, ...any[]]> = T[MinusOne<T['length']>]
+
+  export type IsLastValue<value, list extends readonly [any, ...any[]]> = value extends GetLastValue<list> ? true
+    : false
+
+  // dprint-ignore
+  export type findIndexForValue<value, list extends AnyReadOnlyListNonEmpty> =
+    findIndexForValue_<value, list, 0>
+
+  // dprint-ignore
+  type findIndexForValue_<value, list extends AnyReadOnlyListNonEmpty, i extends number> =
+    value extends list[i]
+      ? i
+      : findIndexForValue_<value, list, PlusOne<i>>
+
+  export type FindValueAfter<value, list extends AnyReadOnlyListNonEmpty> =
+    list[PlusOne<findIndexForValue<value, list>>]
+
+  // dprint-ignore
+  export type TakeValuesBefore<$Value, $List extends AnyReadOnly> =
+    $List extends readonly [infer $ListFirst, ...infer $ListRest]
+      ? $Value extends $ListFirst
+        ? []
+        : [$ListFirst, ...TakeValuesBefore<$Value, $ListRest>]
+      : []
+
+  export type FindValueAfterOr<value, list extends readonly [any, ...any[]], orValue> = ConfigManager.OrDefault<
+    list[PlusOne<findIndexForValue<value, list>>],
+    orValue
+  >
+
+  type AnyReadOnly = readonly any[]
+
+  type AnyReadOnlyListNonEmpty = readonly [any, ...any[]]
+}
+
+type NumberLiteral = number | `${number}`
+
+// dprint-ignore
+export type PlusOne<n extends NumberLiteral> =
+    n extends 0 ? 1
   : n extends 1 ? 2
   : n extends 2 ? 3
   : n extends 3 ? 4
@@ -310,7 +388,9 @@ export type PlusOneUpToTen<n extends number> = n extends 0 ? 1
   : n extends 9 ? 10
   : never
 
-export type MinusOneUpToTen<n extends number> = n extends 10 ? 9
+// dprint-ignore
+export type MinusOne<n extends NumberLiteral> =
+    n extends 10 ? 9
   : n extends 9 ? 8
   : n extends 8 ? 7
   : n extends 7 ? 6
@@ -321,41 +401,6 @@ export type MinusOneUpToTen<n extends number> = n extends 10 ? 9
   : n extends 2 ? 1
   : n extends 1 ? 0
   : never
-
-// dprint-ignore
-export type findIndexForValue<value, list extends AnyReadOnlyListNonEmpty> =
-  findIndexForValue_<value, list, 0>
-
-// dprint-ignore
-type findIndexForValue_<value, list extends AnyReadOnlyListNonEmpty, i extends number> =
-  value extends list[i]
-    ? i
-    : findIndexForValue_<value, list, PlusOneUpToTen<i>>
-
-export type FindValueAfter<value, list extends AnyReadOnlyListNonEmpty> =
-  list[PlusOneUpToTen<findIndexForValue<value, list>>]
-
-// dprint-ignore
-export type TakeValuesBefore<$Value, $List extends AnyReadOnlyList> =
-  $List extends readonly [infer $ListFirst, ...infer $ListRest]
-    ? $Value extends $ListFirst
-      ? []
-      : [$ListFirst, ...TakeValuesBefore<$Value, $ListRest>]
-    : []
-
-type AnyReadOnlyListNonEmpty = readonly [any, ...any[]]
-type AnyReadOnlyList = readonly [...any[]]
-
-export type ValueOr<value, orValue> = value extends undefined ? orValue : value
-
-export type FindValueAfterOr<value, list extends readonly [any, ...any[]], orValue> = ValueOr<
-  list[PlusOneUpToTen<findIndexForValue<value, list>>],
-  orValue
->
-
-export type GetLastValue<T extends readonly [any, ...any[]]> = T[MinusOneUpToTen<T['length']>]
-
-export type IsLastValue<value, list extends readonly [any, ...any[]]> = value extends GetLastValue<list> ? true : false
 
 export type Include<T, U> = T extends U ? T : never
 
@@ -457,10 +502,6 @@ export const shallowMergeDefaults = <$Defaults extends object, $Input extends ob
 
   return merged as any
 }
-
-export type mergeArrayOfObjects<T extends [...any[]]> = T extends [infer $First, ...infer $Rest extends any[]]
-  ? $First & mergeArrayOfObjects<$Rest>
-  : {}
 
 export const identityProxy = new Proxy({}, {
   get: () => (value: unknown) => value,
@@ -637,7 +678,7 @@ export type SimplifyExcept<$ExcludeType, $Type> =
       ? $Type
       : {[TypeKey in keyof $Type]: $Type[TypeKey]}
 
-export const any = undefined as any
+export const _ = undefined as any
 
 // dprint-ignore
 export type ToParameters<$Params extends object | undefined> =
@@ -660,4 +701,14 @@ export const isAbortError = (error: any): error is DOMException & { name: 'Abort
     // Under test with JSDOM, the error must be checked this way.
     // todo look for an open issue with JSDOM to link here, is this just artifact of JSDOM or is it a real issue that happens in browsers?
     || (error instanceof Error && error.message.startsWith(`AbortError:`))
+}
+
+export namespace Func {
+  // dprint-ignore
+  export type AppendAwaitedReturnType<$F, $ReturnTypeToAdd> = 
+    $F extends (...args: infer $Args) => infer $Output
+      ? $Output extends Promise<any>
+        ? (...args: $Args) => Promise<Awaited<$Output> | $ReturnTypeToAdd>
+        : (...args: $Args) => $Output | $ReturnTypeToAdd
+      : never
 }
