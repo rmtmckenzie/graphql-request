@@ -1,12 +1,12 @@
 import type { ConfigManager } from '../../config-manager/__.js'
-import type { Tuple } from '../../prelude.js'
-import type { ExecutableStepRuntime } from '../ExecutableStep.js'
+import type { Objekt, Tuple } from '../../prelude.js'
+import type { ExecutableStep } from '../ExecutableStep.js'
 import type { Step } from '../Step.js'
 import { type Config, type Options, resolveOptions } from './Config.js'
-import type { StepsIndex } from './Executable.js'
+import type { StepsIndex } from './ExecutablePipeline.js'
 import type { PipelineSpec } from './Spec.js'
 
-export const createExecutableStepsIndex = <$Steps extends ExecutableStepRuntime[]>(steps: $Steps): StepsIndex => {
+export const createExecutableStepsIndex = <$Steps extends ExecutableStep[]>(steps: $Steps): StepsIndex => {
   return new Map(steps.map(step => [step.name, step]))
 }
 
@@ -78,11 +78,11 @@ type InferExecutableSteps_<
             ) => $StepSpec['output']
           }
         & (
-          $StepSpec['slots'] extends Step.Slots
-            ? {
+          Objekt.IsEmpty<$StepSpec['slots']> extends true
+            ? {}
+            : {
                 slots: $StepSpec['slots']
               }
-            : {}
         )
       , ...InferExecutableSteps_<[...$PreviousStepSpecs, $StepSpec], $RestStepSpecs, $Options>]
     : []

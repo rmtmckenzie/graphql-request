@@ -9,7 +9,7 @@ import {
   type NonRetryingInterceptorInput,
 } from '../Interceptor/Interceptor.js'
 import type { Pipeline } from '../Pipeline/__.js'
-import { type InferResultFromSpec, successfulResult } from '../Pipeline/Result.js'
+import { successfulResult } from '../Pipeline/Result.js'
 import type { Step } from '../Step.js'
 import type { StepResultErrorExtension } from '../StepResult.js'
 import type { StepTriggerEnvelope } from '../StepTriggerEnvelope.js'
@@ -18,13 +18,13 @@ import { runPipeline } from './runPipeline.js'
 
 export interface Params<$Pipeline extends PipelineSpec = PipelineSpec> {
   initialInput: $Pipeline['input']
-  interceptors: NonRetryingInterceptorInput[]
+  interceptors?: NonRetryingInterceptorInput[]
   retryingInterceptor?: NonRetryingInterceptorInput
 }
 
 export const createRunner =
-  <$Pipeline extends Pipeline.PipelineExecutable>(pipeline: $Pipeline) =>
-  async (params?: Params<$Pipeline>): Promise<InferResultFromSpec<$Pipeline>> => {
+  <$Pipeline extends Pipeline.ExecutablePipeline>(pipeline: $Pipeline) =>
+  async (params?: Params<$Pipeline['spec']>): Promise<$Pipeline['output']> => {
     const { initialInput, interceptors = [], retryingInterceptor } = params ?? {}
 
     const interceptors_ = retryingInterceptor
@@ -49,21 +49,21 @@ export const createRunner =
     return successfulResult(result.result)
   }
 
-const toInternalInterceptor = (pipeline: Pipeline.PipelineExecutable, interceptor: InterceptorInput) => {
+const toInternalInterceptor = (pipeline: Pipeline.ExecutablePipeline, interceptor: InterceptorInput) => {
   const currentChunk = createDeferred<StepTriggerEnvelope>()
   const body = createDeferred()
-  const extensionRun = typeof interceptor === `function` ? interceptor : interceptor.run
+  const interceptorTrigger = typeof interceptor === `function` ? interceptor : interceptor.run
   const retrying = typeof interceptor === `function` ? false : interceptor.retrying
   const applyBody = async (input: object) => {
     try {
-      const result = await extensionRun(input)
+      const result = await interceptorTrigger(input)
       body.resolve(result)
     } catch (error) {
       body.reject(error)
     }
   }
 
-  const interceptorName = extensionRun.name || `anonymous`
+  const interceptorName = interceptorTrigger.name || `anonymous`
 
   switch (pipeline.config.entrypointSelectionMode) {
     case `off`: {
@@ -77,7 +77,7 @@ const toInternalInterceptor = (pipeline: Pipeline.PipelineExecutable, intercepto
     }
     case `optional`:
     case `required`: {
-      const entryStep = getEntryStep(pipeline, extensionRun)
+      const entryStep = getEntryStep(pipeline, interceptorTrigger)
       if (entryStep instanceof Error) {
         if (pipeline.config.entrypointSelectionMode === `required`) {
           return entryStep
@@ -92,13 +92,13 @@ const toInternalInterceptor = (pipeline: Pipeline.PipelineExecutable, intercepto
         }
       }
 
-      const hooksBeforeEntrypoint: Step.Name[] = []
+      const stepsBeforeEntrypoint: Step.Name[] = []
       for (const step of pipeline.steps) {
         if (step === entryStep) break
-        hooksBeforeEntrypoint.push(step.name)
+        stepsBeforeEntrypoint.push(step.name)
       }
 
-      const passthroughs = hooksBeforeEntrypoint.map((hookName) => createPassthrough(hookName))
+      const passthroughs = stepsBeforeEntrypoint.map((hookName) => createPassthrough(hookName))
       let currentChunkPromiseChain = currentChunk.promise
       for (const passthrough of passthroughs) {
         currentChunkPromiseChain = currentChunkPromiseChain.then(passthrough)

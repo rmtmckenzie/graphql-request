@@ -1,10 +1,11 @@
 import type { SomeFunction } from '../prelude.js'
 
+// todo: rename to Spec
 export interface Step<
   $Name extends string = string,
 > {
   name: $Name
-  slots?: Step.Slots
+  slots: Step.Slots
   input: any
   output: any
 }
@@ -25,7 +26,7 @@ export namespace Step {
   >() =>
   <
     const $Name extends string,
-    $Run extends ImplementationFn<$Input>,
+    $Run extends Runner<$Input>,
     $Slots extends undefined | Step.Slots,
   >(
     parameters: {
@@ -36,14 +37,23 @@ export namespace Step {
   ): {
     name: $Name
     run: $Run
-    input: Parameters<$Run>[0]['input']
+    input: $Input
     output: ReturnType<$Run>
     slots: undefined extends $Slots ? undefined : $Slots
   } => {
     return parameters as any
   }
 
-  type ImplementationFn<$Input extends Input = Input> = (parameters: { input: $Input }) => any
+  export type Runner<
+    $Input extends Input = Input,
+    $Slots extends undefined | Step.Slots = undefined,
+    $Previous extends undefined | object = undefined,
+    $Output = any,
+  > = (
+    input: $Input,
+    slots: $Slots,
+    previous: $Previous,
+  ) => $Output
 
   export type Input = object
 

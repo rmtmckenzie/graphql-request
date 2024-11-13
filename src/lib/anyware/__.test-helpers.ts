@@ -1,10 +1,7 @@
-import { keyBy } from 'es-toolkit'
 import { beforeEach, vi } from 'vitest'
-import type { Tuple } from '../prelude.js'
 import { Pipeline } from './_.js'
-import type { NonRetryingInterceptorInput } from './Interceptor/Interceptor.js'
+import type { Interceptor, NonRetryingInterceptorInput } from './Interceptor/Interceptor.js'
 import type { Options } from './Pipeline/Config.js'
-import type { PipelineExecutable } from './Pipeline/Executable.js'
 import { Step } from './Step.js'
 
 export const initialInput = { x: 1 } as const
@@ -20,8 +17,8 @@ export const results = {
 export type results = typeof results
 
 export const stepA = Step.createWithInput<initialInput>()({ name: `a`, run: () => results[`a`] })
-export const stepB = Step.createWithInput<initialInput>()({ name: `b`, run: () => results[`b`] })
-export const stepC = Step.createWithInput<initialInput>()({ name: `c`, run: () => results[`c`] })
+export const stepB = Step.createWithInput<results[`a`]>()({ name: `b`, run: () => results[`b`] })
+export const stepC = Step.createWithInput<results[`b`]>()({ name: `c`, run: () => results[`c`] })
 
 export const slots = {
   m: () => Promise.resolve(`m` as const),
@@ -29,70 +26,87 @@ export const slots = {
 }
 export type slots = typeof slots
 
-type PrivateHookRunnerInput = {
-  input: { value: string }
-  slots: { append: (hookName: string) => string; appendExtra: (hookName: string) => string }
-  previous: object
-}
-
 export const createPipeline = (options?: Options) => {
+  type Append = (hookName: string) => string
+
+  type AppendExtra = () => string
+
+  const stepARunner = vi.fn<
+    (
+      input: { value: string },
+      slots: { append: (hookName: string) => string; appendExtra: (hookName: string) => string },
+      previous: undefined,
+    ) => { value: string }
+  >().mockImplementation((input, slots) => {
+    const extra = slots.appendExtra(`a`)
+    return {
+      value: input.value + `+` + slots.append(`a`) + extra,
+    }
+  })
+
+  type StepARunner = typeof stepARunner
+
+  const stepBRunner = vi.fn<
+    (
+      input: { value: string },
+      slots: { append: (hookName: string) => string; appendExtra: (hookName: string) => string },
+      previous: object,
+    ) => { value: string }
+  >().mockImplementation((input, slots) => {
+    const extra = slots.appendExtra(`b`)
+    return {
+      value: input.value + `+` + slots.append(`b`) + extra,
+    }
+  })
+
+  type StepBRunner = typeof stepBRunner
+
   return Pipeline
     .create<{ value: string }>(options)
-    .step({
-      name: `a`,
+    .stepWithRunnerType<StepARunner>()(`a`, {
       slots: {
-        append: vi.fn().mockImplementation((hookName: string) => {
+        append: vi.fn<Append>().mockImplementation((hookName) => {
           return hookName
         }),
-        appendExtra: vi.fn().mockImplementation(() => {
+        appendExtra: vi.fn<AppendExtra>().mockImplementation(() => {
           return ``
         }),
       },
-      run: vi.fn().mockImplementation(({ input, slots }: PrivateHookRunnerInput) => {
-        const extra = slots.appendExtra(`a`)
-        return { value: input.value + `+` + slots.append(`a`) + extra }
-      }),
+      run: stepARunner,
     })
-    .step({
-      name: `b`,
+    .stepWithRunnerType<StepBRunner>()(`b`, {
       slots: {
-        append: vi.fn().mockImplementation((hookName: string) => {
+        append: vi.fn<Append>().mockImplementation((hookName) => {
           return hookName
         }),
-        appendExtra: vi.fn().mockImplementation(() => {
+        appendExtra: vi.fn<AppendExtra>().mockImplementation(() => {
           return ``
         }),
       },
-      run: vi.fn().mockImplementation(({ input, slots }: PrivateHookRunnerInput) => {
-        const extra = slots.appendExtra(`b`)
-        return { value: input.value + `+` + slots.append(`b`) + extra }
-      }),
+      run: stepBRunner,
     })
     .done()
 }
 
 type TestPipeline = ReturnType<typeof createPipeline>
+export type TestInterceptor = Interceptor.InferConstructor<TestPipeline['spec']>
 
-export let stepsIndex: Tuple.ToIndexByObjectKey<TestPipeline['steps'], 'name'>
-let pipeline: PipelineExecutable
+export let pipeline: TestPipeline
 
 beforeEach(() => {
   pipeline = createPipeline()
-  stepsIndex = keyBy(pipeline.steps, _ => _.name) as any
 })
 
-export const runWithOptions = (options?: Options) => {
+export const pipelineWithOptions = (options?: Options) => {
   const pipeline = createPipeline(options)
-  const run = async (...interceptors: NonRetryingInterceptorInput[]) => {
+  const run = async (...interceptors: TestInterceptor[]) => {
     return await Pipeline.run(pipeline, {
       initialInput: { value: `initial` },
       interceptors,
     })
   }
-  stepsIndex = keyBy(pipeline.steps, _ => _.name) as any
   return {
     pipeline,
-    stepsIndex,
     run,
   }
 }

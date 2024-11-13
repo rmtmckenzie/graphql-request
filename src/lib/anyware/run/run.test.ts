@@ -4,7 +4,15 @@ import { beforeEach, describe, expect, test, vi } from 'vitest'
 import { Errors } from '../../errors/__.js'
 import type { ContextualError } from '../../errors/ContextualError.js'
 import { Pipeline } from '../_.js'
-import { initialInput2, oops, run, runRetrying, runWithOptions, stepsIndex } from '../__.test-helpers.js'
+import {
+  initialInput2,
+  oops,
+  pipeline,
+  pipelineWithOptions,
+  run,
+  runRetrying,
+  type TestInterceptor,
+} from '../__.test-helpers.js'
 import { type ResultSuccess, successfulResult } from '../Pipeline/Result.js'
 import { Step } from '../Step.js'
 
@@ -24,9 +32,9 @@ describe(`one extension`, () => {
         return 0
       }),
     ).toEqual(successfulResult(0))
-    expect(stepsIndex.a.run.mock.calls[0]).toMatchObject([{ input: { value: `initial` } }])
-    expect(stepsIndex.a.run).toHaveBeenCalled()
-    expect(stepsIndex.b.run).toHaveBeenCalled()
+    expect(pipeline.stepsIndex.get('a')?.run.mock.calls[0]?.[0]).toMatchObject({ value: `initial` })
+    expect(pipeline.stepsIndex.get('a')?.run).toHaveBeenCalled()
+    expect(pipeline.stepsIndex.get('b')?.run).toHaveBeenCalled()
   })
   test('can call hook with no input, making the original input be used', () => {
     expect(
@@ -46,8 +54,8 @@ describe(`one extension`, () => {
           return a.input
         }),
       ).toEqual({ value: { value: `initial` } })
-      expect(stepsIndex.a.run).not.toHaveBeenCalled()
-      expect(stepsIndex.b.run).not.toHaveBeenCalled()
+      expect(pipeline.stepsIndex.get('a')?.run).not.toHaveBeenCalled()
+      expect(pipeline.stepsIndex.get('b')?.run).not.toHaveBeenCalled()
     })
     test(`at start, return own result`, async () => {
       expect(
@@ -56,8 +64,8 @@ describe(`one extension`, () => {
           return 0
         }),
       ).toEqual({ value: 0 })
-      expect(stepsIndex.a.run).not.toHaveBeenCalled()
-      expect(stepsIndex.b.run).not.toHaveBeenCalled()
+      expect(pipeline.stepsIndex.get('a')?.run).not.toHaveBeenCalled()
+      expect(pipeline.stepsIndex.get('b')?.run).not.toHaveBeenCalled()
     })
     test(`after first hook, return own result`, async () => {
       expect(
@@ -66,7 +74,7 @@ describe(`one extension`, () => {
           return b.input.value + `+x`
         }),
       ).toEqual(successfulResult(`initial+a+x`))
-      expect(stepsIndex.b.run).not.toHaveBeenCalled()
+      expect(pipeline.stepsIndex.get('b')?.run).not.toHaveBeenCalled()
     })
   })
   describe(`can partially apply`, () => {
@@ -96,79 +104,74 @@ describe(`one extension`, () => {
 })
 
 describe(`two interceptors`, () => {
-  let run: ReturnType<typeof runWithOptions>['run']
-  let stepIndex: ReturnType<typeof runWithOptions>['stepsIndex']
-
-  beforeEach(() => {
-    const info = runWithOptions({ entrypointSelectionMode: `optional` })
-    run = info.run
-    stepIndex = info.stepsIndex
-  })
   test(`first can short-circuit`, async () => {
-    const i1 = () => 1
-    const i2 = vi.fn().mockImplementation(() => 2)
-    expect(await run(i1, i2)).toEqual(successfulResult(1))
+    // Do not require selection mode so that we can use a mock interceptor.
+    const { run, pipeline } = pipelineWithOptions({ entrypointSelectionMode: 'optional' })
+    const i1: TestInterceptor = async ({ a }) => ({ value: '1' })
+    const i2: TestInterceptor = vi.fn().mockImplementation(({ a }) => ({ value: '2' }))
+    expect(await run(i1, i2)).toEqual(successfulResult({ value: '1' }))
     expect(i2).not.toHaveBeenCalled()
-    expect(stepsIndex.a.run).not.toHaveBeenCalled()
-    expect(stepsIndex.b.run).not.toHaveBeenCalled()
+    expect(pipeline.stepsIndex.get('a')?.run).not.toHaveBeenCalled()
+    expect(pipeline.stepsIndex.get('b')?.run).not.toHaveBeenCalled()
   })
 
   test(`each can adjust first hook then passthrough`, async () => {
-    const ex1 = ({ a }: any) => a({ input: { value: a.input.value + `+ex1` } })
-    const ex2 = ({ a }: any) => a({ input: { value: a.input.value + `+ex2` } })
-    expect(await run(ex1, ex2)).toEqual(successfulResult({ value: `initial+ex1+ex2+a+b` }))
+    const i1: TestInterceptor = async ({ a }) => a({ input: { value: a.input.value + `+ex1` } })
+    const i2: TestInterceptor = async ({ a }) => a({ input: { value: a.input.value + `+ex2` } })
+    expect(await run(i1, i2)).toEqual(successfulResult({ value: `initial+ex1+ex2+a+b` }))
   })
 
   test(`each can adjust each hook`, async () => {
-    const ex1 = async ({ a }: any) => {
+    const i1: TestInterceptor = async ({ a }) => {
       const { b } = await a({ input: { value: a.input.value + `+ex1` } })
       return await b({ input: { value: b.input.value + `+ex1` } })
     }
-    const ex2 = async ({ a }: any) => {
+    const i2: TestInterceptor = async ({ a }) => {
       const { b } = await a({ input: { value: a.input.value + `+ex2` } })
       return await b({ input: { value: b.input.value + `+ex2` } })
     }
-    expect(await run(ex1, ex2)).toEqual(successfulResult({ value: `initial+ex1+ex2+a+ex1+ex2+b` }))
+    expect(await run(i1, i2)).toEqual(successfulResult({ value: `initial+ex1+ex2+a+ex1+ex2+b` }))
   })
 
   test(`second can skip hook a`, async () => {
-    const ex1 = async ({ a }: any) => {
+    const i1: TestInterceptor = async ({ a }) => {
       const { b } = await a({ input: { value: a.input.value + `+ex1` } })
       return await b({ input: { value: b.input.value + `+ex1` } })
     }
-    const ex2 = async ({ b }: any) => {
+    const i2: TestInterceptor = async ({ b }) => {
       return await b({ input: { value: b.input.value + `+ex2` } })
     }
-    expect(await run(ex1, ex2)).toEqual(successfulResult({ value: `initial+ex1+a+ex1+ex2+b` }))
+    expect(await run(i1, i2)).toEqual(successfulResult({ value: `initial+ex1+a+ex1+ex2+b` }))
   })
   test(`second can short-circuit before step a`, async () => {
     let ex1AfterA = false
-    const i1 = async ({ a }: any) => {
-      const { b } = await a({ value: a.input.value + `+ex1` })
-      ex1AfterA = true
-    }
-    const i2 = async ({ a }: any) => 2
-
-    expect(await run(i1, i2)).toEqual(successfulResult(2))
+    expect(
+      await run(async ({ a }) => {
+        const { b } = await a({ input: { value: a.input.value + `+ex1` } })
+        ex1AfterA = true
+        return b()
+      }, async ({ a }) => ({ value: '2' })),
+    ).toEqual(successfulResult({ value: '2' }))
     expect(ex1AfterA).toBe(false)
-    expect(stepsIndex.a.run).not.toHaveBeenCalled()
-    expect(stepsIndex.b.run).not.toHaveBeenCalled()
+    expect(pipeline.stepsIndex.get('a')?.run).not.toHaveBeenCalled()
+    expect(pipeline.stepsIndex.get('b')?.run).not.toHaveBeenCalled()
   })
   test(`second can short-circuit after step a`, async () => {
     let ex1AfterB = false
-    const i1 = async ({ a }: any) => {
-      const { b } = await a({ input: { value: a.input.value + `+ex1` } })
-      await b({ value: b.input.value + `+ex1` })
-      ex1AfterB = true
-    }
-    const i2 = async ({ a }: any) => {
-      await a({ value: a.input.value + `+ex2` })
-      return 2
-    }
-    expect(await run(i1, i2)).toEqual(successfulResult(2))
+    expect(
+      await run(async ({ a }) => {
+        const { b } = await a({ input: { value: a.input.value + `+ex1` } })
+        await b({ input: { value: b.input.value + `+ex1` } })
+        ex1AfterB = true
+        return { value: '' }
+      }, async ({ a }) => {
+        await a({ input: { value: a.input.value + `+ex2` } })
+        return { value: `early` }
+      }),
+    ).toEqual(successfulResult({ value: `early` }))
     expect(ex1AfterB).toBe(false)
-    expect(stepsIndex.a.run).toHaveBeenCalledOnce()
-    expect(stepsIndex.b.run).not.toHaveBeenCalled()
+    expect(pipeline.stepsIndex.get('a')?.run).toHaveBeenCalledOnce()
+    expect(pipeline.stepsIndex.get('b')?.run).not.toHaveBeenCalled()
   })
 })
 
@@ -215,7 +218,7 @@ describe(`errors`, () => {
   })
 
   test(`if implementation fails, without interceptors, result is the error`, async () => {
-    stepsIndex.a.run.mockReset().mockRejectedValueOnce(oops)
+    pipeline.stepsIndex.get('a')?.run.mockReset().mockRejectedValueOnce(oops)
     const result = await run() as ContextualError
     expect({
       result,
@@ -256,7 +259,7 @@ describe(`errors`, () => {
     class SpecialError2 extends Error {}
     const stepA = Step.createWithInput<{ throws: Error }>()({
       name: 'a',
-      run: ({ input }) => {
+      run: (input) => {
         if (input.throws) throw input.throws
       },
     })
@@ -298,16 +301,16 @@ describe(`errors`, () => {
 
 describe('retrying extension', () => {
   test('if hook fails, extension can retry, then short-circuit', async () => {
-    stepsIndex.a.run.mockReset().mockRejectedValueOnce(oops).mockResolvedValueOnce(1)
+    pipeline.stepsIndex.get('a')?.run.mockReset().mockRejectedValueOnce(oops).mockResolvedValueOnce({ value: 'retry' })
     const result = await runRetrying(async function foo({ a }) {
       const result1 = await a()
       expect(result1).toEqual(oops)
       const result2 = await a()
       expect(typeof result2.b).toEqual('function')
-      expect(result2.b.input).toEqual(1)
+      expect(result2.b.input).toEqual({ value: 'retry' })
       return result2.b.input
     })
-    expect(result).toEqual(successfulResult(1))
+    expect(result).toEqual(successfulResult({ value: 'retry' }))
   })
 
   describe('errors', () => {
@@ -364,15 +367,15 @@ describe('retrying extension', () => {
 describe('slots', () => {
   test('have defaults that are called by default', async () => {
     await run()
-    expect(stepsIndex.a.slots.append.mock.calls[0]).toMatchObject(['a'])
-    expect(stepsIndex.b.slots.append.mock.calls[0]).toMatchObject(['b'])
+    expect(pipeline.stepsIndex.get('a')?.slots.append.mock.calls[0]).toMatchObject(['a'])
+    expect(pipeline.stepsIndex.get('b')?.slots.append.mock.calls[0]).toMatchObject(['b'])
   })
   test('extension can provide own function to slot on just one of a set of hooks', async () => {
     const result = await run(async ({ a }) => {
       return a({ using: { append: () => 'x' } })
     })
-    expect(stepsIndex.a.slots.append).not.toBeCalled()
-    expect(stepsIndex.b.slots.append.mock.calls[0]).toMatchObject(['b'])
+    expect(pipeline.stepsIndex.get('a')?.slots.append).not.toBeCalled()
+    expect(pipeline.stepsIndex.get('b')?.slots.append.mock.calls[0]).toMatchObject(['b'])
     expect(result).toEqual(successfulResult({ value: 'initial+x+b' }))
   })
   test('extension can provide own functions to slots on multiple of a set of hooks', async () => {
@@ -387,19 +390,19 @@ describe('slots', () => {
       const { b } = await a({ using: { append: () => 'x' } })
       return b({ using: { append: () => 'y' } })
     })
-    expect(stepsIndex.a.slots.append).not.toBeCalled()
-    expect(stepsIndex.b.slots.append).not.toBeCalled()
+    expect(pipeline.stepsIndex.get('a')?.slots.append).not.toBeCalled()
+    expect(pipeline.stepsIndex.get('b')?.slots.append).not.toBeCalled()
     expect(result).toEqual(successfulResult({ value: 'initial+x+y' }))
   })
 })
 
-describe('private hook parameter - previous', () => {
+describe('step runner parameter - previous', () => {
   test('contains inputs of previous hooks', async () => {
     await run(async ({ a }) => {
       return a()
     })
-    expect(stepsIndex.a.run.mock.calls[0]?.[0].previous).toEqual({})
-    expect(stepsIndex.b.run.mock.calls[0]?.[0].previous).toEqual({ a: { input: initialInput2 } })
+    expect(pipeline.stepsIndex.get('a')?.run.mock.calls[0]?.[2]).toEqual({})
+    expect(pipeline.stepsIndex.get('b')?.run.mock.calls[0]?.[2]).toEqual({ a: { input: initialInput2 } })
   })
 
   test('contains the final input actually passed to the hook', async () => {
@@ -407,7 +410,52 @@ describe('private hook parameter - previous', () => {
     await run(async ({ a }) => {
       return a({ input: customInput })
     })
-    expect(stepsIndex.a.run.mock.calls[0]?.[0].previous).toEqual({})
-    expect(stepsIndex.b.run.mock.calls[0]?.[0].previous).toEqual({ a: { input: customInput } })
+    expect(pipeline.stepsIndex.get('a')?.run.mock.calls[0]?.[2]).toEqual({})
+    expect(pipeline.stepsIndex.get('b')?.run.mock.calls[0]?.[2]).toEqual({ a: { input: customInput } })
+  })
+})
+
+describe('overloads', () => {
+  test('overloaded step runners are run', async () => {
+    const p = Pipeline
+      .create<{ value: string }>()
+      .step('a')
+      .step('b')
+      .overload(o =>
+        o
+          .create({ discriminant: ['x', 1] })
+          .step('a', {
+            // todo make it a type error to not propagate the discriminant
+            run: (input) => ({ ...input, value: input.value + '+a' }),
+          })
+          .step('b', {
+            run: (input) => ({ value: input.value + '+b' }),
+          })
+      )
+      .done()
+    const result = await Pipeline.run(p, { initialInput: { value: 'initial', x: 1 } })
+    expect(result).toEqual(successfulResult({ value: 'initial+a+b' }))
+  })
+  test('two overloads can be used; runtime discriminant decides which one is used', async () => {
+    const p = Pipeline
+      .create<{ value: string }>()
+      .step('a')
+      .step('b')
+      .overload(o =>
+        o.create({ discriminant: ['x', 1] })
+          .step('a', { run: (input) => ({ ...input, value: input.value + '+a' }) })
+          .step('b', { run: (input) => ({ value: input.value + '+b' }) })
+      )
+      .overload(o =>
+        o
+          .create({ discriminant: ['x', 2] })
+          .step('a', { run: (input) => ({ ...input, value: input.value + '+a2' }) })
+          .step('b', { run: (input) => ({ value: input.value + '+b2' }) })
+      )
+      .done()
+    const result1 = await Pipeline.run(p, { initialInput: { value: 'initial', x: 1 } })
+    expect(result1).toEqual(successfulResult({ value: 'initial+a+b' }))
+    const result2 = await Pipeline.run(p, { initialInput: { value: 'initial', x: 2 } })
+    expect(result2).toEqual(successfulResult({ value: 'initial+a2+b2' }))
   })
 })

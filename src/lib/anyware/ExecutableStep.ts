@@ -1,7 +1,6 @@
 import type { Step } from './Step.js'
 
-export interface ExecutableStep extends Step {
-  run: (params: any) => any
+export interface ExecutableStep extends Omit<Step, 'slots' | 'input' | 'output'> {
+  slots?: Step.Slots
+  run: Step.Runner<any, any, any>
 }
-
-export interface ExecutableStepRuntime extends Omit<ExecutableStep, 'input' | 'output'> {}
