@@ -8,7 +8,7 @@
     "gen:graffle": "graffle --defaultSchemaUrl http://localhost:3000/graphql --schema ../tests/_/schemas/pokemon/graffle/schema.graphql"
   },
   "devDependencies": {
-    "vitepress": "^1.4.3"
+    "vitepress": "^1.5.0"
   },
   "dependencies": {
     "@shikijs/twoslash": "^1.22.2",
@@ -16,7 +16,7 @@
     "@tsconfig/node20": "^20.1.4",
     "@tsconfig/node22": "^22.0.0",
     "@tsconfig/strictest": "^2.0.5",
-    "es-toolkit": "^1.26.1",
+    "es-toolkit": "^1.27.0",
     "floating-vue": "^5.2.2",
     "globby": "^14.0.2",
     "graffle": "link:..",
