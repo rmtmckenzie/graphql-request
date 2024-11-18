@@ -6,7 +6,6 @@ import type * as SelectionSets from '../../../tests/_/schemas/kitchen-sink/graff
 import { assertEqual } from '../../lib/assert-equal.js'
 import type { Registry } from '../../types/Schema/nodes/Scalar/helpers.js'
 import type { InferResult } from './__.js'
-import type { PickSelectsPositiveIndicatorAndNotSelectAlias } from './OutputObject.js'
 
 type $<$SelectionSet extends SelectionSets.Query> = Simplify<InferResult.OperationQuery<$SelectionSet, Schema>>
 
@@ -16,14 +15,6 @@ type $WithDate<$SelectionSet extends SelectionSets.Query<$Registry>> = InferResu
   $SelectionSet,
   Schema<$Registry>
 >
-
-// dprint-ignore
-{
-	
-assertEqual<PickSelectsPositiveIndicatorAndNotSelectAlias<{ a: true }>, 'a'>()
-assertEqual<PickSelectsPositiveIndicatorAndNotSelectAlias<{ a: ['b', true]; b: true }>, 'b'>()
-
-}
 
 // dprint-ignore
 {
@@ -113,6 +104,7 @@ assertEqual<
 // union fragment
 assertEqual<$<{ unionFooBar: { ___on_Foo: { id: ['id2', true] } } }>, { unionFooBar: null | {} | { id2: null|string } }>()
 
+
 // Directive @include
 // On scalar non-nullable
 assertEqual<$<{ idNonNull: { $include: boolean } }>, { idNonNull: null|string }>()
@@ -152,6 +144,14 @@ assertEqual<$<{ id: { $skip: true } }>, { id: null }>()
 // scalar
 assertEqual<$<{ stringWithArgs: true }>, { stringWithArgs: null | string }>()
 assertEqual<$<{ stringWithArgs: { $: { string: '' } } }>, { stringWithArgs: null | string }>()
+
+// Inline Fragment
+
+assertEqual<$<{ ___: { id: true  }}>                                                , { id: null | string }>()
+assertEqual<$<{ ___: { $include: false; id: true  }}>                               , {}>()
+assertEqual<$<{ ___: { $skip: true; id: true  }}>                                   , {}>()
+assertEqual<$<{ ___: { $skip: boolean; idNonNull: true; listIntNonNull:true }}>     , { idNonNull: string | null; listIntNonNull: number[] | null }>()
+assertEqual<$<{ ___: { $include: boolean; idNonNull: true; listIntNonNull:true }}>  , { idNonNull: string | null; listIntNonNull: number[] | null }>()
 
 // Errors
 // @ts-expect-error invalid query
