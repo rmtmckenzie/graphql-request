@@ -1,4 +1,4 @@
-import type { Tuple, ValuesOrEmptyObject } from '../../lib/prelude.js'
+import type { Tuple, UnionMerge, ValuesOrEmptyObject } from '../../lib/prelude.js'
 import type { Schema } from '../../types/Schema/__.js'
 import type { Select } from '../Select/__.js'
 import type { OutputField } from './OutputField.js'
@@ -9,21 +9,23 @@ export type Alias<
 	$Node extends Schema.OutputObject,
 	$SelectionSet,
 > =
-  ValuesOrEmptyObject<
-    {
-      [
-        $Select in keyof $SelectionSet as $SelectionSet[$Select] extends Select.SelectAlias.SelectAlias
-					? $Select
-					: never
-      ]:
-        InferSelectAlias<
-          // @ts-expect-error We know this satisfies the alias type constraint b/c of the key filtering above.
-          $SelectionSet[$Select],
-          $Select,
-          $Schema,
-          $Node
-        >
-    }
+ UnionMerge<
+    ValuesOrEmptyObject<
+      {
+        [
+          $Select in keyof $SelectionSet as $SelectionSet[$Select] extends Select.SelectAlias.SelectAlias
+            ? $Select
+            : never
+        ]:
+          InferSelectAlias<
+            // @ts-expect-error We know this satisfies the alias type constraint b/c of the key filtering above.
+            $SelectionSet[$Select],
+            $Select,
+            $Schema,
+            $Node
+          >
+      }
+    >
   >
 
 // dprint-ignore
