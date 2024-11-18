@@ -150,8 +150,8 @@ assertEqual<$<{ stringWithArgs: { $: { string: '' } } }>, { stringWithArgs: null
 assertEqual<$<{ ___: { id: true  }}>                                                , { id: null | string }>()
 assertEqual<$<{ ___: { $include: false; id: true  }}>                               , {}>()
 assertEqual<$<{ ___: { $skip: true; id: true  }}>                                   , {}>()
-assertEqual<$<{ ___: { $skip: boolean; idNonNull: true; listIntNonNull:true }}>     , { idNonNull: string | null; listIntNonNull: number[] | null }>()
-assertEqual<$<{ ___: { $include: boolean; idNonNull: true; listIntNonNull:true }}>  , { idNonNull: string | null; listIntNonNull: number[] | null }>()
+assertEqual<$<{ ___: { $skip: boolean; id: true; listIntNonNull:true }}>            , { id?: string | null; listIntNonNull?: number[] }>()
+assertEqual<$<{ ___: { $include: boolean; id: true; listIntNonNull:true }}>         , { id?: string | null; listIntNonNull?: number[] }>()
 
 // Errors
 // @ts-expect-error invalid query

@@ -60,14 +60,10 @@ type InlineFragmentKey_<$SelectionSet extends object, $Schema extends Schema, $N
     : IsNeverViaDirective<$SelectionSet> extends true
       ? {}
       : IsNullableViaDirective<$SelectionSet> extends true
-        ? MakeObjectSelectionResultNullable<
+        ? Partial<
             OutputObject_<OmitDirectiveAndArgumentKeys<$SelectionSet>, $Schema, $Node>
           >
         : OutputObject_<OmitDirectiveAndArgumentKeys<$SelectionSet>, $Schema, $Node>
-
-type MakeObjectSelectionResultNullable<$Result extends object> = {
-  [_ in keyof $Result]: null | $Result[_]
-}
 
 // dprint-ignore
 type PickPositiveIndicatorAndNotAlias<$SelectionSet> = StringKeyof<
