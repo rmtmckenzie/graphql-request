@@ -49,13 +49,11 @@ export interface $MethodsSelect {
 //
 
 export interface Query {
-  <$SelectionSet extends object>(selectionSet: $$Utilities.Exact<$SelectionSet, $$SelectionSets.Query>): $SelectionSet;
+  <$SelectionSet>(selectionSet: $$Utilities.Exact<$SelectionSet, $$SelectionSets.Query>): $SelectionSet;
 }
 
 export interface Mutation {
-  <$SelectionSet extends object>(
-    selectionSet: $$Utilities.Exact<$SelectionSet, $$SelectionSets.Mutation>,
-  ): $SelectionSet;
+  <$SelectionSet>(selectionSet: $$Utilities.Exact<$SelectionSet, $$SelectionSets.Mutation>): $SelectionSet;
 }
 
 //
@@ -75,49 +73,37 @@ export interface Mutation {
 //
 
 export interface BattleRoyale {
-  <$SelectionSet extends object>(
-    selectionSet: $$Utilities.Exact<$SelectionSet, $$SelectionSets.BattleRoyale>,
-  ): $SelectionSet;
+  <$SelectionSet>(selectionSet: $$Utilities.Exact<$SelectionSet, $$SelectionSets.BattleRoyale>): $SelectionSet;
 }
 
 export interface BattleTrainer {
-  <$SelectionSet extends object>(
-    selectionSet: $$Utilities.Exact<$SelectionSet, $$SelectionSets.BattleTrainer>,
-  ): $SelectionSet;
+  <$SelectionSet>(selectionSet: $$Utilities.Exact<$SelectionSet, $$SelectionSets.BattleTrainer>): $SelectionSet;
 }
 
 export interface BattleWild {
-  <$SelectionSet extends object>(
-    selectionSet: $$Utilities.Exact<$SelectionSet, $$SelectionSets.BattleWild>,
-  ): $SelectionSet;
+  <$SelectionSet>(selectionSet: $$Utilities.Exact<$SelectionSet, $$SelectionSets.BattleWild>): $SelectionSet;
 }
 
 export interface CombatantMultiPokemon {
-  <$SelectionSet extends object>(
-    selectionSet: $$Utilities.Exact<$SelectionSet, $$SelectionSets.CombatantMultiPokemon>,
-  ): $SelectionSet;
+  <$SelectionSet>(selectionSet: $$Utilities.Exact<$SelectionSet, $$SelectionSets.CombatantMultiPokemon>): $SelectionSet;
 }
 
 export interface CombatantSinglePokemon {
-  <$SelectionSet extends object>(
+  <$SelectionSet>(
     selectionSet: $$Utilities.Exact<$SelectionSet, $$SelectionSets.CombatantSinglePokemon>,
   ): $SelectionSet;
 }
 
 export interface Patron {
-  <$SelectionSet extends object>(selectionSet: $$Utilities.Exact<$SelectionSet, $$SelectionSets.Patron>): $SelectionSet;
+  <$SelectionSet>(selectionSet: $$Utilities.Exact<$SelectionSet, $$SelectionSets.Patron>): $SelectionSet;
 }
 
 export interface Pokemon {
-  <$SelectionSet extends object>(
-    selectionSet: $$Utilities.Exact<$SelectionSet, $$SelectionSets.Pokemon>,
-  ): $SelectionSet;
+  <$SelectionSet>(selectionSet: $$Utilities.Exact<$SelectionSet, $$SelectionSets.Pokemon>): $SelectionSet;
 }
 
 export interface Trainer {
-  <$SelectionSet extends object>(
-    selectionSet: $$Utilities.Exact<$SelectionSet, $$SelectionSets.Trainer>,
-  ): $SelectionSet;
+  <$SelectionSet>(selectionSet: $$Utilities.Exact<$SelectionSet, $$SelectionSets.Trainer>): $SelectionSet;
 }
 
 //
@@ -137,7 +123,7 @@ export interface Trainer {
 //
 
 export interface Battle {
-  <$SelectionSet extends object>(selectionSet: $$Utilities.Exact<$SelectionSet, $$SelectionSets.Battle>): $SelectionSet;
+  <$SelectionSet>(selectionSet: $$Utilities.Exact<$SelectionSet, $$SelectionSets.Battle>): $SelectionSet;
 }
 
 //
@@ -157,5 +143,5 @@ export interface Battle {
 //
 
 export interface Being {
-  <$SelectionSet extends object>(selectionSet: $$Utilities.Exact<$SelectionSet, $$SelectionSets.Being>): $SelectionSet;
+  <$SelectionSet>(selectionSet: $$Utilities.Exact<$SelectionSet, $$SelectionSets.Being>): $SelectionSet;
 }

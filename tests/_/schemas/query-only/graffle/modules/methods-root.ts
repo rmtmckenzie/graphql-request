@@ -4,14 +4,14 @@ import * as $$Schema from './schema.js'
 import * as $$SelectionSets from './selection-sets.js'
 
 export interface QueryMethods<$Context extends $$Utilities.Context> {
-  $batch: <$SelectionSet extends object>(
+  $batch: <$SelectionSet>(
     selectionSet: $$Utilities.Exact<$SelectionSet, $$SelectionSets.Query<$Context['scalars']>>,
   ) => Promise<
     $$Utilities.SimplifyExcept<
       $Context['scalars']['typesDecoded'],
       $$Utilities.HandleOutput<
         $Context,
-        InferResult.OperationQuery<$SelectionSet, $$Schema.Schema<$Context['scalars']>>
+        InferResult.OperationQuery<$$Utilities.AssertExtendsObject<$SelectionSet>, $$Schema.Schema<$Context['scalars']>>
       >
     >
   >
@@ -25,7 +25,7 @@ export interface QueryMethods<$Context extends $$Utilities.Context> {
     >
   >
 
-  id: <$SelectionSet extends object>(
+  id: <$SelectionSet>(
     selectionSet?: $$Utilities.Exact<$SelectionSet, $$SelectionSets.Query.id<$Context['scalars']>>,
   ) => Promise<
     $$Utilities.SimplifyExcept<
@@ -38,7 +38,7 @@ export interface QueryMethods<$Context extends $$Utilities.Context> {
     >
   >
 
-  idNonNull: <$SelectionSet extends object>(
+  idNonNull: <$SelectionSet>(
     selectionSet?: $$Utilities.Exact<$SelectionSet, $$SelectionSets.Query.idNonNull<$Context['scalars']>>,
   ) => Promise<
     $$Utilities.SimplifyExcept<

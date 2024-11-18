@@ -4,16 +4,19 @@ import { DateScalar } from '../../../tests/_/fixtures/scalars.js'
 import type { db } from '../../../tests/_/schemas/db.js'
 import { Graffle } from '../../../tests/_/schemas/kitchen-sink/graffle/__.js'
 import * as Schema from '../../../tests/_/schemas/kitchen-sink/schema.js'
+import { Graffle as Pokemon } from '../../../tests/_/schemas/pokemon/graffle/__.js'
 
 const graffle = Graffle.create({ schema: Schema.schema }).scalar(DateScalar)
 
-const x = await graffle.query.id({ $include: false })
+// const pokemons = await Pokemon.create().query.pokemons({id:true})
+
 // dprint-ignore
 test(`query`, async () => {
+  expectTypeOf(await graffle.query.object({id:['id2',true]})).toEqualTypeOf<{id2:null|string} | null>()
   // scalar
   expectTypeOf(await graffle.query.id()).toEqualTypeOf<string | null>()
   // scalar none-nullable
-  expectTypeOf(await graffle.query.idNonNull()).toEqualTypeOf<null | string>()
+  expectTypeOf(await graffle.query.idNonNull()).toEqualTypeOf<string>()
   // scalar with optional arguments
   expectTypeOf<Parameters<typeof graffle.query.stringWithArgs>>().toEqualTypeOf<[input?: Graffle.SelectionSets.Query.stringWithArgs]>()
   // scalar with required arguments
@@ -23,15 +26,13 @@ test(`query`, async () => {
 
   // scalar with explicit indicators
   // positive indicator
-  expectTypeOf(await graffle.query.idNonNull(true)).toEqualTypeOf<null |string>()
+  expectTypeOf(await graffle.query.idNonNull(true)).toEqualTypeOf<string>()
   // negative indicator
   // todo
   // expectTypeOf(await graffle.query.idNonNull(false)).toEqualTypeOf<null>()
   // negative indicator via directive
   // todo
   // expectTypeOf(await graffle.query.idNonNull({ $skip: false })).toEqualTypeOf<null>()
-
-  const x = await graffle.query.dateObject1({ $scalars: true })
 
   // object
   expectTypeOf(graffle.query.dateObject1({ date1: true })).resolves.toEqualTypeOf<{ date1: Date | null } | null>()

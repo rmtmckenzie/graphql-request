@@ -4,14 +4,17 @@ import * as $$Schema from './schema.js'
 import * as $$SelectionSets from './selection-sets.js'
 
 export interface MutationMethods<$Context extends $$Utilities.Context> {
-  $batch: <$SelectionSet extends object>(
+  $batch: <$SelectionSet>(
     selectionSet: $$Utilities.Exact<$SelectionSet, $$SelectionSets.Mutation<$Context['scalars']>>,
   ) => Promise<
     $$Utilities.SimplifyExcept<
       $Context['scalars']['typesDecoded'],
       $$Utilities.HandleOutput<
         $Context,
-        InferResult.OperationMutation<$SelectionSet, $$Schema.Schema<$Context['scalars']>>
+        InferResult.OperationMutation<
+          $$Utilities.AssertExtendsObject<$SelectionSet>,
+          $$Schema.Schema<$Context['scalars']>
+        >
       >
     >
   >
@@ -25,7 +28,7 @@ export interface MutationMethods<$Context extends $$Utilities.Context> {
     >
   >
 
-  id: <$SelectionSet extends object>(
+  id: <$SelectionSet>(
     selectionSet?: $$Utilities.Exact<$SelectionSet, $$SelectionSets.Mutation.id<$Context['scalars']>>,
   ) => Promise<
     $$Utilities.SimplifyExcept<
@@ -38,7 +41,7 @@ export interface MutationMethods<$Context extends $$Utilities.Context> {
     >
   >
 
-  idNonNull: <$SelectionSet extends object>(
+  idNonNull: <$SelectionSet>(
     selectionSet?: $$Utilities.Exact<$SelectionSet, $$SelectionSets.Mutation.idNonNull<$Context['scalars']>>,
   ) => Promise<
     $$Utilities.SimplifyExcept<

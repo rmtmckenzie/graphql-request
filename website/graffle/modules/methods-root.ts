@@ -4,14 +4,14 @@ import * as $$Schema from "./schema.js";
 import * as $$SelectionSets from "./selection-sets.js";
 
 export interface QueryMethods<$Context extends $$Utilities.Context> {
-  $batch: <$SelectionSet extends object>(
+  $batch: <$SelectionSet>(
     selectionSet: $$Utilities.Exact<$SelectionSet, $$SelectionSets.Query<$Context["scalars"]>>,
   ) => Promise<
     $$Utilities.SimplifyExcept<
       $Context["scalars"]["typesDecoded"],
       $$Utilities.HandleOutput<
         $Context,
-        InferResult.OperationQuery<$SelectionSet, $$Schema.Schema<$Context["scalars"]>>
+        InferResult.OperationQuery<$$Utilities.AssertExtendsObject<$SelectionSet>, $$Schema.Schema<$Context["scalars"]>>
       >
     >
   >;
@@ -25,7 +25,7 @@ export interface QueryMethods<$Context extends $$Utilities.Context> {
     >
   >;
 
-  battles: <$SelectionSet extends object>(
+  battles: <$SelectionSet>(
     selectionSet: $$Utilities.Exact<$SelectionSet, $$SelectionSets.Query.battles<$Context["scalars"]>>,
   ) => Promise<
     $$Utilities.SimplifyExcept<
@@ -38,7 +38,7 @@ export interface QueryMethods<$Context extends $$Utilities.Context> {
     >
   >;
 
-  beings: <$SelectionSet extends object>(
+  beings: <$SelectionSet>(
     selectionSet: $$Utilities.Exact<$SelectionSet, $$SelectionSets.Query.beings<$Context["scalars"]>>,
   ) => Promise<
     $$Utilities.SimplifyExcept<
@@ -51,7 +51,7 @@ export interface QueryMethods<$Context extends $$Utilities.Context> {
     >
   >;
 
-  pokemonByName: <$SelectionSet extends object>(
+  pokemonByName: <$SelectionSet>(
     selectionSet: $$Utilities.Exact<$SelectionSet, $$SelectionSets.Query.pokemonByName<$Context["scalars"]>>,
   ) => Promise<
     $$Utilities.SimplifyExcept<
@@ -64,7 +64,7 @@ export interface QueryMethods<$Context extends $$Utilities.Context> {
     >
   >;
 
-  pokemons: <$SelectionSet extends object>(
+  pokemons: <$SelectionSet>(
     selectionSet: $$Utilities.Exact<$SelectionSet, $$SelectionSets.Query.pokemons<$Context["scalars"]>>,
   ) => Promise<
     $$Utilities.SimplifyExcept<
@@ -77,7 +77,7 @@ export interface QueryMethods<$Context extends $$Utilities.Context> {
     >
   >;
 
-  trainerByName: <$SelectionSet extends object>(
+  trainerByName: <$SelectionSet>(
     selectionSet: $$Utilities.Exact<$SelectionSet, $$SelectionSets.Query.trainerByName<$Context["scalars"]>>,
   ) => Promise<
     $$Utilities.SimplifyExcept<
@@ -90,7 +90,7 @@ export interface QueryMethods<$Context extends $$Utilities.Context> {
     >
   >;
 
-  trainers: <$SelectionSet extends object>(
+  trainers: <$SelectionSet>(
     selectionSet: $$Utilities.Exact<$SelectionSet, $$SelectionSets.Query.trainers<$Context["scalars"]>>,
   ) => Promise<
     $$Utilities.SimplifyExcept<
@@ -105,14 +105,17 @@ export interface QueryMethods<$Context extends $$Utilities.Context> {
 }
 
 export interface MutationMethods<$Context extends $$Utilities.Context> {
-  $batch: <$SelectionSet extends object>(
+  $batch: <$SelectionSet>(
     selectionSet: $$Utilities.Exact<$SelectionSet, $$SelectionSets.Mutation<$Context["scalars"]>>,
   ) => Promise<
     $$Utilities.SimplifyExcept<
       $Context["scalars"]["typesDecoded"],
       $$Utilities.HandleOutput<
         $Context,
-        InferResult.OperationMutation<$SelectionSet, $$Schema.Schema<$Context["scalars"]>>
+        InferResult.OperationMutation<
+          $$Utilities.AssertExtendsObject<$SelectionSet>,
+          $$Schema.Schema<$Context["scalars"]>
+        >
       >
     >
   >;
@@ -126,7 +129,7 @@ export interface MutationMethods<$Context extends $$Utilities.Context> {
     >
   >;
 
-  addPokemon: <$SelectionSet extends object>(
+  addPokemon: <$SelectionSet>(
     selectionSet: $$Utilities.Exact<$SelectionSet, $$SelectionSets.Mutation.addPokemon<$Context["scalars"]>>,
   ) => Promise<
     $$Utilities.SimplifyExcept<

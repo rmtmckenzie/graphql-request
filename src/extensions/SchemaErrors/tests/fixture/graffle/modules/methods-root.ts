@@ -4,14 +4,14 @@ import * as $$Schema from './schema.js'
 import * as $$SelectionSets from './selection-sets.js'
 
 export interface QueryMethods<$Context extends $$Utilities.Context> {
-  $batch: <$SelectionSet extends object>(
+  $batch: <$SelectionSet>(
     selectionSet: $$Utilities.Exact<$SelectionSet, $$SelectionSets.Query<$Context['scalars']>>,
   ) => Promise<
     $$Utilities.SimplifyExcept<
       $Context['scalars']['typesDecoded'],
       $$Utilities.HandleOutput<
         $Context,
-        InferResult.OperationQuery<$SelectionSet, $$Schema.Schema<$Context['scalars']>>
+        InferResult.OperationQuery<$$Utilities.AssertExtendsObject<$SelectionSet>, $$Schema.Schema<$Context['scalars']>>
       >
     >
   >
@@ -25,7 +25,7 @@ export interface QueryMethods<$Context extends $$Utilities.Context> {
     >
   >
 
-  InputObjectNested: <$SelectionSet extends object>(
+  InputObjectNested: <$SelectionSet>(
     selectionSet?: $$Utilities.Exact<$SelectionSet, $$SelectionSets.Query.InputObjectNested<$Context['scalars']>>,
   ) => Promise<
     $$Utilities.SimplifyExcept<
@@ -38,7 +38,7 @@ export interface QueryMethods<$Context extends $$Utilities.Context> {
     >
   >
 
-  InputObjectNestedNonNull: <$SelectionSet extends object>(
+  InputObjectNestedNonNull: <$SelectionSet>(
     selectionSet: $$Utilities.Exact<$SelectionSet, $$SelectionSets.Query.InputObjectNestedNonNull<$Context['scalars']>>,
   ) => Promise<
     $$Utilities.SimplifyExcept<
@@ -53,7 +53,7 @@ export interface QueryMethods<$Context extends $$Utilities.Context> {
   /**
    * Query enum field documentation.
    */
-  abcEnum: <$SelectionSet extends object>(
+  abcEnum: <$SelectionSet>(
     selectionSet: $$Utilities.Exact<$SelectionSet, $$SelectionSets.Query.abcEnum<$Context['scalars']>>,
   ) => Promise<
     $$Utilities.SimplifyExcept<
@@ -66,7 +66,7 @@ export interface QueryMethods<$Context extends $$Utilities.Context> {
     >
   >
 
-  argInputObjectCircular: <$SelectionSet extends object>(
+  argInputObjectCircular: <$SelectionSet>(
     selectionSet?: $$Utilities.Exact<$SelectionSet, $$SelectionSets.Query.argInputObjectCircular<$Context['scalars']>>,
   ) => Promise<
     $$Utilities.SimplifyExcept<
@@ -79,7 +79,7 @@ export interface QueryMethods<$Context extends $$Utilities.Context> {
     >
   >
 
-  date: <$SelectionSet extends object>(
+  date: <$SelectionSet>(
     selectionSet?: $$Utilities.Exact<$SelectionSet, $$SelectionSets.Query.date<$Context['scalars']>>,
   ) => Promise<
     $$Utilities.SimplifyExcept<
@@ -92,7 +92,7 @@ export interface QueryMethods<$Context extends $$Utilities.Context> {
     >
   >
 
-  dateArg: <$SelectionSet extends object>(
+  dateArg: <$SelectionSet>(
     selectionSet?: $$Utilities.Exact<$SelectionSet, $$SelectionSets.Query.dateArg<$Context['scalars']>>,
   ) => Promise<
     $$Utilities.SimplifyExcept<
@@ -105,7 +105,7 @@ export interface QueryMethods<$Context extends $$Utilities.Context> {
     >
   >
 
-  dateArgInputObject: <$SelectionSet extends object>(
+  dateArgInputObject: <$SelectionSet>(
     selectionSet?: $$Utilities.Exact<$SelectionSet, $$SelectionSets.Query.dateArgInputObject<$Context['scalars']>>,
   ) => Promise<
     $$Utilities.SimplifyExcept<
@@ -118,7 +118,7 @@ export interface QueryMethods<$Context extends $$Utilities.Context> {
     >
   >
 
-  dateArgList: <$SelectionSet extends object>(
+  dateArgList: <$SelectionSet>(
     selectionSet?: $$Utilities.Exact<$SelectionSet, $$SelectionSets.Query.dateArgList<$Context['scalars']>>,
   ) => Promise<
     $$Utilities.SimplifyExcept<
@@ -131,7 +131,7 @@ export interface QueryMethods<$Context extends $$Utilities.Context> {
     >
   >
 
-  dateArgNonNull: <$SelectionSet extends object>(
+  dateArgNonNull: <$SelectionSet>(
     selectionSet: $$Utilities.Exact<$SelectionSet, $$SelectionSets.Query.dateArgNonNull<$Context['scalars']>>,
   ) => Promise<
     $$Utilities.SimplifyExcept<
@@ -144,7 +144,7 @@ export interface QueryMethods<$Context extends $$Utilities.Context> {
     >
   >
 
-  dateArgNonNullList: <$SelectionSet extends object>(
+  dateArgNonNullList: <$SelectionSet>(
     selectionSet: $$Utilities.Exact<$SelectionSet, $$SelectionSets.Query.dateArgNonNullList<$Context['scalars']>>,
   ) => Promise<
     $$Utilities.SimplifyExcept<
@@ -157,7 +157,7 @@ export interface QueryMethods<$Context extends $$Utilities.Context> {
     >
   >
 
-  dateArgNonNullListNonNull: <$SelectionSet extends object>(
+  dateArgNonNullListNonNull: <$SelectionSet>(
     selectionSet: $$Utilities.Exact<
       $SelectionSet,
       $$SelectionSets.Query.dateArgNonNullListNonNull<$Context['scalars']>
@@ -173,7 +173,7 @@ export interface QueryMethods<$Context extends $$Utilities.Context> {
     >
   >
 
-  dateInterface1: <$SelectionSet extends object>(
+  dateInterface1: <$SelectionSet>(
     selectionSet: $$Utilities.Exact<$SelectionSet, $$SelectionSets.Query.dateInterface1<$Context['scalars']>>,
   ) => Promise<
     $$Utilities.SimplifyExcept<
@@ -186,7 +186,7 @@ export interface QueryMethods<$Context extends $$Utilities.Context> {
     >
   >
 
-  dateList: <$SelectionSet extends object>(
+  dateList: <$SelectionSet>(
     selectionSet?: $$Utilities.Exact<$SelectionSet, $$SelectionSets.Query.dateList<$Context['scalars']>>,
   ) => Promise<
     $$Utilities.SimplifyExcept<
@@ -199,7 +199,7 @@ export interface QueryMethods<$Context extends $$Utilities.Context> {
     >
   >
 
-  dateListList: <$SelectionSet extends object>(
+  dateListList: <$SelectionSet>(
     selectionSet?: $$Utilities.Exact<$SelectionSet, $$SelectionSets.Query.dateListList<$Context['scalars']>>,
   ) => Promise<
     $$Utilities.SimplifyExcept<
@@ -212,7 +212,7 @@ export interface QueryMethods<$Context extends $$Utilities.Context> {
     >
   >
 
-  dateListNonNull: <$SelectionSet extends object>(
+  dateListNonNull: <$SelectionSet>(
     selectionSet?: $$Utilities.Exact<$SelectionSet, $$SelectionSets.Query.dateListNonNull<$Context['scalars']>>,
   ) => Promise<
     $$Utilities.SimplifyExcept<
@@ -225,7 +225,7 @@ export interface QueryMethods<$Context extends $$Utilities.Context> {
     >
   >
 
-  dateNonNull: <$SelectionSet extends object>(
+  dateNonNull: <$SelectionSet>(
     selectionSet?: $$Utilities.Exact<$SelectionSet, $$SelectionSets.Query.dateNonNull<$Context['scalars']>>,
   ) => Promise<
     $$Utilities.SimplifyExcept<
@@ -238,7 +238,7 @@ export interface QueryMethods<$Context extends $$Utilities.Context> {
     >
   >
 
-  dateObject1: <$SelectionSet extends object>(
+  dateObject1: <$SelectionSet>(
     selectionSet: $$Utilities.Exact<$SelectionSet, $$SelectionSets.Query.dateObject1<$Context['scalars']>>,
   ) => Promise<
     $$Utilities.SimplifyExcept<
@@ -251,7 +251,7 @@ export interface QueryMethods<$Context extends $$Utilities.Context> {
     >
   >
 
-  dateUnion: <$SelectionSet extends object>(
+  dateUnion: <$SelectionSet>(
     selectionSet: $$Utilities.Exact<$SelectionSet, $$SelectionSets.Query.dateUnion<$Context['scalars']>>,
   ) => Promise<
     $$Utilities.SimplifyExcept<
@@ -264,7 +264,7 @@ export interface QueryMethods<$Context extends $$Utilities.Context> {
     >
   >
 
-  error: <$SelectionSet extends object>(
+  error: <$SelectionSet>(
     selectionSet?: $$Utilities.Exact<$SelectionSet, $$SelectionSets.Query.error<$Context['scalars']>>,
   ) => Promise<
     $$Utilities.SimplifyExcept<
@@ -277,7 +277,7 @@ export interface QueryMethods<$Context extends $$Utilities.Context> {
     >
   >
 
-  id: <$SelectionSet extends object>(
+  id: <$SelectionSet>(
     selectionSet?: $$Utilities.Exact<$SelectionSet, $$SelectionSets.Query.id<$Context['scalars']>>,
   ) => Promise<
     $$Utilities.SimplifyExcept<
@@ -290,7 +290,7 @@ export interface QueryMethods<$Context extends $$Utilities.Context> {
     >
   >
 
-  idNonNull: <$SelectionSet extends object>(
+  idNonNull: <$SelectionSet>(
     selectionSet?: $$Utilities.Exact<$SelectionSet, $$SelectionSets.Query.idNonNull<$Context['scalars']>>,
   ) => Promise<
     $$Utilities.SimplifyExcept<
@@ -303,7 +303,7 @@ export interface QueryMethods<$Context extends $$Utilities.Context> {
     >
   >
 
-  interface: <$SelectionSet extends object>(
+  interface: <$SelectionSet>(
     selectionSet: $$Utilities.Exact<$SelectionSet, $$SelectionSets.Query.$interface<$Context['scalars']>>,
   ) => Promise<
     $$Utilities.SimplifyExcept<
@@ -316,7 +316,7 @@ export interface QueryMethods<$Context extends $$Utilities.Context> {
     >
   >
 
-  interfaceNonNull: <$SelectionSet extends object>(
+  interfaceNonNull: <$SelectionSet>(
     selectionSet: $$Utilities.Exact<$SelectionSet, $$SelectionSets.Query.interfaceNonNull<$Context['scalars']>>,
   ) => Promise<
     $$Utilities.SimplifyExcept<
@@ -329,7 +329,7 @@ export interface QueryMethods<$Context extends $$Utilities.Context> {
     >
   >
 
-  interfaceWithArgs: <$SelectionSet extends object>(
+  interfaceWithArgs: <$SelectionSet>(
     selectionSet: $$Utilities.Exact<$SelectionSet, $$SelectionSets.Query.interfaceWithArgs<$Context['scalars']>>,
   ) => Promise<
     $$Utilities.SimplifyExcept<
@@ -342,7 +342,7 @@ export interface QueryMethods<$Context extends $$Utilities.Context> {
     >
   >
 
-  listInt: <$SelectionSet extends object>(
+  listInt: <$SelectionSet>(
     selectionSet?: $$Utilities.Exact<$SelectionSet, $$SelectionSets.Query.listInt<$Context['scalars']>>,
   ) => Promise<
     $$Utilities.SimplifyExcept<
@@ -355,7 +355,7 @@ export interface QueryMethods<$Context extends $$Utilities.Context> {
     >
   >
 
-  listIntNonNull: <$SelectionSet extends object>(
+  listIntNonNull: <$SelectionSet>(
     selectionSet?: $$Utilities.Exact<$SelectionSet, $$SelectionSets.Query.listIntNonNull<$Context['scalars']>>,
   ) => Promise<
     $$Utilities.SimplifyExcept<
@@ -368,7 +368,7 @@ export interface QueryMethods<$Context extends $$Utilities.Context> {
     >
   >
 
-  listListInt: <$SelectionSet extends object>(
+  listListInt: <$SelectionSet>(
     selectionSet?: $$Utilities.Exact<$SelectionSet, $$SelectionSets.Query.listListInt<$Context['scalars']>>,
   ) => Promise<
     $$Utilities.SimplifyExcept<
@@ -381,7 +381,7 @@ export interface QueryMethods<$Context extends $$Utilities.Context> {
     >
   >
 
-  listListIntNonNull: <$SelectionSet extends object>(
+  listListIntNonNull: <$SelectionSet>(
     selectionSet?: $$Utilities.Exact<$SelectionSet, $$SelectionSets.Query.listListIntNonNull<$Context['scalars']>>,
   ) => Promise<
     $$Utilities.SimplifyExcept<
@@ -394,7 +394,7 @@ export interface QueryMethods<$Context extends $$Utilities.Context> {
     >
   >
 
-  lowerCaseUnion: <$SelectionSet extends object>(
+  lowerCaseUnion: <$SelectionSet>(
     selectionSet: $$Utilities.Exact<$SelectionSet, $$SelectionSets.Query.lowerCaseUnion<$Context['scalars']>>,
   ) => Promise<
     $$Utilities.SimplifyExcept<
@@ -407,7 +407,7 @@ export interface QueryMethods<$Context extends $$Utilities.Context> {
     >
   >
 
-  object: <$SelectionSet extends object>(
+  object: <$SelectionSet>(
     selectionSet: $$Utilities.Exact<$SelectionSet, $$SelectionSets.Query.$object<$Context['scalars']>>,
   ) => Promise<
     $$Utilities.SimplifyExcept<
@@ -420,7 +420,7 @@ export interface QueryMethods<$Context extends $$Utilities.Context> {
     >
   >
 
-  objectList: <$SelectionSet extends object>(
+  objectList: <$SelectionSet>(
     selectionSet: $$Utilities.Exact<$SelectionSet, $$SelectionSets.Query.objectList<$Context['scalars']>>,
   ) => Promise<
     $$Utilities.SimplifyExcept<
@@ -433,7 +433,7 @@ export interface QueryMethods<$Context extends $$Utilities.Context> {
     >
   >
 
-  objectListNonNull: <$SelectionSet extends object>(
+  objectListNonNull: <$SelectionSet>(
     selectionSet: $$Utilities.Exact<$SelectionSet, $$SelectionSets.Query.objectListNonNull<$Context['scalars']>>,
   ) => Promise<
     $$Utilities.SimplifyExcept<
@@ -446,7 +446,7 @@ export interface QueryMethods<$Context extends $$Utilities.Context> {
     >
   >
 
-  objectNested: <$SelectionSet extends object>(
+  objectNested: <$SelectionSet>(
     selectionSet: $$Utilities.Exact<$SelectionSet, $$SelectionSets.Query.objectNested<$Context['scalars']>>,
   ) => Promise<
     $$Utilities.SimplifyExcept<
@@ -459,7 +459,7 @@ export interface QueryMethods<$Context extends $$Utilities.Context> {
     >
   >
 
-  objectNonNull: <$SelectionSet extends object>(
+  objectNonNull: <$SelectionSet>(
     selectionSet: $$Utilities.Exact<$SelectionSet, $$SelectionSets.Query.objectNonNull<$Context['scalars']>>,
   ) => Promise<
     $$Utilities.SimplifyExcept<
@@ -472,7 +472,7 @@ export interface QueryMethods<$Context extends $$Utilities.Context> {
     >
   >
 
-  objectWithArgs: <$SelectionSet extends object>(
+  objectWithArgs: <$SelectionSet>(
     selectionSet: $$Utilities.Exact<$SelectionSet, $$SelectionSets.Query.objectWithArgs<$Context['scalars']>>,
   ) => Promise<
     $$Utilities.SimplifyExcept<
@@ -485,7 +485,7 @@ export interface QueryMethods<$Context extends $$Utilities.Context> {
     >
   >
 
-  result: <$SelectionSet extends object>(
+  result: <$SelectionSet>(
     selectionSet: $$Utilities.Exact<$SelectionSet, $$SelectionSets.Query.result<$Context['scalars']>>,
   ) => Promise<
     $$Utilities.SimplifyExcept<
@@ -498,7 +498,7 @@ export interface QueryMethods<$Context extends $$Utilities.Context> {
     >
   >
 
-  resultNonNull: <$SelectionSet extends object>(
+  resultNonNull: <$SelectionSet>(
     selectionSet: $$Utilities.Exact<$SelectionSet, $$SelectionSets.Query.resultNonNull<$Context['scalars']>>,
   ) => Promise<
     $$Utilities.SimplifyExcept<
@@ -511,7 +511,7 @@ export interface QueryMethods<$Context extends $$Utilities.Context> {
     >
   >
 
-  string: <$SelectionSet extends object>(
+  string: <$SelectionSet>(
     selectionSet?: $$Utilities.Exact<$SelectionSet, $$SelectionSets.Query.$string<$Context['scalars']>>,
   ) => Promise<
     $$Utilities.SimplifyExcept<
@@ -524,7 +524,7 @@ export interface QueryMethods<$Context extends $$Utilities.Context> {
     >
   >
 
-  stringWithArgEnum: <$SelectionSet extends object>(
+  stringWithArgEnum: <$SelectionSet>(
     selectionSet?: $$Utilities.Exact<$SelectionSet, $$SelectionSets.Query.stringWithArgEnum<$Context['scalars']>>,
   ) => Promise<
     $$Utilities.SimplifyExcept<
@@ -537,7 +537,7 @@ export interface QueryMethods<$Context extends $$Utilities.Context> {
     >
   >
 
-  stringWithArgInputObject: <$SelectionSet extends object>(
+  stringWithArgInputObject: <$SelectionSet>(
     selectionSet?: $$Utilities.Exact<
       $SelectionSet,
       $$SelectionSets.Query.stringWithArgInputObject<$Context['scalars']>
@@ -553,7 +553,7 @@ export interface QueryMethods<$Context extends $$Utilities.Context> {
     >
   >
 
-  stringWithArgInputObjectRequired: <$SelectionSet extends object>(
+  stringWithArgInputObjectRequired: <$SelectionSet>(
     selectionSet: $$Utilities.Exact<
       $SelectionSet,
       $$SelectionSets.Query.stringWithArgInputObjectRequired<$Context['scalars']>
@@ -574,7 +574,7 @@ export interface QueryMethods<$Context extends $$Utilities.Context> {
   /**
    * The given arguments are reflected back as a JSON string.
    */
-  stringWithArgs: <$SelectionSet extends object>(
+  stringWithArgs: <$SelectionSet>(
     selectionSet?: $$Utilities.Exact<$SelectionSet, $$SelectionSets.Query.stringWithArgs<$Context['scalars']>>,
   ) => Promise<
     $$Utilities.SimplifyExcept<
@@ -587,7 +587,7 @@ export interface QueryMethods<$Context extends $$Utilities.Context> {
     >
   >
 
-  stringWithListArg: <$SelectionSet extends object>(
+  stringWithListArg: <$SelectionSet>(
     selectionSet?: $$Utilities.Exact<$SelectionSet, $$SelectionSets.Query.stringWithListArg<$Context['scalars']>>,
   ) => Promise<
     $$Utilities.SimplifyExcept<
@@ -600,7 +600,7 @@ export interface QueryMethods<$Context extends $$Utilities.Context> {
     >
   >
 
-  stringWithListArgRequired: <$SelectionSet extends object>(
+  stringWithListArgRequired: <$SelectionSet>(
     selectionSet: $$Utilities.Exact<
       $SelectionSet,
       $$SelectionSets.Query.stringWithListArgRequired<$Context['scalars']>
@@ -616,7 +616,7 @@ export interface QueryMethods<$Context extends $$Utilities.Context> {
     >
   >
 
-  stringWithRequiredArg: <$SelectionSet extends object>(
+  stringWithRequiredArg: <$SelectionSet>(
     selectionSet: $$Utilities.Exact<$SelectionSet, $$SelectionSets.Query.stringWithRequiredArg<$Context['scalars']>>,
   ) => Promise<
     $$Utilities.SimplifyExcept<
@@ -629,7 +629,7 @@ export interface QueryMethods<$Context extends $$Utilities.Context> {
     >
   >
 
-  unionFooBar: <$SelectionSet extends object>(
+  unionFooBar: <$SelectionSet>(
     selectionSet: $$Utilities.Exact<$SelectionSet, $$SelectionSets.Query.unionFooBar<$Context['scalars']>>,
   ) => Promise<
     $$Utilities.SimplifyExcept<
@@ -642,7 +642,7 @@ export interface QueryMethods<$Context extends $$Utilities.Context> {
     >
   >
 
-  unionFooBarNonNull: <$SelectionSet extends object>(
+  unionFooBarNonNull: <$SelectionSet>(
     selectionSet: $$Utilities.Exact<$SelectionSet, $$SelectionSets.Query.unionFooBarNonNull<$Context['scalars']>>,
   ) => Promise<
     $$Utilities.SimplifyExcept<
@@ -655,7 +655,7 @@ export interface QueryMethods<$Context extends $$Utilities.Context> {
     >
   >
 
-  unionFooBarWithArgs: <$SelectionSet extends object>(
+  unionFooBarWithArgs: <$SelectionSet>(
     selectionSet: $$Utilities.Exact<$SelectionSet, $$SelectionSets.Query.unionFooBarWithArgs<$Context['scalars']>>,
   ) => Promise<
     $$Utilities.SimplifyExcept<
@@ -668,7 +668,7 @@ export interface QueryMethods<$Context extends $$Utilities.Context> {
     >
   >
 
-  unionObject: <$SelectionSet extends object>(
+  unionObject: <$SelectionSet>(
     selectionSet: $$Utilities.Exact<$SelectionSet, $$SelectionSets.Query.unionObject<$Context['scalars']>>,
   ) => Promise<
     $$Utilities.SimplifyExcept<
@@ -681,7 +681,7 @@ export interface QueryMethods<$Context extends $$Utilities.Context> {
     >
   >
 
-  unionObjectNonNull: <$SelectionSet extends object>(
+  unionObjectNonNull: <$SelectionSet>(
     selectionSet: $$Utilities.Exact<$SelectionSet, $$SelectionSets.Query.unionObjectNonNull<$Context['scalars']>>,
   ) => Promise<
     $$Utilities.SimplifyExcept<
@@ -696,14 +696,17 @@ export interface QueryMethods<$Context extends $$Utilities.Context> {
 }
 
 export interface MutationMethods<$Context extends $$Utilities.Context> {
-  $batch: <$SelectionSet extends object>(
+  $batch: <$SelectionSet>(
     selectionSet: $$Utilities.Exact<$SelectionSet, $$SelectionSets.Mutation<$Context['scalars']>>,
   ) => Promise<
     $$Utilities.SimplifyExcept<
       $Context['scalars']['typesDecoded'],
       $$Utilities.HandleOutput<
         $Context,
-        InferResult.OperationMutation<$SelectionSet, $$Schema.Schema<$Context['scalars']>>
+        InferResult.OperationMutation<
+          $$Utilities.AssertExtendsObject<$SelectionSet>,
+          $$Schema.Schema<$Context['scalars']>
+        >
       >
     >
   >
@@ -717,7 +720,7 @@ export interface MutationMethods<$Context extends $$Utilities.Context> {
     >
   >
 
-  id: <$SelectionSet extends object>(
+  id: <$SelectionSet>(
     selectionSet?: $$Utilities.Exact<$SelectionSet, $$SelectionSets.Mutation.id<$Context['scalars']>>,
   ) => Promise<
     $$Utilities.SimplifyExcept<
@@ -730,7 +733,7 @@ export interface MutationMethods<$Context extends $$Utilities.Context> {
     >
   >
 
-  idNonNull: <$SelectionSet extends object>(
+  idNonNull: <$SelectionSet>(
     selectionSet?: $$Utilities.Exact<$SelectionSet, $$SelectionSets.Mutation.idNonNull<$Context['scalars']>>,
   ) => Promise<
     $$Utilities.SimplifyExcept<
