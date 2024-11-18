@@ -8,8 +8,6 @@ import { Graffle as Pokemon } from '../../../tests/_/schemas/pokemon/graffle/__.
 
 const graffle = Graffle.create({ schema: Schema.schema }).scalar(DateScalar)
 
-// const pokemons = await Pokemon.create().query.pokemons({id:true})
-
 // dprint-ignore
 test(`query`, async () => {
   expectTypeOf(await graffle.query.object({id:['id2',true]})).toEqualTypeOf<{id2:null|string} | null>()
