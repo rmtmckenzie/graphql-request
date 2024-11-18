@@ -655,6 +655,14 @@ console.log(data)
             defaultValue: null,
             isDeprecated: false,
             deprecationReason: null
+          },
+          {
+            name: 'type',
+            description: null,
+            type: { kind: 'ENUM', name: 'PokemonType', ofType: null },
+            defaultValue: null,
+            isDeprecated: false,
+            deprecationReason: null
           }
         ],
         interfaces: null,
@@ -746,22 +754,6 @@ console.log(data)
                   name: null,
                   ofType: { kind: 'INTERFACE', name: 'Being', ofType: null }
                 }
-              }
-            },
-            isDeprecated: false,
-            deprecationReason: null
-          },
-          {
-            name: 'pokemon',
-            description: null,
-            args: [],
-            type: {
-              kind: 'LIST',
-              name: null,
-              ofType: {
-                kind: 'NON_NULL',
-                name: null,
-                ofType: { kind: 'OBJECT', name: 'Pokemon', ofType: null }
               }
             },
             isDeprecated: false,
