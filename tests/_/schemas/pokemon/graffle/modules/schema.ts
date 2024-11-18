@@ -537,42 +537,42 @@ export namespace Schema {
     export interface attack extends $.OutputField {
       name: 'attack'
       arguments: {}
-      inlineType: [0]
+      inlineType: [1]
       namedType: $$NamedTypes.$$Int
     }
 
     export interface birthday extends $.OutputField {
       name: 'birthday'
       arguments: {}
-      inlineType: [0]
+      inlineType: [1]
       namedType: $$NamedTypes.$$Date
     }
 
     export interface defense extends $.OutputField {
       name: 'defense'
       arguments: {}
-      inlineType: [0]
+      inlineType: [1]
       namedType: $$NamedTypes.$$Int
     }
 
     export interface hp extends $.OutputField {
       name: 'hp'
       arguments: {}
-      inlineType: [0]
+      inlineType: [1]
       namedType: $$NamedTypes.$$Int
     }
 
     export interface id extends $.OutputField {
       name: 'id'
       arguments: {}
-      inlineType: [0]
+      inlineType: [1]
       namedType: $$NamedTypes.$$ID
     }
 
     export interface name extends $.OutputField {
       name: 'name'
       arguments: {}
-      inlineType: [0]
+      inlineType: [1]
       namedType: $$NamedTypes.$$String
     }
 
@@ -586,7 +586,7 @@ export namespace Schema {
     export interface type extends $.OutputField {
       name: 'type'
       arguments: {}
-      inlineType: [0]
+      inlineType: [1]
       namedType: $$NamedTypes.$$PokemonType
     }
   }
