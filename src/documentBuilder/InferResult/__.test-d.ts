@@ -152,6 +152,8 @@ assertEqual<$<{ ___: { $include: false; id: true  }}>                           
 assertEqual<$<{ ___: { $skip: true; id: true  }}>                                   , {}>()
 assertEqual<$<{ ___: { $skip: boolean; id: true; listIntNonNull:true }}>            , { id?: string | null; listIntNonNull?: number[] }>()
 assertEqual<$<{ ___: { $include: boolean; id: true; listIntNonNull:true }}>         , { id?: string | null; listIntNonNull?: number[] }>()
+assertEqual<$<{ ___: { $include: true; id: true }}>                                 , { id: string | null }>()
+assertEqual<$<{ ___: { $skip: false; id: true }}>                                   , { id: string | null }>()
 
 // Errors
 // @ts-expect-error invalid query

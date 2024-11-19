@@ -1,4 +1,5 @@
 import type { HasRequiredKeys, IsAny, IsEmptyObject, IsNever, IsUnknown, Simplify } from 'type-fest'
+
 import type { ConfigManager } from './config-manager/__.js'
 
 /* eslint-disable */
@@ -751,3 +752,17 @@ type UnionKeys<U> = U extends any ? keyof U : never
 type UnionValue<U, K extends PropertyKey> = U extends any ? K extends keyof U ? U[K]
   : never
   : never
+
+// // dprint-ignore
+// export type IsAnyUnionMemberExtends<T, U> =
+//   true extends IsAnyUnionMemberExtends_<T, U>
+//     ? true
+//     : false
+
+// // dprint-ignore
+// type IsAnyUnionMemberExtends_<T, U> =
+//   T extends any
+//     ? T extends U
+//       ? true
+//       : never
+//     : never

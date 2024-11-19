@@ -4,6 +4,10 @@ import { type OmitKeysWithPrefix, type ToParameters, type Tuple } from './prelud
 // dprint-ignore
 {
 
+// assertEqual<IsAnyUnionMemberExtends<1|2, 1>, true>()
+// assertEqual<IsAnyUnionMemberExtends<1|2, 2>, true>()
+// assertEqual<IsAnyUnionMemberExtends<3, 2>  , false>()
+
 assertEqual<OmitKeysWithPrefix<{ a: 1; b: 2 }, 'a'>         , { a: 1; b: 2 }>()
 assertEqual<OmitKeysWithPrefix<{ foo_a: 1; b: 2 }, 'foo'>   , { b: 2 }>()
 

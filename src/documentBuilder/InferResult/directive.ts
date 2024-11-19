@@ -7,14 +7,24 @@ export type IsNeverViaDirective<$SelectionSet> =
     : false
 
 // dprint-ignore
-export type IsNullableViaDirective<$SelectionSet> =
-  $SelectionSet extends NullableSelection
-		? true
-		: false
+export type IsOptionalViaDirective<$SelectionSet> =
+  $SelectionSet extends AlwaysSelection
+    ? false
+    : $SelectionSet extends NeverSelection
+      ? false
+      : $SelectionSet extends OptionalSelection
+        ? true
+        : false
 
-type NeverSelection = Select.Directive.Include.FieldStates.Negative | Select.Directive.Skip.FieldStates.Positive
+type AlwaysSelection =
+  | Select.Directive.Include.FieldStates.Positive
+  | Select.Directive.Skip.FieldStates.Negative
 
-type NullableSelection =
+type NeverSelection =
+  | Select.Directive.Include.FieldStates.Negative
+  | Select.Directive.Skip.FieldStates.Positive
+
+type OptionalSelection =
   | Select.Directive.Include.FieldStates.Variable
   | Select.Directive.Skip.FieldStates.Variable
 

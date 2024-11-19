@@ -1,10 +1,10 @@
 /* eslint-disable */
 import { expectTypeOf, test } from 'vitest'
 import { DateScalar } from '../../../tests/_/fixtures/scalars.js'
-import type { db } from '../../../tests/_/schemas/db.js'
+// import type { db } from '../../../tests/_/schemas/db.js'
 import { Graffle } from '../../../tests/_/schemas/kitchen-sink/graffle/__.js'
 import * as Schema from '../../../tests/_/schemas/kitchen-sink/schema.js'
-import { Graffle as Pokemon } from '../../../tests/_/schemas/pokemon/graffle/__.js'
+// import { Graffle as Pokemon } from '../../../tests/_/schemas/pokemon/graffle/__.js'
 
 const graffle = Graffle.create({ schema: Schema.schema }).scalar(DateScalar)
 

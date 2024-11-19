@@ -5,7 +5,7 @@ import type { TSErrorDescriptive } from '../../lib/ts-error.js'
 import type { Schema } from '../../types/Schema/__.js'
 import type { Select } from '../Select/__.js'
 import type { Alias } from './Alias.js'
-import type { IsNeverViaDirective, IsNullableViaDirective, OmitDirectiveAndArgumentKeys } from './directive.js'
+import type { IsNeverViaDirective, IsOptionalViaDirective, OmitDirectiveAndArgumentKeys } from './directive.js'
 import type { OutputField } from './OutputField.js'
 import type { ScalarsWildcard } from './ScalarsWildcard.js'
 
@@ -61,7 +61,7 @@ type InlineFragmentKey_<$SelectionSet extends object, $Schema extends Schema, $N
     ? {}
     : IsNeverViaDirective<$SelectionSet> extends true
       ? {}
-      : IsNullableViaDirective<$SelectionSet> extends true
+      : IsOptionalViaDirective<$SelectionSet> extends true
         ? Partial<
             OutputObject_<OmitDirectiveAndArgumentKeys<$SelectionSet>, $Schema, $Node>
           >
