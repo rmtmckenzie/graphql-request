@@ -784,11 +784,11 @@ export type SimplifyDeepExcept<$ExcludeType, $Type> =
             ? null
             : never
       )
-      | (
-          undefined extends $Type
-            ? undefined
-            : never
-      )
+// | (
+//     undefined extends $Type
+//       ? undefined
+//       : never
+// )
 
 // dprint-ignore
 type SimplifyDeepExcept_<$ExcludeType, $Type> =
