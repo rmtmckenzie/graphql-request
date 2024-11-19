@@ -81,7 +81,7 @@ export const httpTransport = Anyware.Extension
       })
       .step(`exchange`, {
         slots: {
-          fetch: (requestInfo: RequestInfo): MaybePromise<Response> => fetch(requestInfo),
+          fetch: (request: Request): MaybePromise<Response> => fetch(request),
         },
         run: async (input, slots) => {
           const request = new Request(input.request.url, input.request)
