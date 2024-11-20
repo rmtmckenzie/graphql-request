@@ -1,9 +1,7 @@
+import type { Builder, Context } from '../../entrypoints/extensionkit.js'
 import { createBuilderExtension, createExtension } from '../../entrypoints/extensionkit.js'
 import { type AssertExtends, type BuilderConfig, type WithInput } from '../../entrypoints/main.js'
 import type { ConfigManager } from '../../lib/config-manager/__.js'
-// todo: no deep imports, rethink these utilities and/or how they are exported from the graffle package.
-import type { Context } from '../../client/context.js'
-import type { Builder } from '../../lib/builder/__.js'
 
 export const Throws = createExtension({
   name: `Throws`,

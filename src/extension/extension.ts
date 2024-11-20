@@ -165,7 +165,6 @@ export const createExtension = <
   definitionInput: {
     name: $Name
     normalizeConfig?: (...args: $ConfigInputParameters) => $Config
-    // normalizeConfig?: $x
     custom?: $Custom
     create: (params: { config: $Config }) => {
       builder?: $BuilderExtension

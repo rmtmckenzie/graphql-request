@@ -1,5 +1,4 @@
-import { createExtension, createTypeHooks, type Extension } from '../../extension/extension.js'
-import { Errors } from '../../lib/errors/__.js'
+import { createExtension, createTypeHooks, Errors, type Extension } from '../../entrypoints/extensionkit.js'
 import { normalizeRequestToNode } from '../../lib/grafaid/request.js'
 import { type ExcludeNullAndUndefined, isString } from '../../lib/prelude.js'
 import { isRecordLikeObject } from '../../lib/prelude.js'
