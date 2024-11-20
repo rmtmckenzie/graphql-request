@@ -17,7 +17,7 @@ export interface Builder<
    */
   extendInput: <$InputExtension extends object>() => Builder<
     $RootContext,
-    ConfigManager.UpdateOneKey<$Context, 'input', $InputExtension>
+    ConfigManager.UpdateAtKey<$Context, 'input', $InputExtension>
   >
   /**
    * TODO
@@ -53,7 +53,7 @@ interface BuilderStep<
     },
   ): Builder<
     $RootContext,
-    ConfigManager.UpdateOneKey<
+    ConfigManager.UpdateAtKey<
       $Context,
       'steps',
       & $Context['steps']

@@ -4,7 +4,8 @@ import { Graffle } from '../../../tests/_/schemas/kitchen-sink/graffle/__.js'
 import { schema } from '../../../tests/_/schemas/kitchen-sink/schema.js'
 import { Throws } from './Throws.js'
 
-const graffle = Graffle.create({ schema }).use(Throws()).throws()
+const graffle = Graffle.create({ schema }).use(Throws()).with({ output: { errors: { execution: `return` } } }).throws()
+  .throws()
 
 test(`.gql() throws if errors array non-empty`, async () => {
   await expect(graffle.gql`query { foo }`.send()).rejects.toMatchInlineSnapshot(

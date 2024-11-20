@@ -73,7 +73,7 @@ export interface Builder<$Context extends Context = Context> {
       run?: $Runner
     },
   ) => Builder<
-    ConfigManager.UpdateOneKey<
+    ConfigManager.UpdateAtKey<
       $Context,
       'steps',
       [
@@ -134,7 +134,7 @@ interface BuilderStep<$Context extends Context> {
       run?: (input: $Input, slots: $Slots, previous: GetNextStepParameterPrevious<$Context>) => $Output
     },
   ): Builder<
-    ConfigManager.UpdateOneKey<
+    ConfigManager.UpdateAtKey<
       $Context,
       'steps',
       [
@@ -162,7 +162,7 @@ interface BuilderStep<$Context extends Context> {
       run?: (input: $Input, slots: $Slots, previous: GetNextStepParameterPrevious<$Context>) => $Output
     },
   ): Builder<
-    ConfigManager.UpdateOneKey<
+    ConfigManager.UpdateAtKey<
       $Context,
       'steps',
       [

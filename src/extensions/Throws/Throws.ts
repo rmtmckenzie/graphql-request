@@ -38,11 +38,18 @@ interface BuilderExtension_<$Args extends Builder.Extension.Parameters<BuilderEx
   /**
    * TODO
    */
-  // @ts-expect-error fixme
-  throws: () => IncrementWthNewConfig<$Args, ThrowsifyConfig<$Args['context']['config']>>
+  throws: () => Builder.Definition.MaterializeWithNewContext<
+    $Args['chain'],
+    ConfigManager.UpdateAtKey<
+      $Args['context'],
+      'config',
+      // @ts-expect-error fixme
+      ThrowsifyConfig<$Args['context']['config']>
+    >
+  >
 }
 
-type ThrowsifyConfig<$BuilderConfig extends BuilderConfig> = ConfigManager.SetOne<
+type ThrowsifyConfig<$BuilderConfig extends BuilderConfig> = ConfigManager.SetAtKeyPath<
   $BuilderConfig,
   ['output', 'errors'],
   { other: 'throw'; execution: 'throw' }

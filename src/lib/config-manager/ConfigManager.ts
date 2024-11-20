@@ -150,20 +150,20 @@ export type SetProperties<$Object1 extends object, $Object2 extends object> =
 export type SetMany<$Obj extends object, $Sets extends [Path, any][]> =
   $Sets extends []                                                                        ? $Obj : 
   $Sets extends [infer $Set extends [Path, any], ...infer $SetRest extends [Path, any][]] ? SetMany<
-                                                                                              SetOne<$Obj, $Set[0], $Set[1]>,
+                                                                                              SetAtKeyPath<$Obj, $Set[0], $Set[1]>,
                                                                                               $SetRest
                                                                                             > :
                                                                                             never
 
 export type AppendAtKey<$Obj extends object, $Prop extends keyof $Obj, $Type> =
   // @ts-expect-error
-  UpdateOneKey<$Obj, $Prop, [...$Obj[$Prop], $Type]>
+  UpdateAtKey<$Obj, $Prop, [...$Obj[$Prop], $Type]>
 
 export type AppendManyAtKey<$Obj extends object, $Prop extends keyof $Obj, $Type extends any[]> =
   // @ts-expect-error
-  UpdateOneKey<$Obj, $Prop, [...$Obj[$Prop], ...$Type]>
+  UpdateAtKey<$Obj, $Prop, [...$Obj[$Prop], ...$Type]>
 
-export type UpdateOneKey<$Obj extends object, $Prop extends keyof $Obj, $Type extends $Obj[$Prop]> =
+export type UpdateAtKey<$Obj extends object, $Prop extends keyof $Obj, $Type extends $Obj[$Prop]> =
   & {
     [_ in keyof $Obj as _ extends $Prop ? never : _]: $Obj[_]
   }
@@ -172,7 +172,7 @@ export type UpdateOneKey<$Obj extends object, $Prop extends keyof $Obj, $Type ex
   }
 
 // dprint-ignore
-export type SetOne<$Obj extends object, $Path extends Path, $Value> =
+export type SetAtKeyPath<$Obj extends object, $Path extends Path, $Value> =
     Simplify<
       $Path extends []
         ? $Value extends object
