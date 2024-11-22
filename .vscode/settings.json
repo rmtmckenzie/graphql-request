@@ -4,7 +4,12 @@
     "**/__snapshots__": true,
     "**/pnpm-lock.yaml": true,
     "**/*.tsbuildinfo": true,
-    "**/.vitepress/dist": true
+    "**/.vitepress/dist": true,
+    "examples/__outputs__": true,
+    "tests/examples": true,
+    "website/content/examples": true,
+    "website/content/_snippets/examples": true,
+    "website/content/_snippets/example-links": true
   },
   "typescript.tsdk": "node_modules/typescript/lib",
   "typescript.enablePromptUseWorkspaceTsdk": true,
