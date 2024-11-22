@@ -23,14 +23,26 @@ type $WithDate<$SelectionSet extends SelectionSets.Query<$Registry>> = InferResu
 
 assertEqual<$<{ __typename: true }>, { __typename: 'Query' }>()
 
-// Scalar
-assertEqual<$<{ id: true }>, { id: null | string }>()
-// AssertEqual<RS<{ id: 1 }>, { id: null | string }>()
-// non-nullable
-assertEqual<$<{ idNonNull: true }>, { idNonNull: string }>()
+// Scalar nullable indicator positive
+assertEqual<$<{ id: true }>              , { id: null | string }>()
+// Scalar nullable indicator negative
+assertEqual<$<{ id: false }>             , {}>()
+assertEqual<$<{ id: undefined }>         , {}>()
+// scalar nullable indicator non-deterministic
+assertEqual<$<{ id: true | undefined }>  , { id?: null | string }>()
+assertEqual<$<{ id: boolean }>           , { id?: null | string }>()
+
+// scalar non-null indicator positive
+assertEqual<$<{ idNonNull: true }>             , { idNonNull: string }>()
+// scalar non-null indicator negative
+assertEqual<$<{ idNonNull: false }>            , {}>()
+assertEqual<$<{ idNonNull: undefined }>        , {}>()
+// scalar non-null indicator non-deterministic
+assertEqual<$<{ idNonNull: true | undefined }> , { idNonNull?: string }>()
+assertEqual<$<{ idNonNull: boolean }>          , { idNonNull?: string }>()
+
 // indicator negative
 assertEqual<$<{ id: true; string: false }>, { id: null | string }>()
-// AssertEqual<RS<{ id: true; string: 0 }>, { id: null | string }>()
 assertEqual<$<{ id: true; string: undefined }>, { id: null | string }>()
 
 // Custom Scalar
@@ -109,37 +121,39 @@ assertEqual<$<{ unionFooBar: { ___on_Foo: { id: ['id2', true] } } }>, { unionFoo
 
 // Directive @include
 // On scalar non-nullable
-assertEqual<$<{ idNonNull: { $include: boolean } }>, { idNonNull: null|string }>()
-assertEqual<$<{ idNonNull: { $include: {if:boolean} } }>, { idNonNull: null|string }>()
+assertEqual<$<{ idNonNull: { $include: boolean } }>, { idNonNull?: string }>()
+assertEqual<$<{ idNonNull: { $include: {if:boolean} } }>, { idNonNull?: string }>()
 assertEqual<$<{ idNonNull: { $include: true } }>, { idNonNull: string }>()
 assertEqual<$<{ idNonNull: { $include: {if:true} } }>, { idNonNull: string }>()
-assertEqual<$<{ idNonNull: { $include: false } }>, { idNonNull: null }>()
-assertEqual<$<{ idNonNull: { $include: {if:false} } }>, { idNonNull: null }>()
+assertEqual<$<{ idNonNull: { $include: false } }>, {}>()
+assertEqual<$<{ idNonNull: { $include: {if:false} } }>, {}>()
 // On scalar nullable
-assertEqual<$<{ id: { $include: boolean } }>, { id: null|string }>()
-assertEqual<$<{ id: { $include: false } }>, { id: null }>()
+assertEqual<$<{ id: { $include: boolean } }>, { id?: null|string }>()
+assertEqual<$<{ id: { $include: false } }>, {}>()
 assertEqual<$<{ id: { $include: true } }>, { id: null|string }>()
 
 // Directive @skip
 // On scalar non-nullable
-assertEqual<$<{ idNonNull: { $skip: boolean } }>, { idNonNull: null|string }>()
-assertEqual<$<{ idNonNull: { $skip: {if:boolean} } }>, { idNonNull: null|string }>()
-assertEqual<$<{ idNonNull: { $skip: true } }>, { idNonNull: null }>()
-assertEqual<$<{ idNonNull: { $skip: {if:true} } }>, { idNonNull: null }>()
+assertEqual<$<{ idNonNull: { $skip: boolean } }>, { idNonNull?: string }>()
+assertEqual<$<{ idNonNull: { $skip: {if:boolean} } }>, { idNonNull?: string }>()
+assertEqual<$<{ idNonNull: { $skip: true } }>, {}>()
+assertEqual<$<{ idNonNull: { $skip: {if:true} } }>, {}>()
 assertEqual<$<{ idNonNull: { $skip: false } }>, { idNonNull: string }>()
 assertEqual<$<{ idNonNull: { $skip: {if:false} } }>, { idNonNull: string }>()
 // On scalar nullable
-assertEqual<$<{ id: { $skip: boolean } }>, { id: null|string }>()
+assertEqual<$<{ id: { $skip: boolean } }>, { id?: null|string }>()
 assertEqual<$<{ id: { $skip: false } }>, { id: null|string }>()
-assertEqual<$<{ id: { $skip: true } }>, { id: null }>()
+assertEqual<$<{ id: { $skip: true } }>, {}>()
+
+// Directive @include
+assertEqual<$<{ objectNested: { $include: false } }>                               , {}>()
+assertEqual<$<{ objectNested: { $include: true } }>                                , { objectNested: {} | null}>()
+assertEqual<$<{ objectNested: { $include: boolean } }>                             , { objectNested?: {} | null}>()
 
 // Directive @defer
 // todo
 
 // Directive @stream
-// todo
-
-// Field Group
 // todo
 
 // Arguments
@@ -161,6 +175,6 @@ assertEqual<$<{ ___: { $skip: false; id: true }}>                               
 // @ts-expect-error invalid query
 type Result =  $<{ id2: true }>
 // unknown field
-assertEqual<Result, { id2: InferResult.Errors.UnknownFieldName<'id2', Schema.Query> }>()
+assertEqual<Result, { id2: InferResult.Errors.UnknownKey<'id2', Schema.Query> }>()
 
 }

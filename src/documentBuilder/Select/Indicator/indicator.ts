@@ -6,6 +6,14 @@ import { isPositiveIndicator, type Positive } from './positive.js'
 
 export type Indicator = UnionExpanded<Positive | Negative>
 
+// dprint-ignore
+export type IsOptionalIndicator<$SelectionSet> =
+  true | undefined extends $SelectionSet
+    ? true
+    : boolean extends $SelectionSet
+      ? true
+      : false
+
 export const isIndicator = (v: any): v is Indicator => {
   return isPositiveIndicator(v) || isNegativeIndicator(v)
 }

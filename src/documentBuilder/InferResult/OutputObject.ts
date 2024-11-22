@@ -1,11 +1,16 @@
 import type { IsNever } from 'type-fest'
 import { assertEqual } from '../../lib/assert-equal.js'
-import type { AssertExtendsObject, GetOrNever, StringKeyof } from '../../lib/prelude.js'
+import type { AssertExtendsObject, GetOrNever, PropertyKeyToString, StringKeyof } from '../../lib/prelude.js'
 import type { TSErrorDescriptive } from '../../lib/ts-error.js'
 import type { Schema } from '../../types/Schema/__.js'
 import type { Select } from '../Select/__.js'
 import type { Alias } from './Alias.js'
-import type { IsNeverViaDirective, IsOptionalViaDirective, OmitDirectiveAndArgumentKeys } from './directive.js'
+import type {
+  IsArgumentsOrDirectiveKey,
+  IsNeverViaDirective,
+  IsOptionalViaDirective,
+  OmitDirectiveAndArgumentKeys,
+} from './directive.js'
 import type { OutputField } from './OutputField.js'
 import type { ScalarsWildcard } from './ScalarsWildcard.js'
 
@@ -15,11 +20,8 @@ export type OutputObject<
   $Schema extends Schema,
   $Node extends Schema.OutputObject
 > =
-  // SimplifyExcept<
-    // $Schema['scalars']['typesDecoded'],
     & OutputObject_<$SelectionSet, $Schema, $Node>
     & InlineFragmentKeys<$SelectionSet, $Schema, $Node>
-// >
 
 // dprint-ignore
 type OutputObject_<
@@ -27,24 +29,69 @@ type OutputObject_<
   $Schema extends Schema,
   $Node extends Schema.OutputObject,
 > =
-  // Simplify<
     Select.SelectScalarsWildcard.IsSelectScalarsWildcard<$SelectionSet> extends true
       // todo this needs to be an extension and/or only available when sddm is present
       // todo what about when scalars wildcard is combined with other fields like relations?
       ? ScalarsWildcard<$SelectionSet, $Schema, $Node>
       : 
-          & NonAliasKeys<$SelectionSet, $Schema, $Node>
-          & Alias<$Schema, $Node, $SelectionSet>
-// >
+        & OtherKeys<$SelectionSet, $Schema, $Node>
+        & Alias<$Schema, $Node, $SelectionSet>
 
 // dprint-ignore
-type NonAliasKeys<$SelectionSet, $Schema extends Schema, $Node extends Schema.OutputObject> = {
-  [$Key in PickPositiveIndicatorAndNotAlias<$SelectionSet>]:
-    $Key extends keyof $Node['fields']                     
-      ? OutputField<$SelectionSet[$Key], $Node['fields'][$Key], $Schema> 
-      : Errors.UnknownFieldName<$Key, $Node>
-}
+type OtherKeys<$SelectionSet, $Schema extends Schema, $Node extends Schema.OutputObject> =
+  {
+    [
+      $Field in keyof $SelectionSet as
+        IsFieldKey<$Field> extends true
+          ? Select.Indicator.IsOptionalIndicator<$SelectionSet[$Field]> extends true
+            ? $Field
+            : IsOptionalViaDirective<$SelectionSet[$Field]> extends true
+              ? $Field
+              : never
+          : never
+    ]?:
+      $Field extends keyof $Node['fields']
+        ? OutputField<$SelectionSet[$Field], $Node['fields'][$Field], $Schema>
+        : Errors.UnknownKey<$Field, $Node>
+  }
+  &
+  {
+    [$Field in PickApplicableFieldKeys<$SelectionSet>]:
+      $Field extends keyof $Node['fields']
+        ? OutputField<$SelectionSet[$Field], $Node['fields'][$Field], $Schema>
+        : Errors.UnknownKey<$Field, $Node>
+  }
 
+// dprint-ignore
+type PickApplicableFieldKeys<$SelectionSet> = StringKeyof<
+  {
+    [
+      $Key in keyof $SelectionSet as
+        // field is e.g. foo: boolean
+        // We handle non-deterministic fields elsewhere
+        Select.Indicator.IsOptionalIndicator<$SelectionSet[$Key]> extends true
+          ? never
+          // field is e.g. foo: false
+          : $SelectionSet[$Key] extends Select.Indicator.Negative
+            ? never
+            // We handle aliases elsewhere
+            : $SelectionSet[$Key] extends any[]
+              ? never
+              // We handle inline fragments elsewhere
+              : $Key extends Select.InlineFragment.Key
+                ? never
+                : IsNeverViaDirective<$SelectionSet[$Key]> extends true
+                  ? never
+                  // We handle non-deterministic directives elsewhere
+                  : IsOptionalViaDirective<$SelectionSet[$Key]> extends true
+                    ? never
+                    // Not a field key
+                    : IsArgumentsOrDirectiveKey<$Key> extends true
+                      ? never
+                      : $Key
+    ]: 0
+  }
+>
 // dprint-ignore
 type InlineFragmentKeys<$SelectionSet extends object, $Schema extends Schema, $Node extends Schema.OutputObject> =
   InlineFragmentKey_<
@@ -67,27 +114,20 @@ type InlineFragmentKey_<$SelectionSet extends object, $Schema extends Schema, $N
           >
         : OutputObject_<OmitDirectiveAndArgumentKeys<$SelectionSet>, $Schema, $Node>
 
-// dprint-ignore
-type PickPositiveIndicatorAndNotAlias<$SelectionSet> = StringKeyof<
-  {
-    [
-      $Key in keyof $SelectionSet as $SelectionSet[$Key] extends Select.Indicator.Negative
-        ? never
-        : $SelectionSet[$Key] extends any[]
-          ? never
-          : $Key extends Select.InlineFragment.Key
-            ? never
-            : $Key
-    ]: 0
-  }
->
-
 export namespace Errors {
-  export type UnknownFieldName<
-    $FieldName extends string,
+  export type UnknownKey<
+    $Key extends PropertyKey,
     $Object extends Schema.OutputObject,
-  > = TSErrorDescriptive<'Object', `field "${$FieldName}" does not exist on object "${$Object['name']}"`>
+  > = TSErrorDescriptive<'Object', `field "${PropertyKeyToString<$Key>}" does not exist on object "${$Object['name']}"`>
 }
+
+// dprint-ignore
+export type IsFieldKey<$Key extends PropertyKey> =
+  IsArgumentsOrDirectiveKey<$Key> extends true
+    ? false
+    : Select.InlineFragment.IsInlineFragmentKey<$Key> extends true
+      ? false
+      : true
 
 //
 //
@@ -99,7 +139,7 @@ export namespace Errors {
 // dprint-ignore
 {
 	
-assertEqual<PickPositiveIndicatorAndNotAlias<{ a: true }>                 , 'a'>()
-assertEqual<PickPositiveIndicatorAndNotAlias<{ a: ['b', true]; b: true }> , 'b'>()
+assertEqual<PickApplicableFieldKeys<{ a: true }>                 , 'a'>()
+assertEqual<PickApplicableFieldKeys<{ a: ['b', true]; b: true }> , 'b'>()
 
 }

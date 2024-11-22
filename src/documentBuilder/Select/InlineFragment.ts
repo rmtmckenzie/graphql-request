@@ -8,6 +8,10 @@ export const typeConditionPRefix = `${prefix}on_`
 
 export type TypeConditionalKeyPrefix = typeof typeConditionPRefix
 
+// dprint-ignore
+export type IsInlineFragmentKey<$Key extends PropertyKey> =
+  $Key extends `${Key}${string}` ? true : false
+
 export interface On {
   _tag: 'On'
   typeOrFragmentName: string

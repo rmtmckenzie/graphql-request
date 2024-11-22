@@ -2,10 +2,21 @@ import type { SimplifyDeep } from 'type-fest'
 
 export type IsExtends<A, B> = [A] extends [B] ? true : false
 
-export type IsEqual<A, B> = [A] extends [B] ? [B] extends [A] ? true : false : false
+// dprint-ignore
+export type IsEqual<A, B> =
+  [A] extends [B]
+    ? [B] extends [A]
+      ? [keyof A] extends [keyof B]
+        ? [keyof B] extends [keyof A]
+          ? true
+          : false
+        : false
+      : false
+    : false
 type _______IsEqual = [
   IsFalse<IsEqual<string, 'a'>>,
   IsFalse<IsEqual<'a', string>>,
+  IsFalse<IsEqual<{}, { a?: string }>>,
 ]
 
 export type assertEqual<A, B> = IsEqual<A, B> extends true ? true : never

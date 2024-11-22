@@ -762,3 +762,8 @@ type IsAnyUnionMemberExtends_<T, U> =
 export type AnyAndUnknownToNever<T> = IsAny<T> extends true ? never : IsUnknown<T> extends true ? never : T
 
 export type t<T> = T extends null ? {} | null : {}
+
+export type PropertyKeyToString<$Key extends PropertyKey> = $Key extends string ? $Key
+  : $Key extends number ? $Key
+  : $Key extends symbol ? '<symbol>'
+  : never
