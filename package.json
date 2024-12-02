@@ -121,7 +121,7 @@
   "dependencies": {
     "@graphql-typed-document-node/core": "^3.2.0",
     "@molt/command": "^0.9.0",
-    "es-toolkit": "^1.28.0",
+    "es-toolkit": "^1.29.0",
     "is-plain-obj": "^4.1.0"
   },
   "peerDependencies": {
@@ -160,11 +160,11 @@
     "@types/body-parser": "^1.19.5",
     "@types/express": "^5.0.0",
     "@types/node": "^22.10.1",
-    "@typescript-eslint/eslint-plugin": "^8.16.0",
-    "@typescript-eslint/parser": "^8.16.0",
+    "@typescript-eslint/eslint-plugin": "^8.17.0",
+    "@typescript-eslint/parser": "^8.17.0",
     "async-cleanup": "^1.0.0",
     "doctoc": "^2.2.1",
-    "dprint": "^0.47.5",
+    "dprint": "^0.47.6",
     "dripip": "^0.10.0",
     "eslint": "^9.16.0",
     "eslint-config-prisma": "^0.6.0",
@@ -184,16 +184,16 @@
     "graphql-upload-minimal": "^1.6.1",
     "graphql-yoga": "^5.10.4",
     "jsdom": "^25.0.1",
-    "memfs": "^4.14.0",
+    "memfs": "^4.14.1",
     "prettier": "^3.4.1",
     "publint": "^0.2.12",
     "strip-ansi": "^7.1.0",
     "tsx": "^4.19.2",
-    "type-fest": "^4.29.0",
+    "type-fest": "^4.30.0",
     "typescript": "^5.7.2",
-    "typescript-eslint": "^8.16.0",
+    "typescript-eslint": "^8.17.0",
     "vitepress": "^1.5.0",
-    "vitest": "^2.1.6",
+    "vitest": "^2.1.8",
     "zod": "^3.23.8"
   }
 }
