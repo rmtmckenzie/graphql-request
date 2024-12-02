@@ -1,16 +1,16 @@
 import { beforeEach } from 'vitest'
-import { createExtension } from '../../src/entrypoints/main.js'
-import type { RequestPipelineSpec } from '../../src/requestPipeline/__.js'
+import { Extension } from '../../src/entrypoints/extensionkit.js'
+import type { RequestPipelineBaseDefinition } from '../../src/requestPipeline/__.js'
 
 interface SpyData {
   encode: {
-    input: RequestPipelineSpec['steps']['0']['input'] | null
+    input: RequestPipelineBaseDefinition['steps']['0']['input'] | null
   }
   pack: {
-    input: RequestPipelineSpec['steps']['1']['input'] | null
+    input: RequestPipelineBaseDefinition['steps']['1']['input'] | null
   }
   exchange: {
-    input: RequestPipelineSpec['steps']['2']['input'] | null
+    input: RequestPipelineBaseDefinition['steps']['2']['input'] | null
   }
 }
 
@@ -26,7 +26,7 @@ const emptySpyData: SpyData = {
   },
 }
 
-export const Spy = createExtension({
+export const Spy = Extension.create({
   name: `Spy`,
   custom: {
     data: emptySpyData,

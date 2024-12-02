@@ -1,25 +1,31 @@
 import type { ConfigManager } from '../../config-manager/__.js'
 import type { Tuple } from '../../prelude.js'
-import type { PipelineDef } from '../PipelineDef/__.js'
-import type { StepDef } from '../StepDef.js'
+import type { PipelineDefinition } from '../PipelineDef/__.js'
+import type { StepDefinition } from '../StepDefinition.js'
 import type { Overload } from './__.js'
 
 export const create: Create = (parameters) => {
-  const context_: Omit<Overload, 'input'> = {
+  const overload_: Omit<Overload, 'input'> = {
     discriminant: parameters.discriminant,
+    inputDefaults: parameters.inputDefaults,
     steps: {},
   }
-  const overload = context_ as Overload
+  const overload = overload_ as Overload
 
   const builder: Builder = {
     type: overload,
-    extendInput: () => builder as any,
+    config: () => builder as any,
+    defaults: (inputDefaults: object) => {
+      overload.inputDefaults = inputDefaults
+      return builder as any
+    },
+    configInit: () => builder as any,
     stepWithExtendedInput: () => builder.step as any,
     step: (name, spec) => {
       overload.steps[name] = {
         name,
         ...spec,
-      } as unknown as StepDef
+      } as unknown as StepDefinition
       return builder as any
     },
   }
@@ -27,21 +33,26 @@ export const create: Create = (parameters) => {
   return builder as any
 }
 
-export type Create<$Pipeline extends PipelineDef = PipelineDef> = <
+export type Create<$Pipeline extends PipelineDefinition = PipelineDefinition> = <
   const $DiscriminantSpec extends Overload['discriminant'],
+  const $InputDefaults extends object | undefined,
 >(
-  parameters: { discriminant: $DiscriminantSpec },
+  parameters: {
+    discriminant: $DiscriminantSpec
+    inputDefaults?: $InputDefaults
+  },
 ) => Builder<
   $Pipeline,
   {
     discriminant: $DiscriminantSpec
+    inputDefaults: $InputDefaults
     input: {}
     steps: {}
   }
 >
 
 export interface Builder<
-  $Pipeline extends PipelineDef = PipelineDef,
+  $Pipeline extends PipelineDefinition = PipelineDefinition,
   $Overload extends Overload = Overload.States.Empty,
 > {
   type: $Overload
@@ -52,9 +63,17 @@ export interface Builder<
   /**
    * TODO
    */
-  extendInput: <$InputExtension extends object>() => Builder<
+  config: <inputExtension extends object>() => Builder<
     $Pipeline,
-    Overload.Updaters.SetInput<$Overload, $InputExtension>
+    Overload.Updaters.SetInput<$Overload, inputExtension>
+  >
+  defaults: <inputDefaults extends object>(inputDefaults: inputDefaults) => Builder<
+    $Pipeline,
+    Overload.Updaters.SetInputDefaults<$Overload, inputDefaults>
+  >
+  configInit: <inputExtension extends object>() => Builder<
+    $Pipeline,
+    Overload.Updaters.SetInputInit<$Overload, inputExtension>
   >
   /**
    * TODO
@@ -67,13 +86,13 @@ export interface Builder<
 }
 
 interface StepMethod<
-  $Pipeline extends PipelineDef,
+  $Pipeline extends PipelineDefinition,
   $Overload extends Overload,
   $InputExtension extends object = {},
 > {
   <
     $Name extends $Pipeline['steps'][number]['name'],
-    $Slots extends undefined | StepDef.Slots = undefined,
+    $Slots extends undefined | StepDefinition.Slots = undefined,
     $Input =
       & InferStepInput<
         $Overload,
@@ -102,10 +121,10 @@ interface StepMethod<
 // dprint-ignore
 type InferStepInput<
   $Overload extends Overload,
-  $CurrentStep extends StepDef,
-  $PreviousStep extends StepDef | undefined,
+  $CurrentStep extends StepDefinition,
+  $PreviousStep extends StepDefinition | undefined,
 > =
-  $PreviousStep extends StepDef
+  $PreviousStep extends StepDefinition
     ? $PreviousStep['name'] extends keyof $Overload['steps']
       ? $Overload['steps'][$PreviousStep['name']]['output']
       :

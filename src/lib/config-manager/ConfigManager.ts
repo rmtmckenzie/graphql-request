@@ -1,6 +1,6 @@
 import type { IsUnknown, PartialDeep, Simplify } from 'type-fest'
 import { isDate } from 'util/types'
-import { type ExcludeUndefined, type GuardedType, isAnyFunction, isNonNullObject } from '../prelude.js'
+import { type ExcludeUndefined, type GuardedType, isAnyFunction, isNonNullObject, type Objekt } from '../prelude.js'
 
 // dprint-ignore
 export type OrDefault2<$Value, $Default> =
@@ -20,17 +20,39 @@ export type OrDefault<$Value, $Default> =
                                      $Value
 
 // dprint-ignore
-export type MergeDefaults<$Defaults extends object, $Input extends undefined | object, $CustomScalars> =
+export type MergeDefaultsShallow<
+  $Defaults extends object,
+  $Input extends undefined | object,
+> =
   $Input extends undefined
     ? $Defaults
-    : {
-        [$Key in keyof $Defaults]:
-          $Key extends keyof $Input
-            ? $Input[$Key] extends undefined
-              ? $Defaults[$Key]
-              : MergeDefaultsValues<$Defaults[$Key], ExcludeUndefined<$Input[$Key]>, $CustomScalars>
-            : $Defaults[$Key]
-      }
+    : Objekt.IsEmpty<$Input> extends true
+      ? $Defaults
+      : & Omit<$Input, keyof $Defaults>
+        & {
+          [$DefaultsKey in keyof $Defaults]:
+            $DefaultsKey extends keyof $Input
+              ? $Input[$DefaultsKey] extends undefined
+                ? $Defaults[$DefaultsKey]
+                : $Input[$DefaultsKey]
+              : $Defaults[$DefaultsKey]
+        }
+
+// dprint-ignore
+export type MergeDefaults<$Defaults extends object, $Input extends undefined | object, $CustomScalars = never> =
+  Simplify<
+    $Input extends undefined
+      ? $Defaults
+      : & Omit<$Input, keyof $Defaults>
+        & {
+            [$Key in keyof $Defaults]:
+              $Key extends keyof $Input
+                ? $Input[$Key] extends undefined
+                  ? $Defaults[$Key]
+                  : MergeDefaultsValues<$Defaults[$Key], ExcludeUndefined<$Input[$Key]>, $CustomScalars>
+                : $Defaults[$Key]
+          }
+  >
 
 // dprint-ignore
 type MergeDefaultsValues<$DefaultValue, $InputValue, $CustomScalars> =
@@ -142,13 +164,13 @@ export type GetOptional<$Value, $Path extends [...string[]]> =
                                                                           : undefined
                                                                         : $Value
 
-/**
- * Merge new properties from the second object into the first object.
- * If those properties already exist in the first object they will be overwritten.
- */
-// dprint-ignore
-export type SetProperties<$Object1 extends object, $Object2 extends object> =
-    Simplify<Omit<$Object1, keyof $Object2> & $Object2>
+// /**
+//  * Merge new properties from the second object into the first object.
+//  * If those properties already exist in the first object they will be overwritten.
+//  */
+// // dprint-ignore
+// export type SetProperties<$Object1 extends object, $Object2 extends object> =
+//     Simplify<Omit<$Object1, keyof $Object2> & $Object2>
 
 // dprint-ignore
 export type SetMany<$Obj extends object, $Sets extends [Path, any][]> =
@@ -160,7 +182,7 @@ export type SetMany<$Obj extends object, $Sets extends [Path, any][]> =
                                                                                             never
 
 // dprint-ignore
-export type UpdateKeyWithAppend<
+export type UpdateKeyWithAppendOne<
   $Obj extends object,
   $Prop extends keyof $Obj,
   $Type,
@@ -195,6 +217,34 @@ export type UpdateKeyWithIntersection<
     [_ in $PropertyName]: $Type
   }
 
+// // dprint-ignore
+// export type SetKeysExtends<
+//   $ObjConstraint extends object,
+//   $Obj extends $ObjConstraint,
+//   $NewObjValues extends Partial<$ObjConstraint>,
+// > =
+//   SetKeys<$Obj, $NewObjValues>
+
+/**
+ * Set a batch of keys on an object.
+ * Each key in the batch REPLACES the key on the target object.
+ *
+ * If the batch contains a key that does not exist on the target object,
+ * then the key is IGNORED.
+ */
+// dprint-ignore
+export type SetKeysOptional<
+  $Obj extends object,
+  $NewObjValues extends object,
+> = {
+  [_ in keyof $Obj]:
+    _ extends keyof $NewObjValues
+      ? ExcludeUndefined<$NewObjValues[_]> extends never
+        ? $Obj[_]
+        : ExcludeUndefined<$NewObjValues[_]>
+      : $Obj[_]
+}
+
 export type SetKey<
   $Obj extends object,
   $PropertyName extends keyof $Obj,
@@ -206,6 +256,36 @@ export type SetKey<
   & {
     [_ in $PropertyName]: $Type
   }
+
+export type SetKeyUnsafe<
+  $Obj extends object,
+  $PropertyName extends keyof $Obj,
+  $Type,
+> =
+  & {
+    [_ in keyof $Obj as _ extends $PropertyName ? never : _]: $Obj[_]
+  }
+  & {
+    [_ in $PropertyName]: $Type
+  }
+
+// // dprint-ignore
+// export type IntersectAtKeyPath<$Obj extends object, $Path extends Path, $Value> =
+//   $Path extends []
+//     ? $Value extends object
+//       ? $Obj & $Value
+//       : never
+//     : IntersectAtKeyPath_<$Obj, $Path, $Value>
+
+// // dprint-ignore
+// export type IntersectAtKeyPath_<$ObjOrValue, $Path extends Path, $Value> =
+//       $Path extends [infer $P1 extends string, ...infer $PN extends string[]] ?
+//         $P1 extends keyof $ObjOrValue
+//             ? $ObjOrValue & { [_ in $P1]: IntersectAtKeyPath_<$ObjOrValue[$P1], $PN, $Value> }
+//             // If we use a nice error display here (like the following comment) it will mess with the result type in variable cases.
+//              // `Error: Cannot set value at path in object. Path property "${$P1}" does not exist in object.`
+//             : never
+//         : $Value
 
 // dprint-ignore
 export type SetKeyAtPath<$Obj extends object, $Path extends Path, $Value> =

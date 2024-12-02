@@ -1,16 +1,30 @@
-import { createExtension, createTypeHooks, Errors, type Extension } from '../../entrypoints/extensionkit.js'
+import { Errors, Extension } from '../../entrypoints/extensionkit.js'
 import { normalizeRequestToNode } from '../../lib/grafaid/request.js'
 import { type ExcludeNullAndUndefined, isString } from '../../lib/prelude.js'
 import { isRecordLikeObject } from '../../lib/prelude.js'
+import type { RequestPipelineBaseInterceptor } from '../../requestPipeline/__.js'
 import { SchemaDrivenDataMap } from '../../types/SchemaDrivenDataMap/__.js'
 import type { GeneratedExtensions } from './global.js'
 import { injectTypenameOnRootResultFields } from './injectTypenameOnRootResultFields.js'
 
-export const SchemaErrors = createExtension({
+// todo we can probably remove this explicit type, its not needed, thought it might be, for excess depth error
+export interface SchemaErrors extends Extension {
+  name: `SchemaErrors`
+  config: undefined
+  onRequest: RequestPipelineBaseInterceptor
+  builder: undefined
+  transport: undefined
+  typeHooks: {
+    onRequestDocumentRootType: [OnRequestDocumentRootType_]
+    onRequestResult: [OnRequestResult_]
+  }
+}
+
+export const SchemaErrors: () => SchemaErrors = Extension.create({
   name: `SchemaErrors`,
-  create: () => {
+  create() {
     return {
-      onRequest: async ({ pack }) => {
+      async onRequest({ pack }) {
         const state = pack.input.state
         const sddm = state.schemaMap
 
@@ -67,19 +81,19 @@ export const SchemaErrors = createExtension({
 
         return result
       },
-      typeHooks: createTypeHooks<{
-        onRequestDocumentRootType: OnRequestDocumentRootType_
-        onRequestResult: OnRequestResult_
-      }>,
+      typeHooks: ($) =>
+        $
+          .onRequestDocumentRootType<OnRequestDocumentRootType_>()
+          .onRequestResult<OnRequestResult_>(),
     }
   },
 })
 
-type OnRequestDocumentRootType<$Params extends Extension.Hooks.OnRequestDocumentRootType.Params> =
+type OnRequestDocumentRootType<$Params extends Extension.TypeHooks.OnRequestDocumentRootType.Params> =
   $Params['selectionRootType']
 
 // dprint-ignore
-interface OnRequestResult<$Arguments extends Extension.Hooks.OnRequestResult.Params<GeneratedExtensions>>
+interface OnRequestResult<$Arguments extends Extension.TypeHooks.OnRequestResult.Params<GeneratedExtensions>>
   {
     result: {
       data?:
@@ -97,12 +111,12 @@ interface OnRequestResult<$Arguments extends Extension.Hooks.OnRequestResult.Par
 
 // --------- Boilerplate Types ---------
 
-interface OnRequestDocumentRootType_ extends Extension.Hooks.OnRequestDocumentRootType {
+interface OnRequestDocumentRootType_ extends Extension.TypeHooks.OnRequestDocumentRootType {
   // @ts-expect-error untyped params
   return: OnRequestDocumentRootType<this['params']>
 }
 
-interface OnRequestResult_ extends Extension.Hooks.OnRequestResult {
+interface OnRequestResult_ extends Extension.TypeHooks.OnRequestResult {
   // @ts-expect-error untyped params
   return: OnRequestResult<this['params']>
 }

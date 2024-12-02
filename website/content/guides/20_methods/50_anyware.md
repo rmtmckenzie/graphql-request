@@ -12,7 +12,7 @@ Graffle allows you to apply one or more anyware's to the request pipeline. Each 
 
 You can think of anyware like middleware (run code before and after some operation with control to manipulate input and output) except that it represents a _sequence_ of operations that form a pipeline rather than just one operation like traditional middleware.
 
-The request pipeline has five hooks: [`encode`](#encode), [`pack`](#pack), [`exchange`](#exchange), [`unpack`](#unpack), and [`decode`](#decode). You will learn more about these later.
+The request pipeline has five hooks: [`encode`](#encode), [`pack`](#pack), [`exchange`](#exchange), [`unpack`](#unpack), and [`decode`](#decode).
 
 A hook receives input and returns output. Output becomes input for the next hook except the final hook's output which becomes the pipeline result.
 
@@ -22,7 +22,7 @@ Here is a snippet with a few highlights to give you a feel for how it works (not
 import { Graffle } from 'graffle'
 // ---cut---
 Graffle
-  .create({ schema: '...' })
+  .create()
   .anyware(async ({ encode }) => {
     const { pack } = await encode() // [1]
 
@@ -49,36 +49,32 @@ Graffle
 3. This is leveraging a feature called ["slots"](#slots). We run `exchange` with its original input but modified implementation for `fetch`.
 4. This is leveraging a feature called ["short-circuiting"](#short-circuiting). We _could_ have run the rest of the hooks manually but if we don't have to. By returning the hook result we're conceptually turning any remaining hooks into automatic passthroughs.
 
-## Layers
+## Hooks
 
-There are two layers that make up the graffle request pipeline: `interface`, `transport`. Hooks are exposed at key junctures in the pipeline. The following diagram shows how hooks and layers relate.
+The following diagram shows how hooks are exposed at key junctures in the pipeline.
 
 <img class='Diagram DiagramGraffleRequest' src="/_assets/graffle-request.svg" />
 
-Each layer has a specific responsibility:
-
-1. `interface` – Bridge some type of interface to/from the standard GraphQL request/result object.
-2. `transport` – Bridge the standard GraphQL request/result object to/from some type of transport's request/response object, and execute the "exchange". As a term "Exchange" is akin to "request" but tries to convey a decoupling from any particular transport like HTTP.
+`transport` – Bridge the standard GraphQL request/result object to/from some type of transport's request/response object, and execute the "exchange". As a term "Exchange" is akin to "request" but tries to convey a decoupling from any particular transport like HTTP.
 
 ## Data
 
-The type of data flowing through the request pipeline is polymorphic reflecting the different types of each layer kind.
+The type of data flowing through the request pipeline is polymorphic reflecting the current transport.
 
 | Layer Kind  | Types           |
 | ----------- | --------------- |
-| `interface` | `typed` `raw`   |
 | `transport` | `http` `memory` |
 
-Discriminated unions are used to model this. All hook inputs share a base interface type which carries the discriminated properties of `interface` and `transport`. You can use these properties to narrow data in your anyware as needed.
+Discriminated unions are used to model this. All hook inputs share a base interface type which carries the discriminated properties of `transportType`. You can use these properties to narrow data in your anyware as needed.
 
 ```ts
 // todo twoslash
 import { Graffle } from 'graffle'
 // ---cut---
 Graffle
-  .create({ schema: 'https://...' })
+  .create()
   .anyware(async ({ encode }) => {
-    if (encode.input.interface === 'typed') {
+    if (encode.input.transportType === '...') {
       // Do something here.
     }
 
@@ -98,11 +94,6 @@ This section covers each hook in detail, ordered by their sequence in the reques
 ### Encode
 
 <p class="TitleHint">Layer: Interface</p>
-
-| When interface ... | Then ...                                                                                                   |
-| ------------------ | ---------------------------------------------------------------------------------------------------------- |
-| `typed`            | Given some input, create a GraphQL request. <br> 2. Encode any custom scalar arguments.                    |
-| `raw`              | Passthrough. The raw interface accepts GraphQL requests directly. Custom scalar arguments are not encoded. |
 
 ### Pack
 
@@ -152,15 +143,6 @@ This section covers each hook in detail, ordered by their sequence in the reques
 | `http`             | Given an HTTP response object, create a GraphQL result.    |
 | `memory`           | Passthrough. The exchange returns GraphQL results already. |
 
-### Decode
-
-<p class="TitleHint">Layer: Interface</p>
-
-| When interface ... | Then ...                                      |
-| ------------------ | --------------------------------------------- |
-| `typed`            | Decode any custom scalars in the result data. |
-| `raw`              | Passthrough. Custom scalars are not decoded.  |
-
 ## Jump-Starting
 
 <!--@include: @/_snippets/example-links/jump-start.md-->
@@ -171,7 +153,7 @@ If you want to jump straight to a specific hook other than `encode` you can do s
 import { Graffle } from 'graffle'
 // ---cut---
 Graffle
-  .create({ schema: '...' })
+  .create()
   .anyware(async ({ exchange }) => {
     // ... do something ...
     const { unpack } = await exchange()
@@ -196,7 +178,7 @@ If you want to end your work before `decode` you can do so by returning any hook
 import { Graffle } from 'graffle'
 // ---cut---
 Graffle
-  .create({ schema: '...' })
+  .create()
   .anyware(async ({ encode }) => {
     // ... do something ...
     const { pack } = await encode()
@@ -213,7 +195,7 @@ You can override the input to any hook by passing your own input:
 
 ```ts
 Graffle
-  .create({ schema: '...' })
+  .create()
   .anyware(async ({ encode }) => {
     return encode({
       input: {/* ... */},
@@ -227,7 +209,7 @@ You can access the original input of any hook from its `input` property. This is
 import { Graffle } from 'graffle'
 // ---cut---
 Graffle
-  .create({ schema: '...' })
+  .create()
   .anyware(async ({ encode }) => {
     return encode({
       input: { ...encode.input /* ... */ },
@@ -251,7 +233,7 @@ They execute in the order they were added, regardless of if it was added via an 
 
 ```ts
 Graffle
-  .create({ schema: '...' })
+  .create()
   .use(Extension1WithAnyware())
   .anyware(async ({ encode }) => {/* ... */})
   .use(Extension2WithAnyware())

@@ -668,6 +668,8 @@ export type GetOrNever<$O extends object, $P extends string> =
 // dprint-ignore
 export type AssertExtendsObject<$Type> =AssertExtends<$Type, object>
 
+export type AssertExtendsString<$Type> = AssertExtends<$Type, string>
+
 // dprint-ignore
 export type AssertExtends<$Type, $Constraint> =
   $Type extends $Constraint
@@ -698,7 +700,7 @@ export const isObjectEmpty = (object: Record<string, unknown>) => {
 
 export const toArray = <T>(value: T | T[]) => Array.isArray(value) ? value : [value]
 
-export const __: () => never = () => {
+export const __: (...args: any[]) => never = () => {
   throw new Error(`not implemented`)
 }
 
@@ -773,3 +775,9 @@ export type PropertyKeyToString<$Key extends PropertyKey> = $Key extends string 
   : never
 
 export type DiscriminantPropertyValue = string | number | symbol
+
+export const identity = <value>(value: value): value => value
+
+export type PartialOrUndefined<T> = {
+  [K in keyof T]?: T[K] | undefined
+}

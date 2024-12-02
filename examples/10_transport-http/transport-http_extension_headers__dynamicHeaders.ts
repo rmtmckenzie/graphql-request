@@ -6,10 +6,12 @@ import { Graffle } from '../../src/entrypoints/main.js'
 import { publicGraphQLSchemaEndpoints, show } from '../$/helpers.js'
 
 const graffle = Graffle
-  .create({
-    schema: publicGraphQLSchemaEndpoints.Pokemon,
+  .create()
+  .transport({
+    url: publicGraphQLSchemaEndpoints.Pokemon,
   })
   .anyware(({ pack }) => {
+    // eslint-disable-next-line
     if (pack.input.transportType !== `http`) return pack()
     return pack({
       input: {

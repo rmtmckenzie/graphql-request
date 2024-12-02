@@ -7,10 +7,12 @@ import { Graffle } from '../../src/entrypoints/main.js'
 import { publicGraphQLSchemaEndpoints } from '../$/helpers.js'
 
 Graffle
-  .create({ schema: publicGraphQLSchemaEndpoints.Pokemon })
+  .create()
+  .transport({ url: publicGraphQLSchemaEndpoints.Pokemon })
   // Notice how we **start** with the `exchange` hook, skipping the `encode` and `pack` hooks.
   .anyware(async ({ exchange }) => {
     //              ^^^^^^^^
+    // eslint-disable-next-line
     if (exchange.input.transportType !== `http`) return exchange()
 
     const mergedHeaders = new Headers(exchange.input.request.headers)

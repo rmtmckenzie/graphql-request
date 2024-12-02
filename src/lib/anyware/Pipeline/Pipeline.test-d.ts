@@ -1,5 +1,5 @@
 import { expectTypeOf, test } from 'vitest'
-import { PipelineDef } from '../_.js'
+import { PipelineDefinition } from '../_.js'
 import type { results } from '../__.test-helpers.js'
 import { type initialInput, slots, stepA } from '../__.test-helpers.js'
 import type { Config } from '../PipelineDef/Config.js'
@@ -7,7 +7,7 @@ import type { Step } from '../Step.js'
 import type { StepRunner } from '../StepRunner.js'
 import { Pipeline } from './Pipeline.js'
 
-const b0 = PipelineDef.create().input<initialInput>()
+const b0 = PipelineDefinition.create().input<initialInput>()
 
 test(`returns a pipeline`, () => {
   const p0 = b0.type
@@ -40,8 +40,8 @@ type dObject2 = { [_ in dName]: dValue2 }
 test(`overload input extensions become a pipeline union input`, () => {
   const pDef = b0
     .step(`a`)
-    .overload(o => o.create({ discriminant: d }).extendInput<{ ol1: 1 }>())
-    .overload(o => o.create({ discriminant: d2 }).extendInput<{ ol2: 2 }>())
+    .overload(o => o.create({ discriminant: d }).config<{ ol1: 1 }>())
+    .overload(o => o.create({ discriminant: d2 }).config<{ ol2: 2 }>())
     .type
   const p = Pipeline.create(pDef)
   expectTypeOf(p.input).toMatchTypeOf<

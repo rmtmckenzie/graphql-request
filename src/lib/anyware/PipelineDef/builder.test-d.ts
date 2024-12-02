@@ -2,11 +2,11 @@ import { describe, expectTypeOf, test } from 'vitest'
 import { _ } from '../../prelude.js'
 import type { initialInput } from '../__.test-helpers.js'
 import { results, slots, stepA, stepB } from '../__.test-helpers.js'
-import { PipelineDef } from './__.js'
+import { PipelineDefinition } from './__.js'
 import type { Config } from './Config.js'
 
-const b0 = PipelineDef.create().input<initialInput>()
-const b1 = PipelineDef.create().input<initialInput>().step(stepA)
+const b0 = PipelineDefinition.create().input<initialInput>()
+const b1 = PipelineDefinition.create().input<initialInput>().step(stepA)
 
 test(`initial context`, () => {
   expectTypeOf(b0.type).toMatchTypeOf<{ input: initialInput; steps: []; config: Config; overloads: [] }>()
@@ -112,7 +112,7 @@ describe(`overload`, () => {
   // overload extends input
 
   test(`overload constructor with input and discriminant`, () => {
-    expectTypeOf(b0.overload(o => o.create({ discriminant: d }).extendInput<{ x: 1 }>()).type.overloads)
+    expectTypeOf(b0.overload(o => o.create({ discriminant: d }).config<{ x: 1 }>()).type.overloads)
       .toMatchTypeOf<[{ discriminant: d; input: { x: 1 }; steps: {} }]>()
   })
 

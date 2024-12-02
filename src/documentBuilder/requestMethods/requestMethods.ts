@@ -1,49 +1,16 @@
 import { OperationTypeNode } from 'graphql'
-import type { SimplifyDeep } from 'type-fest'
-import { type Context } from '../../client/context.js'
 import { handleOutput } from '../../client/handleOutput.js'
-import type { TypeFunction } from '../../entrypoints/utilities-for-generated.js'
+import { createProperties } from '../../client/helpers.js'
 import { Anyware } from '../../lib/anyware/__.js'
-import { Builder } from '../../lib/builder/__.js'
 import type { Grafaid } from '../../lib/grafaid/__.js'
 import { getOperationDefinition } from '../../lib/grafaid/document.js'
 import { isSymbol } from '../../lib/prelude.js'
-import { type RequestPipeline, requestPipeline } from '../../requestPipeline/__.js'
-import type { GlobalRegistry } from '../../types/GlobalRegistry/GlobalRegistry.js'
+import type { RequestPipelineBase } from '../../requestPipeline/RequestPipeline.js'
+import { type Context } from '../../types/context.js'
 import { Select } from '../Select/__.js'
 import { SelectionSetGraphqlMapper } from '../SelectGraphQLMapper/__.js'
 
-export interface BuilderExtensionRequestMethods extends Builder.Extension {
-  context: Context
-  // @ts-expect-error untyped params
-  return: RequestMethods<this['params']>
-}
-
-// dprint-ignore
-export type RequestMethods<$Arguments extends Builder.Extension.Parameters<BuilderExtensionRequestMethods>> =
-  SimplifyDeep<
-    & (
-      // todo
-      // GlobalRegistry.Has<$Context['name']> extends false
-      // eslint-disable-next-line
-      // @ts-ignore passes after generation
-      GlobalRegistry.Has<$Arguments['context']['name']> extends false
-        ? {}
-        :
-          (
-            // eslint-disable-next-line
-            // @ts-ignore Passes after generation
-            & TypeFunction.Call<GlobalRegistry.GetOrDefault<$Arguments['context']['name']>['interfaces']['Root'], $Arguments['context']>
-            & {
-                // eslint-disable-next-line
-                // @ts-ignore Passes after generation
-                document: TypeFunction.Call<GlobalRegistry.GetOrDefault<$Arguments['context']['name']>['interfaces']['Document'], $Arguments['context']>
-              }
-          )
-    )
-  >
-
-export const requestMethodsProperties = Builder.Extension.create<BuilderExtensionRequestMethods>((_, context) => {
+export const requestMethodsProperties = createProperties((_, context) => {
   return {
     document: createMethodDocument(context),
     query: createMethodOperationType(context, OperationTypeNode.QUERY),
@@ -91,7 +58,7 @@ const executeRootField = async (
 
   if (result instanceof Error) return result
 
-  return state.config.output.envelope.enabled
+  return state.output.envelope.enabled
     ? result
     // @ts-expect-error
     : result[rootFieldName]
@@ -116,10 +83,7 @@ const executeDocument = async (
   document: Select.Document.DocumentNormalized,
   operationName?: string,
 ) => {
-  const transportType = state.config.transport.type
-  const url = state.config.transport.type === `http` ? state.config.transport.url : undefined
-  const schema = state.config.transport.type === `http` ? undefined : state.config.transport.schema
-
+  if (!state.transports.current) throw new Error(`No transport configured.`)
   const request = graffleMappedResultToRequest(
     SelectionSetGraphqlMapper.toGraphQL(document, {
       sddm: state.schemaMap,
@@ -130,14 +94,14 @@ const executeDocument = async (
   )
 
   const initialInput = {
+    transportType: state.transports.current,
+    ...state.transports.configurations[state.transports.current],
     state,
-    transportType,
-    url,
-    schema,
     request,
-  } as RequestPipeline['input']
+  } as RequestPipelineBase['input']
 
-  const result = await Anyware.PipelineDef.run(requestPipeline, {
+  const pipeline = Anyware.Pipeline.create(state.requestPipelineDefinition) // todo memoize
+  const result = await Anyware.PipelineDefinition.run(pipeline, {
     initialInput,
     // retryingExtension: state.retry as any,
     interceptors: state.extensions.filter(_ => _.onRequest !== undefined).map(_ => _.onRequest!) as any,

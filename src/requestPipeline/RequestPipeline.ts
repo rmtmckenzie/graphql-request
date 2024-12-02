@@ -1,15 +1,71 @@
 import type { FormattedExecutionResult } from 'graphql'
-import type { Context } from '../client/context.js'
+import type { GraffleExecutionResultEnvelope } from '../client/handleOutput.js'
 import { Anyware } from '../lib/anyware/__.js'
+import type { Config } from '../lib/anyware/PipelineDef/Config.js'
 import type { Grafaid } from '../lib/grafaid/__.js'
 import { normalizeRequestToNode } from '../lib/grafaid/request.js'
 import { isAbortError } from '../lib/prelude.js'
+import type { Context } from '../types/context.js'
 import { decodeResultData } from './CustomScalars/decode.js'
 import { encodeRequestVariables } from './CustomScalars/encode.js'
-import { httpTransport } from './extensions/httpTransport.js'
-import { memoryTransport } from './extensions/memoryTransport.js'
 
-const requestPipelineDefBuilderBase = Anyware.PipelineDef
+export namespace RequestPipeline {
+  export interface Input {
+    request: Grafaid.RequestAnalyzedInput
+    state: Context
+  }
+
+  export interface DecodeInput {
+    state: Context
+    result: FormattedExecutionResult
+  }
+
+  export interface EncodeOutput {
+    request: Grafaid.RequestAnalyzedInput
+    state: Context
+  }
+
+  export type PackInput = EncodeOutput
+
+  export type Output = GraffleExecutionResultEnvelope
+}
+
+export interface RequestPipelineBaseDefinition extends Anyware.PipelineDefinition {
+  overloads: []
+  config: Config
+  input: {
+    request: Grafaid.RequestAnalyzedInput
+    state: Context
+  }
+  steps: [{
+    name: 'encode'
+    input: RequestPipeline.Input
+    output: RequestPipeline.EncodeOutput
+    slots: {}
+  }, {
+    name: 'pack'
+    input: RequestPipeline.PackInput
+    output: {}
+    slots: {}
+  }, {
+    name: 'exchange'
+    input: {}
+    output: {}
+    slots: {}
+  }, {
+    name: 'unpack'
+    input: {}
+    output: {}
+    slots: {}
+  }, {
+    name: 'decode'
+    input: RequestPipeline.DecodeInput
+    output: RequestPipeline.Output
+    slots: {}
+  }]
+}
+
+export const requestPipelineBaseDefinition: RequestPipelineBaseDefinition = Anyware.PipelineDefinition
   .create({
     // If core errors caused by an abort error then raise it as a direct error.
     // This is an expected possible error. Possible when user cancels a request.
@@ -76,21 +132,8 @@ const requestPipelineDefBuilderBase = Anyware.PipelineDef
         : input.result
     },
   })
+  .type
 
-export type RequestPipelineSpecBase = typeof requestPipelineDefBuilderBase.type
+export type RequestPipelineBase = Anyware.Pipeline.InferFromDefinition<RequestPipelineBaseDefinition>
 
-const requestPipelineSpecBuilderFull = requestPipelineDefBuilderBase
-  .use(httpTransport)
-  .use(memoryTransport)
-
-export type RequestPipelineSpec = typeof requestPipelineSpecBuilderFull.type
-
-export const requestPipeline = Anyware.Pipeline.create(requestPipelineSpecBuilderFull.type)
-export type RequestPipeline = typeof requestPipeline
-
-export namespace requestPipeline {
-  export type ResultFailure = Anyware.PipelineDef.ResultFailure
-  // | Errors.ContextualError
-  // Possible from http transport fetch with abort controller.
-  // | DOMException
-}
+export type RequestPipelineBaseInterceptor = Anyware.Interceptor.InferFromPipeline<RequestPipelineBase>

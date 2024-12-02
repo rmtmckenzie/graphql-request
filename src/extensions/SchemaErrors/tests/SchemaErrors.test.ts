@@ -3,16 +3,18 @@ import { describe, expect, test } from 'vitest'
 import { db } from '../../../../tests/_/schemas/db.js'
 import { schema } from '../../../../tests/_/schemas/kitchen-sink/schema.js'
 import type { Errors } from '../../../lib/errors/__.js'
+import { TransportMemory } from '../../TransportMemory/TransportMemory.js'
 import { SchemaErrors } from '../runtime.js'
 import { GraffleSchemaErrors } from './fixture/graffle/__.js'
 
 const graffle = GraffleSchemaErrors
-  .create({ schema })
-  .with({
+  .create({
     output: {
       defaults: { errorChannel: `return` },
     },
   })
+  .use(TransportMemory({ schema }))
+  .transport(`memory`)
   .use(SchemaErrors())
 
 describe(`document`, () => {
@@ -82,7 +84,6 @@ test(`gql string request`, async () => {
   // todo it would be nicer to move the extension use to the fixture but how would we get the static type for that?
   // This makes me think of a feature we need to have. Make it easy to get static types of the client in its various configured states.
   const result = await graffle
-    .use(SchemaErrors())
     .gql`query { resultNonNull (case: Object1) { ... on Object1 { id } } }`
     .send()
   expect(result).toMatchObject({ resultNonNull: { __typename: `Object1`, id: `abc` } })
@@ -90,7 +91,6 @@ test(`gql string request`, async () => {
 
 test(`gql document request`, async () => {
   const result = await graffle
-    .use(SchemaErrors())
     .gql(parse(`query { resultNonNull (case: Object1) { ... on Object1 { id } } }`))
     .send()
   expect(result).toMatchObject({ resultNonNull: { __typename: `Object1`, id: `abc` } })

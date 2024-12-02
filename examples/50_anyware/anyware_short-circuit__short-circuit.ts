@@ -7,11 +7,13 @@ import { Graffle } from '../../src/entrypoints/main.js'
 import { publicGraphQLSchemaEndpoints } from '../$/helpers.js'
 
 Graffle
-  .create({ schema: publicGraphQLSchemaEndpoints.Pokemon })
+  .create()
+  .transport({ url: publicGraphQLSchemaEndpoints.Pokemon })
   .anyware(async ({ encode }) => {
     const { pack } = await encode()
     const { exchange } = await pack()
 
+    // eslint-disable-next-line
     if (exchange.input.transportType !== `http`) return exchange()
 
     const mergedHeaders = new Headers(exchange.input.request.headers)

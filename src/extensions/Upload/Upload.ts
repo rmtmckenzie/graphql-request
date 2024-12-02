@@ -1,16 +1,20 @@
-import { createExtension } from '../../entrypoints/main.js'
+import { Extension } from '../../entrypoints/extensionkit.js'
 import type { Variables } from '../../lib/grafaid/graphql.js'
 import { createBody } from './createBody.js'
+
+// todo
+// need way to have this extension rely on http extension being used
 
 /**
  * @see https://github.com/jaydenseric/graphql-multipart-request-spec
  */
-export const Upload = createExtension({
+export const Upload = Extension.create({
   name: `Upload`,
-  create: () => {
+  create() {
     return {
-      onRequest: async ({ pack }) => {
+      async onRequest({ pack }) {
         // TODO we can probably get file upload working for in-memory schemas too :)
+        // @ts-expect-error fixme
         if (pack.input.transportType !== `http`) {
           throw new Error(`Must be using http transport to use "Upload" scalar.`)
         }
@@ -21,11 +25,13 @@ export const Upload = createExtension({
         // @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Disposition
         return await pack({
           using: {
+            // @ts-expect-error fixme
             body: (input) => {
               const hasUploadScalarVariable = input.variables && isUsingUploadScalar(input.variables)
               if (!hasUploadScalarVariable) return
 
               // TODO we can probably get file upload working for in-memory schemas too :)
+              // @ts-expect-error fixme
               if (pack.input.transportType !== `http`) {
                 throw new Error(`Must be using http transport to use "Upload" scalar.`)
               }
@@ -38,6 +44,7 @@ export const Upload = createExtension({
           },
           input: {
             ...pack.input,
+            // @ts-expect-error fixme
             headers: {
               'content-type': ``,
             },

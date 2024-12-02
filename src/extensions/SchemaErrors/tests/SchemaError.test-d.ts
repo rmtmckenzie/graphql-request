@@ -1,19 +1,18 @@
 import { describe, expectTypeOf, test } from 'vitest'
-import { schema } from '../../../../tests/_/schemas/kitchen-sink/schema.js'
-import { type Extension } from '../../../extension/extension.js'
+import { type Extension } from '../../../extension/__.js'
 import { SchemaErrors } from '../runtime.js'
 import { GraffleSchemaErrors } from './fixture/graffle/__.js'
 
-const g = GraffleSchemaErrors.create({ schema }).use(SchemaErrors())
+const g = GraffleSchemaErrors.create().use(SchemaErrors())
 
 // todo move test to test suite for .use method
 test(`config type is augmented with type hook`, () => {
-  expectTypeOf<typeof g._.typeHooks.onRequestResult>().toMatchTypeOf<[Extension.Hooks.OnRequestResult]>()
+  expectTypeOf<typeof g._.typeHookOnRequestResult>().toMatchTypeOf<[Extension.TypeHooks.OnRequestResult]>()
 })
 
 test(`config type is augmented with type hook after "with"`, () => {
   const g2 = g.with({ output: { defaults: { errorChannel: `throw` } } })
-  expectTypeOf<typeof g2._.typeHooks.onRequestResult>().toMatchTypeOf<[Extension.Hooks.OnRequestResult]>()
+  expectTypeOf<typeof g2._.typeHookOnRequestResult>().toMatchTypeOf<[Extension.TypeHooks.OnRequestResult]>()
 })
 
 const resultFieldSelect =

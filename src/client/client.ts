@@ -1,94 +1,167 @@
-import {
-  type BuilderExtensionRequestMethods,
-  requestMethodsProperties,
-} from '../documentBuilder/requestMethods/requestMethods.js' // todo
-import { defaultName } from '../generator/config/defaults.js'
-import type { Builder } from '../lib/builder/__.js'
-import type { ConfigManager } from '../lib/config-manager/__.js'
-import { type Exact, proxyGet } from '../lib/prelude.js'
+import { requestMethodsProperties } from '../documentBuilder/requestMethods/requestMethods.js' // todo
+import type { Anyware } from '../lib/anyware/__.js'
+import { proxyGet } from '../lib/prelude.js'
+import type { TypeFunction } from '../lib/type-function/__.js'
+import { type ClientTransports, Context } from '../types/context.js'
 import type { GlobalRegistry } from '../types/GlobalRegistry/GlobalRegistry.js'
-import { Schema } from '../types/Schema/__.js'
-import { type BuilderExtensionAnyware, builderExtensionAnyware } from './builderExtensions/anyware.js'
-import { type BuilderExtensionInternal, builderExtensionInternal } from './builderExtensions/internal.js'
-import { type BuilderExtensionScalar, builderExtensionScalar } from './builderExtensions/scalar.js'
-import { type BuilderExtensionUse, builderExtensionUse } from './builderExtensions/use.js'
-import { type BuilderExtensionWith, builderExtensionWith } from './builderExtensions/with.js'
-import { type Context, type ContextWithoutConfig, createContext, type TypeHooksEmpty } from './context.js'
-import { type BuilderExtensionGql, builderExtensionGql } from './gql/gql.js'
-import { type InputStatic } from './Settings/Input.js'
-import { type NormalizeInput } from './Settings/InputToConfig.js'
+import { type ConfigInit, type NormalizeConfigInit, normalizeConfigInit } from './Configuration/ConfigInit.js'
+import { anywareProperties } from './properties/anyware.js'
+import { type gqlOverload, gqlProperties } from './properties/gql/gql.js'
+import { type ScalarMethod, scalarProperties, type TypeErrorMissingSchemaMap } from './properties/scalar.js'
+import { type TransportMethod, transportProperties } from './properties/transport.js'
+import { type UseMethod, useProperties } from './properties/use.js'
+import { withProperties } from './properties/with.js'
 
-// export type ClientGeneric = Builder.Definition.MaterializeGeneric<
-//   Builder.Definition.ExtendMany<
-//     Builder.Definition.Empty,
-//     [
-//       Internal_,
-//       RequestMethods_,
-//       With_,
-//       Use_,
-//       Anyware_,
-//       Gql_,
-//       Scalar_,
-//     ]
-//   >
-// >
+export type ClientEmpty = Client<Context.States.Empty, {}, {}>
+export type ClientGeneric = Client<Context, object, ExtensionChainableRegistry>
 
-export type Client<$Context extends Context> = Builder.Definition.MaterializeWith<
-  ClientDefinition,
-  $Context
+export type Client<
+  $Context extends Context, // = Context,
+  $Extension extends object, // = object,
+  $ExtensionChainable extends ExtensionChainableRegistry, // = ExtensionChainableRegistry,
+> =
+  & ClientBase<$Context, $Extension, $ExtensionChainable>
+  & $Extension
+  & {
+    [k in keyof $ExtensionChainable]: TypeFunction.Call<
+      $ExtensionChainable[k],
+      [$Context, $Extension, $ExtensionChainable]
+    >
+  }
+  & (
+    // todo
+    // GlobalRegistry.Has<$Context['name']> extends false
+    // eslint-disable-next-line
+    // @ts-ignore passes after generation
+    GlobalRegistry.Has<$Context['name']> extends false ? {}
+      : (
+        // eslint-disable-next-line
+        // @ts-ignore Passes after generation
+        & TypeFunction.Call<GlobalRegistry.GetOrDefault<$Context['name']>['interfaces']['Root'], $Context>
+        & {
+          // eslint-disable-next-line
+          // @ts-ignore Passes after generation
+          document: TypeFunction.Call<GlobalRegistry.GetOrDefault<$Context['name']>['interfaces']['Document'], $Context>
+        }
+      )
+  )
+
+export interface ClientBase<
+  $Context extends Context,
+  out $Extension extends object,
+  out $ExtensionChainable extends ExtensionChainableRegistry,
+> {
+  _: $Context
+  // _extension: $Extension
+  // _extensionChainable: $ExtensionChainable
+  extendWithPropertiesChainable: <
+    extensionChainable extends ExtensionChainable,
+  >() => Client<$Context, $Extension, $ExtensionChainable & { [_ in extensionChainable['name']]: extensionChainable }>
+  extendWithProperties: <
+    extension extends {},
+  >(extension: extension) => Client<$Context, $Extension & extension, $ExtensionChainable>
+  gql: ClientTransports.PreflightCheck<
+    $Context,
+    gqlOverload<$Context>
+  >
+  scalar: null extends $Context['schemaMap'] ? TypeErrorMissingSchemaMap
+    : ScalarMethod<
+      $Context,
+      $Extension,
+      $ExtensionChainable
+    >
+  transport: TransportMethod<
+    $Context,
+    $Extension,
+    $ExtensionChainable
+  >
+  use: UseMethod<
+    $Context,
+    $Extension,
+    $ExtensionChainable
+  >
+  anyware: (
+    interceptor: Anyware.Interceptor.InferFromPipeline<
+      Anyware.Pipeline.InferFromDefinition<$Context['requestPipelineDefinition']>
+    >,
+  ) => Client<$Context, $Extension, $ExtensionChainable>
+  with: <$ConfigInit extends ConfigInit>(
+    configInit: $ConfigInit,
+  ) => Client<
+    // @ts-expect-error
+    {
+      [_ in keyof $Context]: _ extends keyof NormalizeConfigInit<$Context['input'] & $ConfigInit>
+        ? NormalizeConfigInit<$Context['input'] & $ConfigInit>[_]
+        : $Context[_]
+    },
+    $Extension,
+    $ExtensionChainable
+  >
+}
+
+export type ExtensionChainableRegistry = {
+  [name: string]: ExtensionChainable
+}
+
+export interface ExtensionChainable extends TypeFunction {
+  name: string
+}
+
+export type ExtensionChainableArguments = [Context, object, ExtensionChainableRegistry]
+
+export const createConstructorWithContext = <$Context extends Context>(
+  context: $Context,
+): ClientConstructor<$Context> => {
+  return (configInit) => {
+    const config = normalizeConfigInit(configInit ?? {})
+
+    // @ts-expect-error
+    config.schemaMap ??= context.schemaMap
+
+    const context_ = {
+      ...context,
+      ...config,
+    }
+    const client = createWithContext(context_)
+    return client
+  }
+}
+
+export type ClientConstructor<$Context extends Context = Context.States.Empty> = <
+  const $ConfigInit extends ConfigInit = {},
+>(
+  configInit?: $ConfigInit,
+) => Client<
+  // @ts-expect-error
+  {
+    [k in keyof $Context]: k extends keyof NormalizeConfigInit<$ConfigInit> ? NormalizeConfigInit<$ConfigInit>[k]
+      : $Context[k]
+  },
+  {},
+  {}
 >
 
-type ClientDefinition = Builder.Definition.Create<[
-  BuilderExtensionInternal,
-  BuilderExtensionRequestMethods,
-  BuilderExtensionWith,
-  BuilderExtensionUse,
-  BuilderExtensionAnyware,
-  BuilderExtensionGql,
-  BuilderExtensionScalar,
-]>
-
-// dprint-ignore
-type Create = <$Input extends InputStatic>(input: Exact<$Input, InputStatic>) =>
-  // todo fixme
-  // eslint-disable-next-line
-  // @ts-ignore
-  Client<{
-    name: HandleName<$Input>
-    input: $Input
-    config: NormalizeInput<$Input>
-    schemaMap: ConfigManager.OrDefault<$Input['schemaMap'], null>
-    retry: null
-    extensions: []
-    scalars: {}
-    typeHooks: TypeHooksEmpty,
-  }>
-
-export const create: Create = (input) => {
-  const initialContext = createContext({
-    name: input.name ?? defaultName,
-    schemaMap: input.schemaMap ?? null,
-    extensions: [],
-    scalars: Schema.Scalar.Registry.empty,
-    // retry: null,
-    input,
-  })
+export const create: ClientConstructor = (configInit) => {
+  const initialContext = Context.Updaters.addConfigInit(
+    // todo remove this, client builder should never mutate context, just putting this here for now while working on other stuff.
+    structuredClone(Context.States.contextEmpty),
+    configInit ?? {},
+  )
   return createWithContext(initialContext)
 }
 
 export const createWithContext = (
-  initialContext: ContextWithoutConfig,
+  context: Context,
 ) => {
-  const context = createContext(initialContext)
-
   // @ts-expect-error ignoreme
   const clientDirect: Client = {
-    ...builderExtensionInternal(createWithContext, context),
-    ...builderExtensionGql(createWithContext, context),
-    ...builderExtensionWith(createWithContext, context),
-    ...builderExtensionUse(createWithContext, context),
-    ...builderExtensionAnyware(createWithContext, context),
-    ...builderExtensionScalar(createWithContext, context),
+    _: context,
+    ...transportProperties(createWithContext, context),
+    ...gqlProperties(createWithContext, context),
+    ...withProperties(createWithContext, context),
+    ...useProperties(createWithContext, context),
+    ...anywareProperties(createWithContext, context),
+    ...scalarProperties(createWithContext, context),
   }
 
   // todo test that access to this works without generation in a unit like test. We discovered bug and covered this in an e2e test.
@@ -102,7 +175,7 @@ export const createWithContext = (
     const onGetHandlers = context.extensions.map(_ => _.builder).filter(_ => _ !== undefined)
 
     for (const onGetHandler of onGetHandlers) {
-      const result = onGetHandler.implementation({
+      const result = onGetHandler({
         client: clientDirect,
         path,
         property,
@@ -115,6 +188,3 @@ export const createWithContext = (
 
   return clientProxy
 }
-
-type HandleName<$Input extends InputStatic> = $Input['name'] extends string ? $Input['name']
-  : GlobalRegistry.DefaultClientName

@@ -7,19 +7,18 @@ import { Graffle } from '../../entrypoints/main.js'
 import { Upload } from './Upload.js'
 
 import { type SchemaService, serveSchema } from '../../../tests/_/lib/serveSchema.js'
-import type { Client } from '../../client/client.js'
-import type { Context } from '../../entrypoints/utilities-for-generated.js'
+import type { GraffleMinimal } from '../../entrypoints/presets/__GraffleMinimal.js'
 
 let schemaServer: SchemaService
 
-let graffle: Client<Context>
+let graffle: GraffleMinimal.Client
 
 beforeAll(async () => {
   schemaServer = await serveSchema({ schema })
 })
 
 beforeEach(() => {
-  const graffle_ = Graffle.create({ schema: schemaServer.url }).use(Upload())
+  const graffle_ = Graffle.create().transport({ url: schemaServer.url }).use(Upload())
   graffle = graffle_ as any
 })
 
@@ -28,6 +27,7 @@ afterAll(async () => {
 })
 
 test(`upload`, async () => {
+  // @ts-expect-error fixme
   const data = await graffle.gql`
     mutation ($blob: Upload!) {
       readTextFile(blob: $blob)

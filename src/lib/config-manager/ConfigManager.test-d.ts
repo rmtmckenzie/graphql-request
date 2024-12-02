@@ -1,4 +1,3 @@
-import type { Context } from '../../entrypoints/utilities-for-generated.js'
 import { assertEqual } from '../assert-equal.js'
 import type { ConfigManager } from './__.js'
 
@@ -14,16 +13,27 @@ interface x1 {
 }
 
 assertEqual<
-  ConfigManager.SetProperties<x1, {
+  ConfigManager.SetKeysOptional<x1, {
     a: [1, 2]
-    b: boolean
     c: { y: 2 }
+    keyThatDoesNotExistOnX1: boolean
   }>,
-  { z: number; a: [1, 2]; b: boolean; c: { y: 2 } }
+  { z: number; a: [1, 2]; c: { y: 2 } }
 >()
 
 // dprint-ignore
 {
+
+assertEqual<ConfigManager.MergeDefaultsShallow<{x:1}, undefined>      , {x:1}>()
+assertEqual<ConfigManager.MergeDefaultsShallow<{x:1}, {}>             , {x:1}>()
+assertEqual<ConfigManager.MergeDefaultsShallow<{}, {x:1}>             , {x:1}>()
+assertEqual<ConfigManager.MergeDefaultsShallow<{x:2}, {x:1}>          , {x:1}>()
+
+assertEqual<ConfigManager.MergeDefaults<{x:1}, undefined>      , {x:1}>()
+assertEqual<ConfigManager.MergeDefaults<{x:1}, {}>             , {x:1}>()
+assertEqual<ConfigManager.MergeDefaults<{x:1}, {x:2}>          , {x:2}>()
+assertEqual<ConfigManager.MergeDefaults<{x:1}, {x:2; y:3}>     , {x:2; y:3}>()
+  
 assertEqual<ConfigManager.SetKeyAtPath<{ a: { b: 2 } }, [], { a2: 2 }>     , { a: { b: 2 }; a2: 2 }>()
 assertEqual<ConfigManager.SetKeyAtPath<{ a: { b: 2 } }, ['a'], { b: 3 }>   , { a: { b: 3 } }>()
 assertEqual<ConfigManager.SetKeyAtPath<{ a: { b: 2 } }, ['a', 'b'], 3>     , { a: { b: 3 } }>()
@@ -44,19 +54,23 @@ assertEqual<ConfigManager.SetAtPath<a1, ['a', 'b', 'c'], 9>  , { a: { b: { c: 9 
 assertEqual<ConfigManager.SetAtPath<a1, ['a', 'b2', 'c'], 9> , { a: { b: number; b2: { c: 9 } }; b: string }>()
 assertEqual<ConfigManager.SetAtPath<a1, ['c'], 9>            , { a: { b: number }; b: string; c: 9 }>()
 
-assertEqual<ConfigManager.UpdateKeyWithAppend<{x: []}, 'x', 1>  , { x: [1] }>()
-assertEqual<ConfigManager.UpdateKeyWithAppend<{x: [1]}, 'x', 2> , { x: [1, 2] }>()
+// assertEqual<ConfigManager.UpdateMany<{'a':2}, [[['a'], 1]]>            , { a: 1 }>()
+// assertEqual<ConfigManager.UpdateMany<{'a':2}, [[['a'], 1], null]>      , { a: 1 }>()
+
+assertEqual<ConfigManager.UpdateKeyWithAppendOne<{x: []}, 'x', 1>  , { x: [1] }>()
+assertEqual<ConfigManager.UpdateKeyWithAppendOne<{x: [1]}, 'x', 2> , { x: [1, 2] }>()
+assertEqual<ConfigManager.UpdateKeyWithAppendOne<{x: []}, 'x', 1>  , { x: [1] }>()
+assertEqual<ConfigManager.UpdateKeyWithAppendOne<{x: [1]}, 'x', 2> , { x: [1, 2] }>()
 
 assertEqual<ConfigManager.UpdateKeyWithIntersection<{x: {}}, 'x', {}>          , { x: {} }>()
 assertEqual<ConfigManager.UpdateKeyWithIntersection<{x: {}}, 'x', {a:1}>       , { x: {a:1} }>()
 assertEqual<ConfigManager.UpdateKeyWithIntersection<{x: {b:2}}, 'x', {a:1}>    , { x: {a:1; b:2} }>()
-}
 
-assertEqual<
-  ConfigManager.SetAtPath<
-    Context,
-    ['typeHooks', 'onRequestResult'],
-    Context['typeHooks']['onRequestResult']
-  >,
-  Context
->()
+
+assertEqual<ConfigManager.SetKeysOptional<{a:1}, {}>                 , {a:1}>()
+assertEqual<ConfigManager.SetKeysOptional<{a:1}, {a:2}>              , {a:2}>()
+assertEqual<ConfigManager.SetKeysOptional<{a:1}, {a:undefined}>      , {a:1}>()
+assertEqual<ConfigManager.SetKeysOptional<{a:1}, {a?:1}>             , {a:1}>()
+assertEqual<ConfigManager.SetKeysOptional<{a:1}, {a?:2}>             , {a:2}>()
+assertEqual<ConfigManager.SetKeysOptional<{a:1}, {a:2|undefined}>    , {a:2}>()
+}

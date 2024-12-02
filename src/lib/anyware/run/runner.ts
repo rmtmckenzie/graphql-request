@@ -8,9 +8,9 @@ import {
   type NonRetryingInterceptorInput,
 } from '../Interceptor/Interceptor.js'
 import type { Pipeline } from '../Pipeline/Pipeline.js'
-import type { PipelineDef } from '../PipelineDef/__.js'
+import type { PipelineDefinition } from '../PipelineDef/__.js'
 import { successfulResult } from '../Result.js'
-import type { StepDef } from '../StepDef.js'
+import type { StepDefinition } from '../StepDefinition.js'
 import type { StepResultErrorExtension } from '../StepResult.js'
 import type { StepTriggerEnvelope } from '../StepTriggerEnvelope.js'
 import { getEntryStep } from './getEntrypoint.js'
@@ -25,8 +25,6 @@ export interface Params<$Pipeline extends Pipeline = Pipeline> {
 export const createRunner =
   <$Pipeline extends Pipeline>(pipeline: $Pipeline) =>
   async (params?: Params<$Pipeline>): Promise<$Pipeline['output']> => {
-    // const pipelineExecutable = pipeline as any as ExecutablePipeline.InferFromPipeline<$ExPipeline>
-
     const { initialInput, interceptors = [], retryingInterceptor } = params ?? {}
 
     const interceptors_ = retryingInterceptor
@@ -51,7 +49,7 @@ export const createRunner =
     return successfulResult(result.result) as any
   }
 
-const toInternalInterceptor = (pipeline: PipelineDef.Pipeline, interceptor: InterceptorInput) => {
+const toInternalInterceptor = (pipeline: PipelineDefinition.Pipeline, interceptor: InterceptorInput) => {
   const currentChunk = createDeferred<StepTriggerEnvelope>()
   const body = createDeferred()
   const interceptorTrigger = typeof interceptor === `function` ? interceptor : interceptor.run
@@ -94,7 +92,7 @@ const toInternalInterceptor = (pipeline: PipelineDef.Pipeline, interceptor: Inte
         }
       }
 
-      const stepsBeforeEntrypoint: StepDef.Name[] = []
+      const stepsBeforeEntrypoint: StepDefinition.Name[] = []
       for (const step of pipeline.steps) {
         if (step === entryStep) break
         stepsBeforeEntrypoint.push(step.name)

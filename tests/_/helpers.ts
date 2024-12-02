@@ -4,10 +4,11 @@ import type { FSJetpack } from 'fs-jetpack/types.js'
 import * as Path from 'node:path'
 import type { Mock } from 'vitest'
 import { test as testBase, vi } from 'vitest'
-import type { Client } from '../../src/client/client.js'
-import type { TransportConfigHttp, TransportConfigMemory } from '../../src/client/Settings/Config.js'
 import { Graffle } from '../../src/entrypoints/main.js'
-import type { Context, SchemaDrivenDataMap } from '../../src/entrypoints/utilities-for-generated.js'
+import type { GraffleBasic } from '../../src/entrypoints/presets/__GraffleBasic.js'
+import type { GraffleMinimal } from '../../src/entrypoints/presets/__GraffleMinimal.js'
+import type { SchemaDrivenDataMap } from '../../src/entrypoints/utilities-for-generated.js'
+import { TransportMemory } from '../../src/extensions/TransportMemory/TransportMemory.js'
 import type { ConfigManager } from '../../src/lib/config-manager/__.js'
 import { Grafaid } from '../../src/lib/grafaid/__.js'
 import { CONTENT_TYPE_REC } from '../../src/lib/grafaid/http/http.js'
@@ -27,9 +28,12 @@ interface Project {
   }>
 }
 
-export const kitchenSink = KitchenSink.create({
-  schema: kitchenSinkSchema,
-})
+export const kitchenSink = KitchenSink
+  .create({ checkPreflight: false })
+  .use(TransportMemory({
+    schema: kitchenSinkSchema,
+  }))
+  .transport(`memory`)
 
 export const createResponse = (body: object) =>
   new Response(JSON.stringify(body), { status: 200, headers: { 'content-type': CONTENT_TYPE_REC } })
@@ -37,33 +41,22 @@ export const createResponse = (body: object) =>
 interface Fixtures {
   fetch: Mock<(request: Request) => Promise<Response>>
   pokemonService: SchemaService
-  graffle: Client<Context>
-  kitchenSink: Client<
-    ConfigManager.SetProperties<
-      Context,
-      {
-        name: `default`
-        schemaMap: SchemaDrivenDataMap
-        config: {
-          output: Context['config']['output']
-          transport: TransportConfigMemory
-        }
-      }
+  graffle: GraffleMinimal.Client.With<{
+    checkPreflight: false
+  }>
+  kitchenSinkHttp: GraffleBasic.Client.With<{
+    schemaMap: SchemaDrivenDataMap
+    checkPreflight: false
+  }>
+  kitchenSink: GraffleBasic.Client.With<{
+    schemaMap: SchemaDrivenDataMap
+    checkPreflight: false
+    transports: ConfigManager.SetKeyUnsafe<
+      GraffleBasic.Client.Context['transports'],
+      `current`,
+      `memory`
     >
-  >
-  kitchenSinkHttp: Client<
-    ConfigManager.SetProperties<
-      Context,
-      {
-        name: `default`
-        schemaMap: SchemaDrivenDataMap
-        config: {
-          output: Context['config']['output']
-          transport: TransportConfigHttp
-        }
-      }
-    >
-  >
+  }>
   kitchenSinkData: typeof db
   project: Project
 }
@@ -110,6 +103,7 @@ export const test = testBase.extend<Fixtures>({
     await fs.writeAsync(`package.json`, {
       name: `test`,
       type: `module`,
+      packageManager: `pnpm@9.12.2`,
       scripts: {
         'check:types': `tsc --noEmit`,
         // rollup: `rollup --configPlugin typescript --config rollup.config.ts`,
@@ -154,7 +148,9 @@ export const test = testBase.extend<Fixtures>({
     globalThis.fetch = fetch
   },
   kitchenSink: async ({ fetch: _ }, use) => {
-    const kitchenSink = KitchenSink.create({ schema: kitchenSinkSchema })
+    const kitchenSink = KitchenSink.create()
+      .use(TransportMemory({ schema: kitchenSinkSchema }))
+      .transport(`memory`)
     // kitchenSink.anyware(async ({ encode }) => {
     //   encode({ input: {}})
     // })
@@ -162,8 +158,9 @@ export const test = testBase.extend<Fixtures>({
     await use(kitchenSink)
   },
   kitchenSinkHttp: async ({ fetch: _ }, use) => {
-    const kitchenSink = KitchenSink.create({ schema: `https://foo.io/api/graphql` })
-    kitchenSink._.extensions
+    const kitchenSink = KitchenSink
+      .create()
+      .transport({ url: `https://foo.io/api/graphql` })
     // @ts-expect-error fixme
     await use(kitchenSink)
   },
@@ -171,7 +168,9 @@ export const test = testBase.extend<Fixtures>({
     await use(db)
   },
   graffle: async ({ fetch: _ }, use) => {
-    const graffle = Graffle.create({ schema: new URL(`https://foo.io/api/graphql`) })
+    const graffle = Graffle
+      .create()
+      .transport({ url: new URL(`https://foo.io/api/graphql`) })
     // @ts-expect-error fixme
     await use(graffle)
   },
