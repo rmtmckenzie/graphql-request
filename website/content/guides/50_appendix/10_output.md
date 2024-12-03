@@ -29,7 +29,6 @@ You can configure output through the `output` configuration property.
 import { Graffle } from 'graffle'
 // ---cut---
 const graffle = Graffle.create({
-  schema: '...',
   output: {
     errors: {
       execution: 'throw',
@@ -47,7 +46,6 @@ You can choose to use an envelope. When you use an envelope the data will be ret
 import { Graffle } from 'graffle'
 // ---cut---
 const graffle = Graffle.create({
-  schema: '...',
   output: {
     errors: {
       execution: 'throw',

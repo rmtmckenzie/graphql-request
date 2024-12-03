@@ -15,14 +15,14 @@ The `http` transport implements the ["GraphQL Over HTTP" specification](https://
 ::: code-group
 
 ```ts [URL]
-Graffle.create({
-  schema: new URL('https://api.service.io/graphql'),
+Graffle.create().transport({
+  url: new URL('https://api.service.io/graphql'),
 })
 ```
 
 ```ts [string]
-Graffle.create({
-  schema: 'https://api.service.io/graphql',
+Graffle.create().transport({
+  url: 'https://api.service.io/graphql',
 })
 ```
 
@@ -39,13 +39,12 @@ You can generally configure aspects of the transport in three ways:
 ```ts twoslash
 import { Graffle } from 'graffle'
 // ---cut---
-Graffle.create({
-  schema: 'https://...',
-  transport: {
+Graffle
+  .create()
+  .transport({
     headers: { authorization: '...' },
     raw: { mode: 'cors' },
-  },
-})
+  })
 ```
 
 Precedence is:
@@ -71,11 +70,12 @@ By default all requests use HTTP POST. However you can configure queries and sub
 ```ts twoslash
 import { Graffle } from 'graffle'
 // ---cut---
-Graffle.create({
-  schema: 'https://...',
-  transport: { methodMode: 'getReads' },
-  //                       ^^^^^^^^^^
-})
+Graffle
+  .create()
+  .transport({
+    methodMode: 'getReads',
+    //          ^^^^^^^^^^
+  })
 ```
 
 ## POST
@@ -85,11 +85,12 @@ By default all requests use HTTP POST. If you need to explicitly re-configure th
 ```ts twoslash
 import { Graffle } from 'graffle'
 // ---cut---
-Graffle.create({
-  schema: 'https://...',
-  transport: { methodMode: 'post' }, // The default.
-  //                       ^^^^^^
-})
+Graffle
+  .create()
+  .transport({
+    methodMode: 'post',
+    //          ^^^^^^
+  })
 ```
 
 ## Anyware
@@ -114,9 +115,9 @@ Hooks are augmented in the following ways:
 ```ts twoslash
 import { Graffle } from 'graffle'
 // ---cut---
-Graffle.create({
-  schema: 'https://...',
-  transport: { raw: { mode: 'cors' } },
-  //           ^^^
-})
+Graffle
+  .create()
+  .transport({
+    raw: { mode: 'cors' }, // [!code highlight]
+  })
 ```

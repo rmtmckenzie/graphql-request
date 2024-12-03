@@ -71,9 +71,11 @@ Now you're ready to send your first GraphQL document. We'll use a publicly avail
 
 import { Graffle } from 'graffle'
 
-const graffle = Graffle.create({
-  schema: 'https://countries.trevorblades.com/graphql',
-})
+const graffle = Graffle
+  .create()
+  .transport({
+    url: 'https://countries.trevorblades.com/graphql',
+  })
 
 const data = await graffle.gql`
   query myQuery ($filter: [String!]) {
@@ -130,15 +132,19 @@ Let's rewrite our code to use the document builder. You should notice some new m
 
 import { Graffle } from 'graffle'
 
-const graffle = Graffle.create({
-  schema: 'https://countries.trevorblades.com/graphql',
-})
+const graffle = Graffle
+  .create()
+  .transport({
+    url: 'https://countries.trevorblades.com/graphql',
+  })
 
 const data = await graffle.document({
   query: {
     myQuery: {
       countries: {
-        $: { filter: { name: { in: [`Canada`, `Germany`, `Japan`] } } },
+        $: {
+          filter: { name: { in: [`Canada`, `Germany`, `Japan`] } },
+        },
         name: true,
         continent: {
           name: true,

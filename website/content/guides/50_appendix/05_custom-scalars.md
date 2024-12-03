@@ -25,10 +25,7 @@ Then you augment your Graffle instance with the SDDM, and finally register your 
 import { schemaMap } from './graffle/__.js'
 
 const graffle = Graffle
-  .create({
-    schema: '...',
-    schemaMap,
-  })
+  .create({ schemaMap })
   .scalar(`Date`, {
     decode: (value) => new globalThis.Date(value),
     encode: (value) => value.toISOString(),
