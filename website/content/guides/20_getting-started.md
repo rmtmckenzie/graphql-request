@@ -53,9 +53,9 @@ pnpm add graffle@next graphql
 
 Graffle is an [ESM only package built around package `exports`](https://github.com/graffle-js/graffle/discussions/863). This imposes a few requirements on your project configuration.
 
-1. One of the following:
-   - Your project is using ESM (your `package.json` [`type` is set to `module`](https://nodejs.org/api/packages.html#type))
-   - Your CJS proejct uses `node@^20.17` with [`--experimental-require-module`](https://nodejs.org/api/cli.html#--experimental-require-module) or `node@^23` (where that flag is the default).
+1. One of:
+   - Your project is using ESM ([`"type": "module"`](https://nodejs.org/api/packages.html#type)).
+   - Your project is using CJS with [`node@^22.12.0`](https://bsky.app/profile/kuhrt.me/post/3lckonbltrs2i) or `node@^20.17` with [`--experimental-require-module`](https://nodejs.org/api/cli.html#--experimental-require-module).
 2. _If you are using TypeScript_:
    1. If you are using TypeScript your `tsconfig.json` must set `module` and [`moduleResolution`](https://www.typescriptlang.org/tsconfig/#moduleResolution) to `Node16` or `Bundler`. Otherwise TypeScript will not be able to find the types when you attempt to import entrypoints from `graffle`.
    2. Your TypeScript version must be `typescript@^4.9`.
