@@ -41,7 +41,16 @@ export type Client<
         & {
           // eslint-disable-next-line
           // @ts-ignore Passes after generation
-          document: TypeFunction.Call<GlobalRegistry.GetOrDefault<$Context['name']>['interfaces']['Document'], $Context>
+          document: ClientTransports.PreflightCheck<
+            $Context,
+            TypeFunction.Call<
+              GlobalRegistry.GetOrDefault<
+                // @ts-expect-error
+                $Context['name']
+              >['interfaces']['Document'],
+              $Context
+            >
+          >
         }
       )
   )
@@ -128,7 +137,7 @@ export const createConstructorWithContext = <$Context extends Context>(
 }
 
 export type ClientConstructor<$Context extends Context = Context.States.Empty> = <
-  const $ConfigInit extends ConfigInit = {},
+  const $ConfigInit extends ConfigInit,
 >(
   configInit?: $ConfigInit,
 ) => Client<
@@ -143,8 +152,7 @@ export type ClientConstructor<$Context extends Context = Context.States.Empty> =
 
 export const create: ClientConstructor = (configInit) => {
   const initialContext = Context.Updaters.addConfigInit(
-    // todo remove this, client builder should never mutate context, just putting this here for now while working on other stuff.
-    structuredClone(Context.States.contextEmpty),
+    Context.States.contextEmpty,
     configInit ?? {},
   )
   return createWithContext(initialContext)
