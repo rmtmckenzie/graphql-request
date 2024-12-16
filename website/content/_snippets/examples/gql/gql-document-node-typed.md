@@ -3,8 +3,14 @@
 
 <!-- dprint-ignore-start -->
 ```ts twoslash
-import { parse, type TypedQueryDocumentNode } from 'graphql'
+// Our website uses Vitepress+Twoslash. Twoslash does not discover the generated Graffle modules.
+// Perhaps we can configure Twoslash to include them. Until we figure that out, we have to
+// explicitly import them like this.
+import './graffle/modules/global.js'
+// ---cut---
+
 import { Graffle } from 'graffle'
+import { parse, type TypedQueryDocumentNode } from 'graphql'
 
 const graffle = Graffle.create()
   .transport({

@@ -5,12 +5,18 @@
 
 <!-- dprint-ignore-start -->
 ```ts twoslash
+// Our website uses Vitepress+Twoslash. Twoslash does not discover the generated Graffle modules.
+// Perhaps we can configure Twoslash to include them. Until we figure that out, we have to
+// explicitly import them like this.
+import './graffle/modules/global.js'
+// ---cut---
+
 import { Graffle } from 'graffle'
-import { create } from 'graffle/presets/minimal'
+import { GraffleMinimal } from 'graffle/presets/minimal'
 
-console.log(`Is the default preset`, Graffle.create === create)
+console.log(`Is the default preset`, Graffle.create === GraffleMinimal.create)
 
-const graffle = create()
+const graffle = GraffleMinimal.create()
 
 console.log(`The current transport is`, graffle._.transports.current)
 ```

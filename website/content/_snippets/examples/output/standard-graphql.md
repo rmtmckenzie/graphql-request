@@ -3,6 +3,12 @@
 
 <!-- dprint-ignore-start -->
 ```ts twoslash
+// Our website uses Vitepress+Twoslash. Twoslash does not discover the generated Graffle modules.
+// Perhaps we can configure Twoslash to include them. Until we figure that out, we have to
+// explicitly import them like this.
+import './graffle/modules/global.js'
+// ---cut---
+
 import { Graffle, Preset } from 'graffle'
 
 const graffle = Graffle
@@ -29,8 +35,7 @@ ContextualError: There was an error in the core implementation of hook "exchange
     ... 2 lines matching cause stack trace ...
     at async Object.send (/some/path/to/gql.ts:XX:XX:26)
     at async <anonymous> (/some/path/to/output_preset__standard-graphql.ts:XX:XX:16) {
-  context: { hookName: 'exchange', source: 'implementation' },
-  [cause]: TypeError: Failed to parse URL from ...
+  cause: TypeError: Failed to parse URL from ...
       at new Request (node:internal/deps/undici/undici:XX:XX)
       at Object.run (/some/path/to/TransportHttp.ts:XX:XX:31)
       ... 6 lines matching cause stack trace ...
@@ -50,7 +55,8 @@ ContextualError: There was an error in the core implementation of hook "exchange
       code: 'ERR_INVALID_URL',
       input: '...'
     }
-  }
+  },
+  context: { hookName: 'exchange', source: 'implementation' }
 }
 
 Node.js vXX.XX.XX

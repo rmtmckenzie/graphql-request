@@ -2,11 +2,11 @@
   "type": "module",
   "packageManager": "pnpm@9.12.2",
   "scripts": {
-    "dev": "NODE_ENV=development vitepress dev",
+    "dev": "disable_twoslash=true NODE_ENV=development vitepress dev",
     "dev:twoslash": "NODE_ENV=development vitepress dev",
     "build": "vitepress build",
     "preview": "vitepress preview",
-    "gen:graffle": "graffle --defaultSchemaUrl http://localhost:3000/graphql --schema ../tests/_/schemas/pokemon/graffle/schema.graphql"
+    "gen:graffle": "graffle --defaultSchemaUrl http://localhost:3000/graphql --schema ../tests/_/schemas/pokemon/schema.graphql"
   },
   "devDependencies": {
     "vitepress": "^1.5.0"
@@ -20,7 +20,7 @@
     "es-toolkit": "^1.30.1",
     "floating-vue": "^5.2.2",
     "globby": "^14.0.2",
-    "graffle": "link:..",
+    "graffle": "file:..",
     "graphql": "^16.10.0",
     "tsx": "^4.19.2",
     "typescript": "^5.7.2",

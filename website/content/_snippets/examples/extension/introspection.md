@@ -3,6 +3,12 @@
 
 <!-- dprint-ignore-start -->
 ```ts twoslash
+// Our website uses Vitepress+Twoslash. Twoslash does not discover the generated Graffle modules.
+// Perhaps we can configure Twoslash to include them. Until we figure that out, we have to
+// explicitly import them like this.
+import './graffle/modules/global.js'
+// ---cut---
+
 import { Introspection } from 'graffle/extensions/introspection'
 import { Graffle } from './graffle/__.js'
 
@@ -18,8 +24,8 @@ console.log(data)
 {
   __schema: {
     description: null,
-    queryType: { name: 'Query' },
-    mutationType: { name: 'Mutation' },
+    queryType: { name: 'Query', kind: 'OBJECT' },
+    mutationType: { name: 'Mutation', kind: 'OBJECT' },
     subscriptionType: null,
     types: [
       {

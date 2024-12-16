@@ -2,7 +2,7 @@
  * This example shows how to use the `raw` configuration of transport configuration to easily access low-level `RequestInit` configuration.
  */
 
-import { Graffle } from '../../src/entrypoints/main.js'
+import { Graffle } from 'graffle'
 import { show } from '../$/helpers.js'
 import { publicGraphQLSchemaEndpoints } from '../$/helpers.js'
 
@@ -14,7 +14,7 @@ const graffle = Graffle
       mode: `cors`,
     },
   })
-  .anyware(async ({ exchange }) => {
+  .anyware(({ exchange }) => {
     show(exchange.input.request)
     return exchange()
   })
