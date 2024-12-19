@@ -45,6 +45,7 @@
     "check:lint": "eslint . --max-warnings 0",
     "check:publint": "publint run --strict",
     "prepublishOnly": "pnpm build",
+    "prepare": "pnpm build",
     "build:docs": "doctoc README.md --notitle && dprint fmt README.md",
     "build": "pnpm clean && pnpm tsc --project tsconfig.build.json",
     "clean": "tsc --build --clean && rm -rf build",
