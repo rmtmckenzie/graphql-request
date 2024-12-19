@@ -57,10 +57,8 @@
     "release:pr": "dripip pr"
   },
   "dependencies": {
+    "graphql": "^16.9.0",
     "@graphql-typed-document-node/core": "^3.2.0"
-  },
-  "peerDependencies": {
-    "graphql": "14 - 16"
   },
   "devDependencies": {
     "@arethetypeswrong/cli": "^0.15.3",
@@ -88,7 +86,6 @@
     "eslint-typescript": "^1.1.0",
     "express": "^4.19.2",
     "get-port": "^7.1.0",
-    "graphql": "^16.9.0",
     "graphql-scalars": "^1.23.0",
     "graphql-tag": "^2.12.6",
     "jsdom": "^24.1.0",
